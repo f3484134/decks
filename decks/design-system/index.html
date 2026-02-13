@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Systems × AI — From Brand Identity to Automated Generation</title>
+
+  <!-- Reveal.js 5 via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/moon.css" id="theme" />
+  <!-- Highlight.js theme for code blocks -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css" />
+
+  <style>
+    /* ── Custom overrides ─────────────────────────── */
+    :root {
+      --accent:  #7EC8E3;   /* sky blue accent  */
+      --accent2: #F7C948;   /* warm gold accent */
+      --accent3: #55D6A6;   /* mint green       */
+      --accent4: #C084FC;   /* purple           */
+      --bad:     #E85D75;   /* error / avoid    */
+    }
+
+    .reveal { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { text-transform: none; letter-spacing: -0.02em; }
+    .reveal h1 { font-size: 2.2em; }
+    .reveal h2 { font-size: 1.5em; }
+    .reveal h3 { font-size: 1.15em; color: var(--accent); }
+
+    /* Accent utility classes */
+    .accent  { color: var(--accent);  }
+    .accent2 { color: var(--accent2); }
+    .accent3 { color: var(--accent3); }
+    .accent4 { color: var(--accent4); }
+    .bad     { color: var(--bad);     }
+
+    /* Smaller code font */
+    .reveal pre { font-size: 0.55em; box-shadow: none; }
+    .reveal pre code { padding: 1em; border-radius: 8px; max-height: 520px; }
+    .reveal code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+
+    /* Layer cake diagram */
+    .layer-cake {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 700px; margin: 0.8em auto;
+    }
+    .layer-box {
+      padding: 0.55em 1em; text-align: center; font-size: 0.7em;
+      border: 1px solid rgba(255,255,255,0.15); font-weight: 600;
+    }
+    .layer-box:nth-child(1) { background: rgba(192,132,252,0.2); color: var(--accent4); }
+    .layer-box:nth-child(2) { background: rgba(247,201,72,0.2);  color: var(--accent2); }
+    .layer-box:nth-child(3) { background: rgba(85,214,166,0.2);  color: var(--accent3); }
+    .layer-box:nth-child(4) { background: rgba(126,200,227,0.2); color: var(--accent); }
+    .layer-box:nth-child(5) { background: rgba(255,255,255,0.08); color: #aaa; }
+
+    /* Flow diagram */
+    .flow { display: flex; align-items: center; justify-content: center; gap: 0.4em; flex-wrap: wrap; margin: 0.8em 0; }
+    .flow-box {
+      background: rgba(126,200,227,0.15); border: 1px solid var(--accent);
+      border-radius: 8px; padding: 0.5em 0.9em; font-size: 0.65em; font-weight: 600; color: var(--accent);
+    }
+    .flow-arrow { font-size: 1.2em; color: #666; }
+
+    /* Atomic hierarchy */
+    .atomic-grid {
+      display: flex; gap: 0.4em; justify-content: center; flex-wrap: wrap; margin: 0.8em 0;
+    }
+    .atomic-box {
+      border-radius: 10px; padding: 0.6em 0.8em; font-size: 0.55em;
+      text-align: center; width: 130px; font-weight: 600;
+    }
+
+    /* Comparison table */
+    .reveal table { font-size: 0.55em; margin: 0 auto; }
+    .reveal table th { background: rgba(126,200,227,0.2); color: var(--accent); font-weight: 700; }
+    .reveal table td, .reveal table th { border: 1px solid rgba(255,255,255,0.12); padding: 0.4em 0.65em; }
+    .reveal table td { color: #ccc; }
+
+    /* Two-column layout */
+    .cols { display: flex; gap: 1.5em; align-items: flex-start; }
+    .cols > * { flex: 1; }
+
+    /* Subtle sub-text */
+    .sub { font-size: 0.6em; color: #888; margin-top: 0.3em; }
+
+    /* Slide number styling */
+    .reveal .slide-number { font-size: 0.5em; color: #666; }
+
+    /* Phase grid */
+    .phase-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.6em;
+      font-size: 0.65em; text-align: left; max-width: 750px; margin: 0 auto;
+    }
+    .phase-card {
+      background: rgba(255,255,255,0.05); border-radius: 8px;
+      padding: 0.7em 1em; border-left: 3px solid var(--accent);
+    }
+    .phase-card h4 { margin: 0 0 0.3em 0; color: var(--accent2); font-size: 1.05em; }
+    .phase-card ul { margin: 0; padding-left: 1.2em; }
+
+    /* Title slide subtitle */
+    .reveal .title-sub { font-size: 0.55em; color: #999; margin-top: 0.5em; }
+
+    /* Agent architecture box */
+    .agent-arch {
+      display: flex; flex-direction: column; gap: 0.3em;
+      max-width: 750px; margin: 0.5em auto; font-size: 0.6em;
+    }
+    .agent-row {
+      display: flex; gap: 0.3em; justify-content: center; align-items: stretch;
+    }
+    .agent-box {
+      border-radius: 8px; padding: 0.5em 0.8em; text-align: center; font-weight: 600;
+      flex: 1; display: flex; flex-direction: column; justify-content: center;
+    }
+    .agent-box small { font-weight: 400; font-size: 0.85em; opacity: 0.8; display: block; margin-top: 0.2em; }
+
+    /* Color swatch demo */
+    .swatch-row {
+      display: flex; gap: 0.5em; justify-content: center; margin: 0.8em 0;
+    }
+    .swatch {
+      width: 60px; height: 60px; border-radius: 8px; display: flex; align-items: flex-end;
+      justify-content: center; font-size: 0.4em; padding: 4px; color: white; font-weight: 600;
+    }
+
+    /* Maturity bar */
+    .maturity-bar {
+      display: flex; gap: 0; max-width: 700px; margin: 0.8em auto; border-radius: 8px; overflow: hidden;
+    }
+    .maturity-level {
+      padding: 0.5em 0.3em; text-align: center; font-size: 0.5em; font-weight: 600;
+    }
+
+    /* Good / bad labels */
+    .good::before { content: "✅ "; }
+    .avoid::before { content: "❌ "; }
+
+    /* Key-value pairs */
+    .kv { font-size: 0.65em; text-align: left; max-width: 650px; margin: 0 auto; }
+    .kv dt { color: var(--accent); font-weight: 700; margin-top: 0.5em; }
+    .kv dd { margin-left: 1.5em; color: #ccc; }
+
+    /* Token demo card */
+    .token-demo {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; padding: 1.2em; max-width: 350px; margin: 0.8em auto;
+      text-align: left; font-size: 0.6em;
+    }
+    .token-demo h4 { margin: 0 0 0.5em; font-size: 1.1em; }
+    .token-demo p { color: #aaa; margin: 0 0 0.8em; font-size: 0.9em; }
+    .token-demo .demo-btn {
+      display: inline-block; background: #3B82F6; color: white;
+      padding: 0.4em 1em; border-radius: 8px; font-weight: 600; font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 1 — Title
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h1 style="font-size:1.6em;">Design Systems × AI</h1>
+  <p style="font-size:0.95em; color:var(--accent); margin:0.2em 0;">From Brand Identity to<br>Automated Generation</p>
+  <p class="title-sub">A practical guide for design architects</p>
+  <p style="font-size:0.4em; color:#666; margin-top:2em;">February 2026 · Prepared by Bob for Ako</p>
+  <aside class="notes">
+    This presentation covers how to build a design system from scratch and transform it into
+    an AI-powered design generator. We'll go from foundational theory through hands-on tutorial.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 2 — The Vision
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Vision</h2>
+  <div class="flow" style="margin-top:1.2em;">
+    <div class="flow-box">💬 "Create a<br>landing page<br>for Feature X"</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent2);color:var(--accent2);">🤖 AI reads<br>design system<br>+ brand rules</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">✨ Generates<br>on-brand UI<br>using your tokens</div>
+  </div>
+  <p style="font-size:0.6em; color:#888; margin-top:1.2em;">
+    This isn't science fiction. It's achievable today —<br>
+    <strong>if</strong> you structure your design system for AI consumption.
+  </p>
+  <aside class="notes">
+    The end goal: a human describes what they need, an AI sub-agent generates pixel-perfect
+    UI using only your approved tokens, components, and patterns. Let's learn how to get there.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 3 — What IS a Design System?
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>What Is a Design System?</h2>
+  <p style="font-size:0.65em; color:#ccc; margin-bottom:0.5em;">
+    It's <span class="bad">NOT</span> just a component library.
+  </p>
+  <div class="cols" style="font-size:0.58em; margin-top:0.5em;">
+    <div>
+      <h3 style="color:var(--bad); font-size:1em;">Common Misconception</h3>
+      <ul style="color:#999;">
+        <li>A Figma file with buttons</li>
+        <li>A React component library</li>
+        <li>A style guide PDF</li>
+        <li>A color palette</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--accent3); font-size:1em;">Reality</h3>
+      <ul style="color:#ccc;">
+        <li>Design principles (the <em>why</em>)</li>
+        <li>Design tokens (the <em>values</em>)</li>
+        <li>Component library (the <em>what</em>)</li>
+        <li>Pattern library (the <em>how</em>)</li>
+        <li>Documentation (the <em>rules</em>)</li>
+        <li>Governance (the <em>process</em>)</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.6em;">
+    Think: <span class="accent2">operating system</span> for your product's visual language
+  </p>
+  <aside class="notes">
+    Material Design, Apple HIG, Ant Design, Fluent Design — these are complete design systems.
+    They include principles, tokens, components, patterns, documentation, and governance.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 4 — The Layer Cake
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Design System Layer Cake</h2>
+  <div class="layer-cake">
+    <div class="layer-box">📄 Pages / Screens <span style="font-weight:400;font-size:0.85em;">— Assembled from patterns</span></div>
+    <div class="layer-box">🧩 Patterns <span style="font-weight:400;font-size:0.85em;">— Solutions to UX problems</span></div>
+    <div class="layer-box">⚙️ Components <span style="font-weight:400;font-size:0.85em;">— Reusable UI elements (Button, Card)</span></div>
+    <div class="layer-box">🎨 Visual Style <span style="font-weight:400;font-size:0.85em;">— Brand personality in pixels</span></div>
+    <div class="layer-box">⚛️ Design Tokens <span style="font-weight:400;font-size:0.85em;">— Atomic values (color, spacing, type)</span></div>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.5em;">
+    Each layer builds on the one below · Change a token → <span class="accent3">everything updates</span>
+  </p>
+  <aside class="notes">
+    Tokens are the foundation — every visual decision starts as a named value.
+    Components consume tokens. Patterns compose components. Pages assemble patterns.
+    The key: change at the bottom ripples up through every layer.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 5 — Design Tokens Deep Dive
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Design Tokens: The Atoms</h2>
+  <p style="font-size:0.6em; color:#ccc; margin-bottom:0.5em;">
+    Every visual decision → a <span class="accent2">named, structured value</span>
+  </p>
+  <table style="font-size:0.5em;">
+    <thead>
+      <tr><th>Category</th><th>Examples</th><th>What It Controls</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="accent">Colors</span></td><td>brand-primary, text-secondary, error</td><td>Every color in the product</td></tr>
+      <tr><td><span class="accent">Typography</span></td><td>font-family, size-base, weight-bold</td><td>All text styling</td></tr>
+      <tr><td><span class="accent">Spacing</span></td><td>spacing-sm (8px), spacing-md (16px)</td><td>Padding, margins, gaps</td></tr>
+      <tr><td><span class="accent">Elevation</span></td><td>shadow-sm, shadow-md, shadow-lg</td><td>Depth & layering</td></tr>
+      <tr><td><span class="accent">Motion</span></td><td>duration-fast (200ms), easing-default</td><td>Animations & transitions</td></tr>
+      <tr><td><span class="accent">Border Radius</span></td><td>radius-default (8px), radius-full</td><td>Corner rounding</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.5em; color:var(--accent3); margin-top:0.5em;">
+    W3C Design Tokens standard · Platform-agnostic · Single source of truth
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 6 — Primitive vs Semantic Tokens
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Two-Tier Token Architecture</h2>
+  <div class="cols" style="font-size:0.6em;">
+    <div>
+      <h3 style="color:var(--accent); font-size:1em;">Primitive Tokens</h3>
+      <p style="color:#888; font-size:0.85em;">Raw palette values</p>
+      <pre><code class="language-json" data-trim>
+{
+  "blue-500": "#3B82F6",
+  "blue-700": "#1D4ED8",
+  "neutral-900": "#171717",
+  "red-500": "#EF4444"
+}
+      </code></pre>
+      <p style="color:#888; font-size:0.8em;">⚠️ AI shouldn't use these directly</p>
+    </div>
+    <div>
+      <h3 style="color:var(--accent3); font-size:1em;">Semantic Tokens</h3>
+      <p style="color:#888; font-size:0.85em;">Tokens with <em>meaning</em></p>
+      <pre><code class="language-json" data-trim>
+{
+  "brand-primary": {
+    "value": "{blue-500}",
+    "description": "CTAs,
+      links, active states"
+  },
+  "feedback-error": {
+    "value": "{red-500}",
+    "description": "Error
+      states only"
+  }
+}
+      </code></pre>
+      <p style="color:var(--accent3); font-size:0.8em;">✅ AI uses these — intent is clear</p>
+    </div>
+  </div>
+  <aside class="notes">
+    The two-tier architecture is critical for AI. Primitive tokens define the palette.
+    Semantic tokens assign meaning. AI should always use semantic tokens because
+    they carry usage intent through the description field.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 7 — Brand Visual Identity
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Defining Your Visual Identity</h2>
+  <div style="font-size:0.62em; text-align:left; max-width:700px; margin:0 auto;">
+    <p style="margin-bottom:0.6em;"><span class="accent2" style="font-size:1.3em;">①</span> &nbsp;<strong>Design Principles</strong> — 3-5 statements that guide all decisions</p>
+    <div style="margin-left:2em; color:#888; font-size:0.85em; margin-bottom:0.6em;">
+      <em>"Clarity over cleverness" · "Accessible by default" · "Content first"</em>
+    </div>
+    <p style="margin-bottom:0.6em;"><span class="accent2" style="font-size:1.3em;">②</span> &nbsp;<strong>Mood Boards</strong> — Visual references that capture the <em>feeling</em></p>
+    <div style="margin-left:2em; color:#888; font-size:0.85em; margin-bottom:0.6em;">
+      Colors, typography, UI references, competitor analysis
+    </div>
+    <p style="margin-bottom:0.6em;"><span class="accent2" style="font-size:1.3em;">③</span> &nbsp;<strong>Style Tiles</strong> — Test visual decisions without full mockups</p>
+    <div style="margin-left:2em; color:#888; font-size:0.85em; margin-bottom:0.6em;">
+      Colors on buttons, type hierarchy, a card component, icon style
+    </div>
+    <p style="margin-bottom:0.6em;"><span class="accent2" style="font-size:1.3em;">④</span> &nbsp;<strong>Token Foundation</strong> — Every decision as a named value</p>
+    <div style="margin-left:2em; color:#888; font-size:0.85em;">
+      <code>tokens.json</code> — the "constitution" of your design system
+    </div>
+  </div>
+  <aside class="notes">
+    Before any code, answer: What does our product look and feel like?
+    Design principles guide decisions when tokens and rules don't cover a case.
+    Real examples: Material Design, Apple HIG, Ant Design principles.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 8 — Part 2 Transition
+     ════════════════════════════════════════════════════ -->
+<section data-background-color="#1a1a2e">
+  <h1 style="font-size:1.8em;">Part 2</h1>
+  <p style="font-size:1em; color:var(--accent);">From Figma to Code</p>
+  <p style="font-size:0.5em; color:#888; margin-top:1em;">Design tokens → Style Dictionary → Components → Storybook</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 9 — Token Pipeline
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Token → Code Pipeline</h2>
+  <div class="flow" style="margin:1em 0;">
+    <div class="flow-box">🎨 Design<br>Decisions</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent2);color:var(--accent2);">📄 tokens.json<br>(W3C format)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent4);color:var(--accent4);">⚙️ Style<br>Dictionary</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">💻 Platform<br>Output</div>
+  </div>
+  <div style="font-size:0.55em; text-align:left; max-width:600px; margin:0.5em auto; color:#ccc;">
+    <p><strong>Outputs from one source:</strong></p>
+    <p>├── <code>variables.css</code> — CSS custom properties</p>
+    <p>├── <code>tokens.scss</code> — SCSS variables</p>
+    <p>├── <code>tokens.ts</code> — TypeScript constants</p>
+    <p>├── <code>colors.xml</code> — Android resources</p>
+    <p>└── <code>tokens.swift</code> — iOS/macOS</p>
+  </div>
+  <p style="font-size:0.45em; color:#888; margin-top:0.5em;">
+    Tools: <span class="accent">Style Dictionary</span> (Amazon) · Tokens Studio (Figma) · Specify
+  </p>
+  <aside class="notes">
+    Style Dictionary by Amazon is the de facto standard for token transformation.
+    One JSON source file generates outputs for every platform.
+    Tokens Studio syncs between Figma and code.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 10 — Tokens in JSON
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Design Tokens in Practice</h2>
+  <pre><code class="language-json" data-trim data-line-numbers="1-8|9-17|18-25">
+{
+  "color": {
+    "brand-primary": {
+      "$value": "#3B82F6",
+      "$type": "color",
+      "$description": "Primary brand color — CTAs, links, active states"
+    }
+  },
+  "spacing": {
+    "md": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$description": "Default component spacing — most common value"
+    }
+  },
+  "radius": {
+    "default": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$description": "Standard border radius for cards, buttons, inputs"
+    }
+  },
+  "shadow": {
+    "sm": {
+      "$value": "0 1px 3px rgba(0,0,0,0.08)",
+      "$type": "shadow",
+      "$description": "Subtle lift — cards at rest"
+    }
+  }
+}
+  </code></pre>
+  <p style="font-size:0.5em; color:#888;">
+    W3C Design Tokens format · <code>$description</code> is what makes it <span class="accent3">AI-readable</span>
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 11 — CSS Output
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Generated CSS Custom Properties</h2>
+  <pre><code class="language-css" data-trim>
+:root {
+  /* Colors */
+  --color-brand-primary: #3B82F6;
+  --color-brand-primary-hover: #2563EB;
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-background: #FFFFFF;
+  --color-surface: #F9FAFB;
+  --color-border: #E5E7EB;
+  --color-error: #EF4444;
+  --color-success: #22C55E;
+
+  /* Spacing (base-4) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;  /* Most common */
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Typography · Radius · Shadows */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --radius-default: 8px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --transition-fast: 150ms ease;
+}
+  </code></pre>
+  <p style="font-size:0.5em; color:#888;">
+    Components consume variables · Change token → everything updates
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 12 — Atomic Design
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Atomic Design Hierarchy</h2>
+  <p style="font-size:0.55em; color:#888; margin-bottom:0.5em;">Brad Frost's methodology for component composition</p>
+  <div class="atomic-grid">
+    <div class="atomic-box" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid #555;">
+      <div style="font-size:2em;">⚛️</div>
+      <strong>Atoms</strong>
+      <div style="font-size:0.85em; font-weight:400; margin-top:0.2em;">Button · Input<br>Label · Icon</div>
+    </div>
+    <div class="atomic-box" style="background:rgba(126,200,227,0.15); color:var(--accent); border:1px solid var(--accent);">
+      <div style="font-size:2em;">🧬</div>
+      <strong>Molecules</strong>
+      <div style="font-size:0.85em; font-weight:400; margin-top:0.2em;">SearchBar<br>FormField</div>
+    </div>
+    <div class="atomic-box" style="background:rgba(85,214,166,0.15); color:var(--accent3); border:1px solid var(--accent3);">
+      <div style="font-size:2em;">🦠</div>
+      <strong>Organisms</strong>
+      <div style="font-size:0.85em; font-weight:400; margin-top:0.2em;">Header · Hero<br>ProductCard</div>
+    </div>
+    <div class="atomic-box" style="background:rgba(247,201,72,0.15); color:var(--accent2); border:1px solid var(--accent2);">
+      <div style="font-size:2em;">📐</div>
+      <strong>Templates</strong>
+      <div style="font-size:0.85em; font-weight:400; margin-top:0.2em;">Page layouts<br>Grid systems</div>
+    </div>
+    <div class="atomic-box" style="background:rgba(192,132,252,0.15); color:var(--accent4); border:1px solid var(--accent4);">
+      <div style="font-size:2em;">📄</div>
+      <strong>Pages</strong>
+      <div style="font-size:0.85em; font-weight:400; margin-top:0.2em;">Complete<br>screens</div>
+    </div>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.3em;">
+    AI needs to know: which atoms exist → don't reinvent, <span class="accent2">compose</span>
+  </p>
+  <aside class="notes">
+    When AI knows your Atomic Design hierarchy, it composes existing atoms into molecules
+    instead of creating new elements from scratch. This prevents visual drift.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 13 — React Button Example
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Example: Button Component</h2>
+  <pre><code class="language-tsx" data-trim data-line-numbers="1-6|8-18|20-28">
+// Button.tsx — Uses ONLY design tokens
+type ButtonVariant = 'primary' | 'secondary'
+                   | 'destructive' | 'ghost';
+
+interface ButtonProps {
+  variant?: ButtonVariant;
+  size?: 'sm' | 'md' | 'lg';
+  loading?: boolean;
+  children: React.ReactNode;
+}
+
+export const Button: React.FC&lt;ButtonProps&gt; = ({
+  variant = 'primary',
+  size = 'md',
+  loading,
+  children,
+  ...props
+}) =&gt; (
+  &lt;button
+    className={`btn btn-${variant} btn-${size}`}
+    disabled={loading}
+    {...props}
+  &gt;
+    {loading && &lt;Spinner /&gt;}
+    {children}
+  &lt;/button&gt;
+);
+  </code></pre>
+  <div style="font-size:0.5em; color:#888; margin-top:0.3em;">
+    CSS uses <code>var(--color-brand-primary)</code>, <code>var(--spacing-md)</code>, <code>var(--radius-default)</code>
+    <br>Zero hardcoded values · All styling flows from tokens
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 14 — Full Pipeline Diagram
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Complete Pipeline</h2>
+  <div style="font-size:0.58em; text-align:center;">
+    <div class="flow">
+      <div class="flow-box" style="border-color:#888;color:#aaa;">🧠 Brand<br>Decision</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">📄 Token<br>Definition</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--accent4);color:var(--accent4);">🎨 Figma<br>Component</div>
+    </div>
+    <div style="font-size:1.5em; color:#555; margin:0.2em;">↓</div>
+    <div class="flow">
+      <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">💻 React<br>Component</div>
+      <div class="flow-arrow">←</div>
+      <div class="flow-box" style="border-color:var(--accent2);color:var(--accent2);">⚙️ Style<br>Dictionary</div>
+    </div>
+    <div style="font-size:1.5em; color:#555; margin:0.2em;">↓</div>
+    <div class="flow">
+      <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">📖 Storybook<br>Docs</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--accent2);color:var(--accent2);">👩‍💻 Developer<br>Uses</div>
+    </div>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.4em;">
+    One brand decision → flows through tokens → Figma → code → docs → product
+  </p>
+  <aside class="notes">
+    The key insight: every visual decision flows from a single source of truth.
+    Change the primary color token once → Figma variables update → CSS updates →
+    React components update → Storybook updates → product updates.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 15 — Part 3 Transition
+     ════════════════════════════════════════════════════ -->
+<section data-background-color="#1a1a2e">
+  <h1 style="font-size:1.8em;">Part 3</h1>
+  <p style="font-size:1em; color:var(--accent);">Making It AI-Ready</p>
+  <p style="font-size:0.5em; color:#888; margin-top:1em;">The key insight: design systems <em>are</em> AI guardrails</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 16 — The Key Insight
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Key Insight</h2>
+  <blockquote style="font-size:0.85em; border-left:4px solid var(--accent2); padding:0.5em 1em; background:rgba(247,201,72,0.08);">
+    "A design system is already a set of constraints.<br>
+    Constraints are <span class="accent2">exactly</span> what AI needs<br>
+    to produce consistent output."
+  </blockquote>
+  <div class="cols" style="font-size:0.55em; margin-top:1em;">
+    <div style="text-align:center;">
+      <p style="font-size:1.3em;">🤖 Without constraints</p>
+      <p style="color:var(--bad);">Arbitrary colors<br>Random spacing<br>Invented border radius<br>Wrong fonts<br>Looks like nothing</p>
+    </div>
+    <div style="text-align:center;">
+      <p style="font-size:1.3em;">🤖 With design system</p>
+      <p style="color:var(--accent3);">Your exact tokens<br>Your spacing scale<br>Your border radius<br>Your typography<br><strong>Looks like your product</strong></p>
+    </div>
+  </div>
+  <aside class="notes">
+    This is the central thesis. You don't need to build a separate AI safety layer.
+    Your design system IS the guardrail. You just need to make it readable by AI.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 17 — SKILL.md Format
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>SKILL.md: Teaching AI Your Rules</h2>
+  <pre><code class="language-markdown" data-trim data-line-numbers="1-5|7-15|17-24">
+# My Design System — AI Guide
+
+## Color Tokens (NEVER use raw hex)
+- `--color-primary`: #3B82F6 — CTAs, links
+- `--color-text`: #1F2937 — Body text
+- `--color-error`: #EF4444 — Errors ONLY
+
+## Component Rules
+- **Button**: Max 1 primary per section
+- **Card**: 16px padding, never nest cards
+- **Form**: Label above input, always
+
+## ❌ NEVER DO
+- Use raw hex values
+- Create custom spacing values
+- Skip hover/focus states
+- Make text smaller than 12px
+
+## ✅ ALWAYS DO
+- Use semantic HTML
+- Include aria-label on icon buttons
+- Use CSS custom properties only
+- Include loading + error states
+  </code></pre>
+  <p style="font-size:0.5em; color:var(--accent3);">
+    This single file = 90% of the value · 10% of the effort
+  </p>
+  <aside class="notes">
+    A SKILL.md file is structured markdown that acts as "onboarding docs for AI."
+    It contains tokens, component rules, do's and don'ts — everything an AI needs
+    to generate on-brand UI. Anti-patterns are as important as patterns.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 18 — Component Specs as Prompts
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Component Specs as Prompts</h2>
+  <pre><code class="language-markdown" data-trim data-line-numbers="1-6|8-15|17-21">
+# Component: Button
+
+## Variants
+- `primary`: Main actions (1 per section)
+- `secondary`: Supporting actions
+- `destructive`: Delete, irreversible
+
+## Token Usage
+| Property     | Token                       |
+|------------- |-----------------------------|
+| Background   | `--color-brand-primary`     |
+| Text         | `--color-text-on-primary`   |
+| Padding      | `--spacing-sm` `--spacing-md`|
+| Radius       | `--radius-default`          |
+| Min height   | 40px (touch target)         |
+
+## Rules
+- NEVER use raw hex values
+- Maximum 1 primary button per section
+- Destructive buttons require confirmation
+  </code></pre>
+  <p style="font-size:0.5em; color:#888;">
+    Each component becomes a <span class="accent2">contract</span> that AI follows
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 19 — AI Agent Architecture
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>AI Design Sub-Agent Architecture</h2>
+  <div class="agent-arch">
+    <div class="agent-row">
+      <div class="agent-box" style="background:rgba(126,200,227,0.15); border:1px solid var(--accent); color:var(--accent); flex:2;">
+        💬 Human Input<small>"Create a landing page for our analytics feature"</small>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:1.2em; color:#555;">↓</div>
+    <div class="agent-row">
+      <div class="agent-box" style="background:rgba(247,201,72,0.15); border:1px solid var(--accent2); color:var(--accent2);">
+        📄 tokens.json<small>Colors, spacing, type</small>
+      </div>
+      <div class="agent-box" style="background:rgba(85,214,166,0.15); border:1px solid var(--accent3); color:var(--accent3);">
+        📋 SKILL.md<small>Rules & anti-patterns</small>
+      </div>
+      <div class="agent-box" style="background:rgba(192,132,252,0.15); border:1px solid var(--accent4); color:var(--accent4);">
+        ⚙️ Component Specs<small>Props, variants, states</small>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:1.2em; color:#555;">↓</div>
+    <div class="agent-row">
+      <div class="agent-box" style="background:rgba(85,214,166,0.2); border:2px solid var(--accent3); color:var(--accent3); flex:2;">
+        🤖 AI Design Agent<small>Reads all context → generates constrained output</small>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:1.2em; color:#555;">↓</div>
+    <div class="agent-row">
+      <div class="agent-box" style="background:rgba(247,201,72,0.2); border:1px solid var(--accent2); color:var(--accent2); flex:1;">
+        💻 HTML/React Output<small>Uses only approved tokens & components</small>
+      </div>
+      <div class="agent-box" style="background:rgba(126,200,227,0.1); border:1px solid #555; color:#aaa; flex:1;">
+        👀 Human Review<small>Verify → iterate → ship</small>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    The architecture is simple: human describes what they need, the agent reads your design system
+    context (tokens + SKILL.md + component specs), generates constrained output, and human reviews.
+    The quality of output depends entirely on the quality of your design system documentation.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 20 — Part 4 Transition
+     ════════════════════════════════════════════════════ -->
+<section data-background-color="#1a1a2e">
+  <h1 style="font-size:1.8em;">Part 4</h1>
+  <p style="font-size:1em; color:var(--accent);">Tutorial: Build Your Own</p>
+  <p style="font-size:0.5em; color:#888; margin-top:1em;">5 steps · Copy-paste ready · Test with Claude or GPT</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 21 — Step 1: Define Tokens
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Step 1: Define 5 Core Tokens</h2>
+  <pre><code class="language-json" data-trim>
+{
+  "color-primary":   { "value": "#3B82F6",
+    "description": "CTAs, links, active states" },
+  "font-family":     { "value": "Inter, system-ui, sans-serif",
+    "description": "All text in the product" },
+  "spacing-md":      { "value": "16px",
+    "description": "Default padding & gaps" },
+  "radius-default":  { "value": "8px",
+    "description": "Cards, buttons, inputs" },
+  "shadow-sm":       { "value": "0 1px 3px rgba(0,0,0,0.08)",
+    "description": "Subtle lift for cards" }
+}
+  </code></pre>
+  <p style="font-size:0.55em; color:#888; margin-top:0.5em;">
+    That's it. <span class="accent2">Five decisions</span> define 80% of your visual language.
+  </p>
+  <aside class="notes">
+    Start ridiculously small. Five tokens is enough to generate recognizable UI.
+    You can always add more tokens later — but these five give you color, typography,
+    spacing, border treatment, and depth. That covers most visual decisions.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 22 — Step 2: CSS Variables
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Step 2: Create Your Design System CSS</h2>
+  <pre><code class="language-css" data-trim>
+:root {
+  --color-primary: #3B82F6;
+  --color-primary-hover: #2563EB;
+  --color-text: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-bg: #FFFFFF;
+  --color-surface: #F9FAFB;
+  --color-border: #E5E7EB;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  --radius-default: 8px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --transition-fast: 150ms ease;
+}
+  </code></pre>
+  <p style="font-size:0.5em; color:#888;">
+    Tokens → CSS custom properties · Components will consume these
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 23 — Step 3: Write SKILL.md
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Step 3: Write Your SKILL.md</h2>
+  <pre><code class="language-markdown" data-trim style="font-size:0.9em;">
+# Design System AI Guide
+
+## Rules
+- Use ONLY CSS variables (--color-*, --spacing-*)
+- NEVER use raw hex colors or pixel values
+- All interactive elements need hover + focus states
+- Semantic HTML always (&lt;button&gt;, &lt;nav&gt;, &lt;main&gt;)
+
+## Token Reference
+- Primary: var(--color-primary) — CTAs, links
+- Text: var(--color-text) — body copy
+- Spacing: var(--spacing-md) — default gaps
+- Radius: var(--radius-default) — all components
+- Shadow: var(--shadow-sm) — card resting state
+
+## ❌ Don't
+- Raw hex colors
+- Nest cards inside cards
+- Custom spacing values
+- Skip error/loading states
+  </code></pre>
+  <p style="font-size:0.5em; color:var(--accent3);">
+    Feed this to Claude or GPT as system context → <strong>try it now!</strong>
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 24 — Step 4: Test It
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Step 4: Test — Generate a Card</h2>
+  <div class="cols" style="font-size:0.55em;">
+    <div>
+      <h3 style="font-size:1em;">Your Prompt</h3>
+      <pre><code class="language-text" data-trim>
+Using my design system
+(SKILL.md above):
+
+Create a "Feature Card" with:
+- An emoji icon
+- A title
+- A 2-line description
+- A "Learn More" link
+
+Follow my rules exactly.
+      </code></pre>
+    </div>
+    <div>
+      <h3 style="font-size:1em; color:var(--accent3);">AI Output</h3>
+      <div class="token-demo">
+        <div style="font-size:2em; margin-bottom:0.3em;">🚀</div>
+        <h4>Lightning Fast</h4>
+        <p>Sub-100ms response times globally with edge computing.</p>
+        <div class="demo-btn">Learn More →</div>
+      </div>
+      <p style="color:var(--accent3); font-size:0.85em; margin-top:0.5em;">
+        ✅ Uses your tokens<br>
+        ✅ Follows your rules
+      </p>
+    </div>
+  </div>
+  <aside class="notes">
+    Copy your SKILL.md into a Claude Project or GPT conversation,
+    then use this prompt. Evaluate: does it use your tokens? Does it follow your rules?
+    If not, refine the SKILL.md and try again.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 25 — Step 5: Iterate
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Step 5: Iterate & Refine</h2>
+  <p style="font-size:0.6em; color:#ccc; margin-bottom:0.5em;">
+    Common failures → SKILL.md fixes
+  </p>
+  <table style="font-size:0.5em;">
+    <thead>
+      <tr><th>AI Fails To…</th><th>Add to SKILL.md</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Uses raw hex values</td><td><strong>"NEVER use raw hex — ALWAYS CSS variables"</strong></td></tr>
+      <tr><td>Invents new spacing</td><td><strong>"ONLY these values: sm, md, lg"</strong></td></tr>
+      <tr><td>Skips hover states</td><td><strong>"ALL buttons MUST have :hover"</strong></td></tr>
+      <tr><td>Wrong font size</td><td><strong>"Body = 16px, small = 14px, NOTHING ELSE"</strong></td></tr>
+      <tr><td>Nests cards</td><td><strong>"NEVER nest .card inside .card"</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.55em; color:var(--accent2); margin-top:0.8em;">
+    Every failure → new anti-pattern → system gets stronger 💪
+  </p>
+  <aside class="notes">
+    The refinement loop is the most important part. After each test,
+    add the failure case as an anti-pattern. Over time, your SKILL.md
+    becomes a comprehensive guardrail against every type of AI error.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 26 — Maturity Model
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>AI-Readiness Maturity</h2>
+  <div class="maturity-bar">
+    <div class="maturity-level" style="background:rgba(232,93,117,0.3); color:var(--bad); flex:1;">
+      L1<br>~30%<br><span style="font-size:0.8em;">Tokens<br>defined</span>
+    </div>
+    <div class="maturity-level" style="background:rgba(247,201,72,0.2); color:var(--accent2); flex:1;">
+      L2<br>~50%<br><span style="font-size:0.8em;">Tokens<br>described</span>
+    </div>
+    <div class="maturity-level" style="background:rgba(126,200,227,0.2); color:var(--accent); flex:1;">
+      L3<br>~70%<br><span style="font-size:0.8em;">SKILL.md<br>created</span>
+    </div>
+    <div class="maturity-level" style="background:rgba(85,214,166,0.2); color:var(--accent3); flex:1;">
+      L4<br>~85%<br><span style="font-size:0.8em;">Components<br>spec'd</span>
+    </div>
+    <div class="maturity-level" style="background:rgba(192,132,252,0.25); color:var(--accent4); flex:1;">
+      L5<br>~95%<br><span style="font-size:0.8em;">Patterns<br>documented</span>
+    </div>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.3em;">
+    % = AI output accepted without changes
+  </p>
+  <p style="font-size:0.55em; color:#ccc; margin-top:0.5em;">
+    <span class="accent2">Today's tutorial gets you to L3</span> — that's already <strong>70% accuracy</strong>
+  </p>
+  <aside class="notes">
+    Level 1 is where most teams are — tokens exist but have no descriptions.
+    The tutorial in this presentation gets you to Level 3.
+    Level 5 is the goal: patterns are so well-documented that AI output
+    is accepted 95% of the time without changes.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 27 — Roadmap
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>5-Week Production Roadmap</h2>
+  <div class="phase-grid">
+    <div class="phase-card">
+      <h4>📋 Week 1: Tokens</h4>
+      <ul>
+        <li>Design principles (3-5)</li>
+        <li>Full token set: colors, type, spacing</li>
+        <li><code>tokens.json</code> in W3C format</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <h4>⚙️ Week 2-3: Components</h4>
+      <ul>
+        <li>10-15 core components in React</li>
+        <li>Style Dictionary pipeline</li>
+        <li>All states: hover, focus, disabled</li>
+      </ul>
+    </div>
+    <div class="phase-card" style="border-left-color:var(--accent3);">
+      <h4>📖 Week 3-4: Storybook</h4>
+      <ul>
+        <li>Interactive docs</li>
+        <li>Pattern library</li>
+        <li>Do's & don'ts with visuals</li>
+      </ul>
+    </div>
+    <div class="phase-card" style="border-left-color:var(--accent2);">
+      <h4>🤖 Week 4-5: AI Setup</h4>
+      <ul>
+        <li>SKILL.md + component specs</li>
+        <li>Test with 10+ prompts</li>
+        <li>Figma MCP integration</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:0.5em; color:var(--accent3); margin-top:0.5em;">
+    🔄 Phase 5 (ongoing): Generate → Review → Fix gaps → Repeat
+  </p>
+  <aside class="notes">
+    This is a realistic timeline for a design architect working part-time on the system.
+    Week 1 is the most important — get your tokens right and everything else follows.
+    Phase 5 never ends — it's the continuous refinement loop.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 28 — Real-World References
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Learn from the Best</h2>
+  <div style="font-size:0.58em; text-align:left; max-width:700px; margin:0 auto;">
+    <p>🎨 <strong class="accent">Material Design 3</strong> — Google's comprehensive system<br>
+    <span style="color:#999;">Dynamic color, motion system, adaptive layouts · <a href="https://m3.material.io" style="color:var(--accent);">m3.material.io</a></span></p>
+    <p>🍎 <strong class="accent">Apple HIG</strong> — Opinionated and deep<br>
+    <span style="color:#999;">Platform patterns, accessibility, spatial computing · <a href="https://developer.apple.com/design" style="color:var(--accent);">developer.apple.com/design</a></span></p>
+    <p>🐜 <strong class="accent">Ant Design</strong> — Enterprise-grade, open source<br>
+    <span style="color:#999;">Complete React library + design tokens · <a href="https://ant.design" style="color:var(--accent);">ant.design</a></span></p>
+    <p>⬛ <strong class="accent">Shadcn/ui</strong> — Modern, composable, copy-paste<br>
+    <span style="color:#999;">Not a library, a collection of components · <a href="https://ui.shadcn.com" style="color:var(--accent);">ui.shadcn.com</a></span></p>
+    <p>🔵 <strong class="accent">Fluent Design</strong> — Microsoft's cross-platform system<br>
+    <span style="color:#999;">Depth, motion, material, light · <a href="https://fluent2.microsoft.design" style="color:var(--accent);">fluent2.microsoft.design</a></span></p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 29 — Key Takeaways
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Key Takeaways</h2>
+  <div style="font-size:0.68em; text-align:left; max-width:680px; margin:0 auto;">
+    <p>1️⃣ &nbsp;Design systems are <strong>more than component libraries</strong> — they're knowledge bases</p>
+    <p>2️⃣ &nbsp;<strong>Design tokens</strong> with <code>$description</code> = AI-readable design</p>
+    <p>3️⃣ &nbsp;<strong>Semantic tokens</strong> over primitives — intent matters more than values</p>
+    <p>4️⃣ &nbsp;Your design system <strong>IS</strong> the AI guardrail — no separate layer needed</p>
+    <p>5️⃣ &nbsp;<strong>SKILL.md</strong> + component specs = an AI that follows your rules</p>
+    <p>6️⃣ &nbsp;Start with <strong>5 tokens + 1 SKILL.md</strong> → iterate from failures</p>
+  </div>
+  <aside class="notes">
+    Recap the key insights. The most important message: you don't need a massive
+    design system to start. Five tokens and one SKILL.md file is enough to begin
+    generating consistent AI output. Build from there.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 30 — Close
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Start Today</h2>
+  <div style="font-size:0.65em; color:#ccc; margin:1em 0;">
+    <p><span class="accent2" style="font-size:1.3em;">①</span> &nbsp;Define 5 tokens with <code>$description</code></p>
+    <p><span class="accent2" style="font-size:1.3em;">②</span> &nbsp;Write a SKILL.md with rules + anti-patterns</p>
+    <p><span class="accent2" style="font-size:1.3em;">③</span> &nbsp;Test: ask Claude to generate a card component</p>
+    <p><span class="accent2" style="font-size:1.3em;">④</span> &nbsp;Iterate: add every failure as an anti-pattern</p>
+  </div>
+  <p style="font-size:0.8em; color:var(--accent3); margin-top:1em;">
+    90% of the value · 10% of the effort
+  </p>
+  <hr style="border:none; border-top:1px solid #444; margin:1.5em 0;" />
+  <p style="font-size:0.6em; color:var(--accent2);">Thank you! 🙏</p>
+  <p style="font-size:0.45em; color:#666;">
+    Research & presentation by Bob · February 2026
+  </p>
+</section>
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<!-- Reveal.js + plugins via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/markdown/markdown.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    showSlideNumber: 'all',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    center: true,
+    width: 1100,
+    height: 700,
+    margin: 0.08,
+    plugins: [RevealHighlight, RevealNotes, RevealMarkdown]
+  });
+</script>
+</body>
+</html>
