@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>From Hero to System — AI Skills Presentation</title>
+
+  <!-- Reveal.js 5 via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/moon.css" id="theme" />
+  <!-- Highlight.js theme for code blocks -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css" />
+
+  <style>
+    /* ── Custom overrides ─────────────────────────── */
+    :root {
+      --accent:  #7EC8E3;   /* sky blue accent  */
+      --accent2: #F7C948;   /* warm gold accent */
+      --accent3: #55D6A6;   /* mint green       */
+      --bad:     #E85D75;   /* error / avoid    */
+    }
+
+    .reveal { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { text-transform: none; letter-spacing: -0.02em; }
+    .reveal h1 { font-size: 2.2em; }
+    .reveal h2 { font-size: 1.5em; }
+    .reveal h3 { font-size: 1.15em; color: var(--accent); }
+
+    /* Accent utility classes */
+    .accent  { color: var(--accent);  }
+    .accent2 { color: var(--accent2); }
+    .accent3 { color: var(--accent3); }
+    .bad     { color: var(--bad);     }
+
+    /* Smaller code font */
+    .reveal pre { font-size: 0.55em; box-shadow: none; }
+    .reveal pre code { padding: 1em; border-radius: 8px; max-height: 520px; }
+    .reveal code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+
+    /* Diagram boxes */
+    .layer-diagram {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 700px; margin: 0.8em auto;
+    }
+    .layer-box {
+      padding: 0.55em 1em; text-align: center; font-size: 0.7em;
+      border: 1px solid rgba(255,255,255,0.15); font-weight: 600;
+    }
+    .layer-box:nth-child(1) { background: rgba(126,200,227,0.25); color: var(--accent); }
+    .layer-box:nth-child(2) { background: rgba(85,214,166,0.20);  color: var(--accent3); }
+    .layer-box:nth-child(3) { background: rgba(247,201,72,0.20);  color: var(--accent2); }
+    .layer-box:nth-child(4) { background: rgba(255,255,255,0.08); color: #aaa; }
+
+    /* Flow diagram */
+    .flow { display: flex; align-items: center; justify-content: center; gap: 0.4em; flex-wrap: wrap; margin: 0.8em 0; }
+    .flow-box {
+      background: rgba(126,200,227,0.15); border: 1px solid var(--accent);
+      border-radius: 8px; padding: 0.5em 0.9em; font-size: 0.65em; font-weight: 600; color: var(--accent);
+    }
+    .flow-arrow { font-size: 1.2em; color: #666; }
+
+    /* Comparison table */
+    .reveal table { font-size: 0.55em; margin: 0 auto; }
+    .reveal table th { background: rgba(126,200,227,0.2); color: var(--accent); font-weight: 700; }
+    .reveal table td, .reveal table th { border: 1px solid rgba(255,255,255,0.12); padding: 0.4em 0.65em; }
+    .reveal table td { color: #ccc; }
+
+    /* Good / bad labels */
+    .good::before { content: "✅ "; }
+    .avoid::before { content: "❌ "; }
+
+    /* Two-column layout */
+    .cols { display: flex; gap: 1.5em; align-items: flex-start; }
+    .cols > * { flex: 1; }
+
+    /* Subtle sub-text */
+    .sub { font-size: 0.6em; color: #888; margin-top: 0.3em; }
+
+    /* Slide number styling */
+    .reveal .slide-number { font-size: 0.5em; color: #666; }
+
+    /* Phase checklist */
+    .phase-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.6em;
+      font-size: 0.65em; text-align: left; max-width: 750px; margin: 0 auto;
+    }
+    .phase-card {
+      background: rgba(255,255,255,0.05); border-radius: 8px;
+      padding: 0.7em 1em; border-left: 3px solid var(--accent);
+    }
+    .phase-card h4 { margin: 0 0 0.3em 0; color: var(--accent2); font-size: 1.05em; }
+    .phase-card ul { margin: 0; padding-left: 1.2em; }
+
+    /* Tag badges */
+    .tag {
+      display: inline-block; font-size: 0.5em; padding: 0.15em 0.5em;
+      border-radius: 4px; background: rgba(126,200,227,0.2); color: var(--accent);
+      margin-right: 0.3em; vertical-align: middle;
+    }
+
+    /* Title slide subtitle */
+    .reveal .title-sub { font-size: 0.55em; color: #999; margin-top: 0.5em; }
+
+    /* Key-value pairs */
+    .kv { font-size: 0.65em; text-align: left; max-width: 650px; margin: 0 auto; }
+    .kv dt { color: var(--accent); font-weight: 700; margin-top: 0.5em; }
+    .kv dd { margin-left: 1.5em; color: #ccc; }
+  </style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 1 — Title
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h1 style="font-size:1.8em;">From Hero to System</h1>
+  <p style="font-size:1em; color:var(--accent); margin:0.2em 0;">Turning Human Knowledge<br>into AI Skills</p>
+  <p class="title-sub">A practical guide for design architects</p>
+  <p style="font-size:0.4em; color:#666; margin-top:2em;">February 2026 · Prepared by Bob for Ako</p>
+  <aside class="notes">
+    Welcome! This presentation distills research on how to package human expertise
+    so AI tools — Claude, GPTs, Cursor — can reliably follow your standards.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 2 — The Problem
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The "Hero Knowledge" Problem</h2>
+  <p style="font-size:0.75em; color:#ccc;">
+    Every team has <span class="accent2">unwritten expertise</span> trapped in one person's head.
+  </p>
+  <div class="flow" style="margin-top:1em;">
+    <div class="flow-box">🧠 Expert knows<br>"use red-600 for errors"</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">🏖️ Expert goes<br>on vacation</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--bad); color:var(--bad);">🤖 AI uses<br>wrong red</div>
+  </div>
+  <p style="font-size:0.6em; color:#888; margin-top:1em;">
+    Heroes don't scale. AI can — <em>if</em> you structure the knowledge.
+  </p>
+  <aside class="notes">
+    The core insight: teams winning at AI aren't those with the best models —
+    they're those who've packaged their knowledge best.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 3 — Core Insight
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Core Insight</h2>
+  <blockquote style="font-size:0.85em; border-left:4px solid var(--accent2); padding:0.5em 1em; background:rgba(247,201,72,0.08);">
+    "The teams winning at AI aren't the ones with<br>the best models. They're the ones who've<br><span class="accent2">packaged their knowledge best.</span>"
+  </blockquote>
+  <aside class="notes">
+    This is the key takeaway of the whole presentation. Everything else is how.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 4 — What Are Claude Skills?
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>What Are Claude Skills?</h2>
+  <p style="font-size:0.7em; color:#ccc;">
+    <span class="accent">Modular instruction packages</span> that teach Claude<br>
+    how to handle specific tasks or domains.
+  </p>
+  <div class="flow" style="margin-top:1em;">
+    <div class="flow-box">📦 Package<br>expertise once</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">🔍 Claude<br>auto-discovers</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent3); color:var(--accent3);">✨ Consistent<br>output every time</div>
+  </div>
+  <p style="font-size:0.55em; color:#888; margin-top:1em;">
+    Think of them as <strong>"onboarding docs for AI"</strong>
+  </p>
+  <aside class="notes">
+    Instead of re-explaining brand guidelines or coding standards every conversation,
+    you package the expertise once. Claude discovers and applies it automatically.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 5 — Skill File Structure
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Anatomy of a Skill</h2>
+  <pre><code class="language-plaintext" data-trim>
+my-brand-skill/
+├── SKILL.md           # Core instructions (required)
+├── REFERENCE.md       # Supplemental info (optional)
+├── resources/
+│   ├── helper.py      # Executable scripts
+│   └── examples.json  # Reference data
+  </code></pre>
+  <p style="font-size:0.55em; color:#888;">
+    Minimum: one folder + one <code>SKILL.md</code> file
+  </p>
+  <aside class="notes">
+    The folder structure is intentionally simple. SKILL.md is the only required file.
+    Resources are loaded on demand to save tokens.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 6 — SKILL.md Example
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>SKILL.md In Practice</h2>
+  <pre><code class="language-markdown" data-trim data-line-numbers="1-8|10-14|16-23">
+---
+name: brand-guidelines
+description: >
+  Apply company brand guidelines for marketing
+  copy, presentations, and customer-facing content.
+dependencies:
+  - python3
+---
+
+# Brand Guidelines Skill
+
+## Voice & Tone
+- Professional but approachable
+- Active voice preferred
+
+## Color Usage
+- Primary: #1A73E8 (trust blue)
+- Error: #DE3E25 (destructive only)
+- Never use raw hex — use semantic tokens
+
+## ✅ Good
+"We've updated your dashboard with new insights."
+
+## ❌ Bad
+"The UI has been refactored with enhanced data viz."
+  </code></pre>
+  <aside class="notes">
+    YAML frontmatter at the top gives Claude metadata for discovery.
+    The body is structured markdown with rules, examples, and anti-patterns.
+    Note the good/bad examples — AI learns as much from what NOT to do.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 7 — Progressive Disclosure
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Smart Loading: 3 Tiers</h2>
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>What Claude Sees</th><th>When</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="accent3">Metadata</span></td>
+        <td>Name + description</td>
+        <td>Always — every conversation</td>
+      </tr>
+      <tr>
+        <td><span class="accent">Full Instructions</span></td>
+        <td>Entire SKILL.md body</td>
+        <td>Only when relevant</td>
+      </tr>
+      <tr>
+        <td><span class="accent2">Resources</span></td>
+        <td>Scripts, data, refs</td>
+        <td>Only when executing</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.55em; color:#888; margin-top:0.8em;">
+    10 skills loaded → only 1 fully expanded → <span class="accent3">token-efficient</span>
+  </p>
+  <aside class="notes">
+    Progressive disclosure is what makes Skills practical at scale.
+    You can load many skills but only pay the full token cost for the relevant one.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 8 — Skills vs Styles
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Skills ≠ Output Styles</h2>
+  <div class="cols" style="font-size:0.65em;">
+    <div style="border:1px solid var(--accent); border-radius:8px; padding:1em;">
+      <h3 style="margin-top:0;">🎨 Styles</h3>
+      <ul>
+        <li>Modify <strong>how</strong> Claude responds</li>
+        <li>Tone, formatting, structure</li>
+        <li><span class="accent2">Always active</span> once selected</li>
+      </ul>
+    </div>
+    <div style="border:1px solid var(--accent3); border-radius:8px; padding:1em;">
+      <h3 style="margin-top:0; color:var(--accent3);">⚡ Skills</h3>
+      <ul>
+        <li>Modify <strong>what</strong> Claude can do</li>
+        <li>Domain expertise, workflows</li>
+        <li><span class="accent3">On-demand</span> based on context</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 9 — The Convergence
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Convergence</h2>
+  <p style="font-size:0.6em; color:#ccc; margin-bottom:0.8em;">
+    Everyone is solving the same problem — different shapes, same DNA.
+  </p>
+  <table style="font-size:0.48em;">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Claude Skills</th>
+        <th>Custom GPTs</th>
+        <th>Cursor Rules</th>
+        <th>AGENTS.md</th>
+        <th>Figma MCP</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="color:var(--accent);font-weight:700;">Format</td><td>SKILL.md + folder</td><td>Web UI config</td><td>.mdc files</td><td>Plain markdown</td><td>Auto-generated</td></tr>
+      <tr><td style="color:var(--accent);font-weight:700;">Activation</td><td>Auto by context</td><td>User selects</td><td>Glob / AI-decided</td><td>Always loaded</td><td>MCP protocol</td></tr>
+      <tr><td style="color:var(--accent);font-weight:700;">Progressive</td><td>✅ 3-tier</td><td>❌</td><td>⚠️ Glob</td><td>❌</td><td>✅</td></tr>
+      <tr><td style="color:var(--accent);font-weight:700;">Executable</td><td>✅ Scripts</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+      <tr><td style="color:var(--accent);font-weight:700;">Composable</td><td>✅</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">
+    All approaches converge on: structured metadata, markdown instructions,
+    reference resources, and progressive disclosure. The Agent Skills spec at
+    agentskills.io is an emerging cross-platform standard.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 10 — When to Use What
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Choosing Your Format</h2>
+  <div style="font-size:0.62em; text-align:left; max-width:700px; margin:0 auto;">
+    <p>📄 <strong>Consistent document output?</strong> → <span class="accent">Claude Skills</span> (scripts for PDF, Excel)</p>
+    <p>💬 <strong>Customer-facing assistant?</strong> → <span class="accent">Custom GPTs</span> (easy sharing, web UI)</p>
+    <p>🖥️ <strong>Coding conventions?</strong> → <span class="accent">Cursor Rules</span> (auto-attach by file type)</p>
+    <p>🎨 <strong>Design system compliance?</strong> → <span class="accent">Figma MCP</span> + token docs</p>
+    <p>🏢 <strong>Team process capture?</strong> → <span class="accent">AGENTS.md</span> (simplest approach)</p>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:1em;">
+    They're not mutually exclusive — combine as needed
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 11 — Structuring Knowledge
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Structuring Knowledge for AI</h2>
+  <p style="font-size:0.65em; color:#ccc; margin-bottom:0.5em;">
+    AI has <span class="bad">zero tacit knowledge</span>. Everything must be <span class="accent2">explicit</span>.
+  </p>
+  <table style="font-size:0.5em;">
+    <thead>
+      <tr><th>Knowledge Type</th><th>Example</th><th>Encoding</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="accent">Rules</span></td><td>"Error text = red-600"</td><td>Explicit constraints</td></tr>
+      <tr><td><span class="accent">Patterns</span></td><td>"Cards have 16px padding"</td><td>Templates + examples</td></tr>
+      <tr><td><span class="accent">Preferences</span></td><td>"Prefer shorter headlines"</td><td>Ranked examples ✅/❌</td></tr>
+      <tr><td><span class="accent">Judgment</span></td><td>"Layout feels too dense"</td><td>Decision trees</td></tr>
+      <tr><td><span class="accent">Process</span></td><td>"PRs need design review"</td><td>Step-by-step workflows</td></tr>
+    </tbody>
+  </table>
+  <aside class="notes">
+    The art is in the translation from tacit to explicit.
+    Each knowledge type needs a different encoding strategy.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 12 — Anti-Patterns
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Power of Anti-Patterns</h2>
+  <p style="font-size:0.6em; color:#ccc; margin-bottom:0.5em;">
+    AI learns <span class="accent2">almost as much</span> from what <span class="bad">NOT</span> to do.
+  </p>
+  <pre><code class="language-markdown" data-trim>
+## Common Mistakes (DO NOT)
+- ❌ Using primitive color tokens directly (e.g., `red-6`)
+- ❌ Hardcoding pixel values instead of spacing tokens
+- ❌ Creating new variants when an existing one works
+- ❌ Skipping loading/error states in components
+  </code></pre>
+  <p style="font-size:0.55em; color:#888; margin-top:0.5em;">
+    <strong>The "new hire" test:</strong> If a smart new hire could follow<br>
+    your instructions and produce 90%+ acceptable output,<br>
+    your instructions are good enough for AI.
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 13 — Tokens Without Intent
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Tokens Without Intent</h2>
+  <div class="cols" style="font-size:0.6em;">
+    <div>
+      <h3 style="color:var(--bad);">🚫 What AI sees</h3>
+      <pre><code class="language-json" data-trim>
+{
+  "red-6": {
+    "value": "#DE3E25",
+    "type": "color"
+  }
+}
+      </code></pre>
+      <p style="color:#888; font-size:0.85em;">No idea that <code>red-6</code> is a <em>primitive</em>,<br>not for direct use</p>
+    </div>
+    <div>
+      <h3>✅ What AI needs</h3>
+      <pre><code class="language-json" data-trim>
+{
+  "color-feedback-error": {
+    "value": "#DE3E25",
+    "description": "Error states:
+      alerts, destructive buttons",
+    "usage": ["Alert.error",
+      "Button.destructive"],
+    "pairedWith": [
+      "color-feedback-errorText"]
+  }
+}
+      </code></pre>
+    </div>
+  </div>
+  <aside class="notes">
+    A single description field transforms a color value into actionable guidance.
+    AI now knows what it's for, where to use it, and what it pairs with.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 14 — The 4-Layer Bridge
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Design System → AI Bridge</h2>
+  <div class="layer-diagram">
+    <div class="layer-box">Layer 4 · Usage Rules & Guardrails<br><span style="font-size:0.8em;font-weight:400;">"Buttons must use semantic tokens"</span></div>
+    <div class="layer-box">Layer 3 · Component Specifications<br><span style="font-size:0.8em;font-weight:400;">Props, variants, composition rules</span></div>
+    <div class="layer-box">Layer 2 · Semantic Tokens<br><span style="font-size:0.8em;font-weight:400;">color-feedback-error, spacing-card-padding</span></div>
+    <div class="layer-box">Layer 1 · Primitive Tokens<br><span style="font-size:0.8em;font-weight:400;">red-6, space-4, font-size-14</span></div>
+  </div>
+  <p style="font-size:0.5em; color:#888;">
+    AI-readability starts at <span class="accent2">Layer 2</span> · Guardrails live at <span class="accent">Layer 4</span>
+  </p>
+  <aside class="notes">
+    Layer 1 primitives should rarely be used directly by AI.
+    Layer 2 is where you add descriptions.
+    Layer 3 documents each component.
+    Layer 4 is the guardrails that prevent misuse.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 15 — Component Spec Example
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Component Spec Example</h2>
+  <pre><code class="language-markdown" data-trim data-line-numbers="1-6|8-16|18-22">
+# Component: Button
+
+## Variants
+- `primary`: Main actions (1 per section)
+- `secondary`: Supporting actions
+- `destructive`: Delete, irreversible actions
+
+## Token Usage
+| Property     | Token                         |
+|------------- |-------------------------------|
+| Background   | `color-interactive-primary`   |
+| Text         | `color-text-onColor`          |
+| Padding      | `spacing-component-btn-pad`   |
+| Border radius| `radius-component-button`     |
+| Min height   | `sizing-touch-target-min`     |
+
+## Rules
+- NEVER use raw hex values
+- ALWAYS pair with appropriate text color token
+- Maximum 1 primary button per section
+- Destructive buttons require confirmation
+  </code></pre>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 16 — Figma MCP Pipeline
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Figma MCP: The Bridge</h2>
+  <p style="font-size:0.6em; color:#ccc; margin-bottom:0.8em;">
+    Connects your Figma designs <span class="accent">directly</span> to your IDE's AI agent
+  </p>
+  <div class="flow">
+    <div class="flow-box">🎨 Figma<br>Components</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent2);color:var(--accent2);">🔌 MCP<br>Server</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">🤖 AI Agent<br>(Cursor / Claude)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">💻 Code using<br>YOUR components</div>
+  </div>
+  <div style="font-size:0.55em; text-align:left; max-width:600px; margin:0.8em auto 0; color:#ccc;">
+    <p>📦 <strong>Sends:</strong> Components, styles, variables, Code Connect</p>
+    <p>🎯 <strong>Enables:</strong> AI uses <em>your</em> components, not generic ones</p>
+    <p>⚡ <strong>Killer feature:</strong> Auto-generates design system rules from your codebase</p>
+  </div>
+  <aside class="notes">
+    If you're using Figma + an AI coding tool, setting up the Figma MCP server
+    is the highest-leverage integration you can do. 68% of devs use AI to write code,
+    but only 32% trust the output — MCP bridges this trust gap.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 17 — 7 Principles
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>7 Principles of AI Knowledge</h2>
+  <div style="font-size:0.58em; text-align:left; max-width:700px; margin:0 auto; columns:2; column-gap:1.5em;">
+    <p><span class="accent2">1.</span> Be <strong>explicit</strong>, not implicit</p>
+    <p><span class="accent2">2.</span> <strong>Structure</strong> beats prose</p>
+    <p><span class="accent2">3.</span> Include examples — <strong>good AND bad</strong></p>
+    <p><span class="accent2">4.</span> State what <strong>NOT</strong> to do</p>
+    <p><span class="accent2">5.</span> Use <strong>progressive disclosure</strong></p>
+    <p><span class="accent2">6.</span> Test with <strong>edge cases</strong></p>
+    <p><span class="accent2">7.</span> <strong>Version</strong> and iterate</p>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.6em;">
+    "Make it look professional" means nothing.<br>
+    "16px body, 48px headers, neutral-700" means <span class="accent3">everything</span>.
+  </p>
+  <aside class="notes">
+    These 7 principles apply regardless of which format you choose.
+    The most under-used technique is #4 — stating what NOT to do.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 18 — Knowledge Capture Process
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Knowledge Capture Process</h2>
+  <div class="flow" style="margin-bottom:0.8em;">
+    <div class="flow-box">👀 Observe<br>the expert</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent2);color:var(--accent2);">🔍 Extract<br>patterns</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">📝 Encode<br>as rules</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">🧪 Test with<br>AI</div>
+  </div>
+  <div style="font-size:0.58em; text-align:left; max-width:650px; margin:0 auto; color:#ccc;">
+    <p><strong>5 extraction questions:</strong></p>
+    <ol>
+      <li>"Walk me through the last time you did [task]."</li>
+      <li>"What's the most common mistake juniors make?"</li>
+      <li>"One rule only — what is it?"</li>
+      <li>"When do you <em>break</em> your own rules?"</li>
+      <li>"Show me a great example and a terrible one."</li>
+    </ol>
+  </div>
+  <aside class="notes">
+    These 5 questions are designed to extract process, anti-patterns,
+    core principles, edge cases, and quality bars from domain experts.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 19 — Real-World Examples
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Real-World Success Stories</h2>
+  <div style="font-size:0.58em; text-align:left; max-width:700px; margin:0 auto;">
+    <p>🚀 <strong class="accent">Trigger.dev</strong> — Cursor rules for task writing<br>
+    <span style="color:#999;">Explicit SDK version + full examples → dramatically improved consistency</span></p>
+    <p>🎨 <strong class="accent">Figma MCP</strong> — Design system context for AI agents<br>
+    <span style="color:#999;">AI reuses existing components instead of generating generic code</span></p>
+    <p>🏗️ <strong class="accent">Builder.io</strong> — Context-aware design-to-code<br>
+    <span style="color:#999;">AI learns from your actual repo and uses your components</span></p>
+    <p>🤖 <strong class="accent">OpenClaw / AGENTS.md</strong> — Agent self-knowledge<br>
+    <span style="color:#999;">Plain markdown in project root — simple but effective</span></p>
+    <p>🎯 <strong class="accent">Romina Kavcic</strong> — AI-readable design tokens<br>
+    <span style="color:#999;">Added descriptions + usage arrays → Claude picked the right tokens automatically</span></p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 20 — The Framework
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Your 5-Phase Roadmap</h2>
+  <div class="phase-grid">
+    <div class="phase-card">
+      <h4>📋 Phase 1: Audit <span style="color:#666;font-size:0.8em;">(Day 1)</span></h4>
+      <ul>
+        <li>Top 20 tokens</li>
+        <li>Top 10 components</li>
+        <li>5 "unwritten rules"</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <h4>📝 Phase 2: Describe <span style="color:#666;font-size:0.8em;">(Days 2-3)</span></h4>
+      <ul>
+        <li>Add <code>description</code> fields</li>
+        <li>Add <code>usage</code> & <code>pairedWith</code></li>
+        <li>Write component specs</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <h4>🛡️ Phase 3: Guardrail <span style="color:#666;font-size:0.8em;">(Days 4-5)</span></h4>
+      <ul>
+        <li>Usage rules</li>
+        <li>Anti-pattern examples</li>
+        <li>Decision trees</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <h4>📦 Phase 4: Package <span style="color:#666;font-size:0.8em;">(Week 2)</span></h4>
+      <ul>
+        <li>Choose format(s)</li>
+        <li>Progressive disclosure</li>
+        <li>Set up Figma MCP</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:0.5em; color:var(--accent3); margin-top:0.5em;">
+    🔄 Phase 5: Test & Iterate — ongoing, review monthly
+  </p>
+  <aside class="notes">
+    This is the actionable framework. Phase 1 can literally start today.
+    The key is to start small and iterate based on where AI fails.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 21 — Minimum Viable Skill
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Minimum Viable Skill</h2>
+  <p style="font-size:0.55em; color:#888; margin-bottom:0.3em;">
+    If you only do <span class="accent2">ONE thing</span>, create this file:
+  </p>
+  <pre><code class="language-markdown" data-trim>
+# Design System Quick Reference for AI
+
+## Tokens (Use These, Not Raw Values)
+- Primary action: `color-interactive-primary` (#1A73E8)
+- Error: `color-feedback-error` (#DE3E25)
+- Body text: `color-text-primary` (#1F2937)
+- Spacing: sm (8px) · md (16px) · lg (24px)
+- Border radius: `radius-default` (8px)
+
+## Component Rules
+- Use `<Button>` not `<button>` — handles a11y
+- Primary buttons: max 1 per section
+- Cards always have 16px padding
+- Forms: spacing-md between fields
+
+## Do NOT
+- ❌ Use raw hex colors
+- ❌ Create new components when existing ones fit
+- ❌ Skip loading/error states
+  </code></pre>
+  <p style="font-size:0.5em; color:var(--accent3);">
+    90% of the value · 10% of the effort
+  </p>
+  <aside class="notes">
+    Put this file in your repo root, Claude project, or Cursor rules.
+    It's the fastest way to start getting value from AI knowledge engineering.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 22 — 15-Minute Quick Win
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Start Today: 15-Minute Win</h2>
+  <p style="font-size:0.6em; color:#ccc; margin-bottom:0.5em;">
+    Add <code>description</code> to your <span class="accent2">top 10</span> most-used tokens:
+  </p>
+  <div style="font-size:0.55em; text-align:left; max-width:550px; margin:0 auto; color:#ccc;">
+    <ol>
+      <li>Primary button color</li>
+      <li>Error color</li>
+      <li>Text primary color</li>
+      <li>Background color</li>
+      <li>Border color</li>
+      <li>Button padding</li>
+      <li>Input padding</li>
+      <li>Border radius (default)</li>
+      <li>Focus ring color</li>
+      <li>Disabled state opacity</li>
+    </ol>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.5em;">
+    That's it. You've just made your design system <span class="accent3">AI-readable</span>.
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 23 — The Pattern
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>The Universal Pattern</h2>
+  <p style="font-size:0.6em; color:#ccc; margin-bottom:0.6em;">
+    All approaches converge on <span class="accent2">four pillars</span>:
+  </p>
+  <div style="display:flex; gap:0.5em; justify-content:center; flex-wrap:wrap;">
+    <div style="background:rgba(126,200,227,0.15); border:1px solid var(--accent); border-radius:8px; padding:0.6em 0.8em; font-size:0.6em; text-align:center; width:140px;">
+      <div style="font-size:1.5em;">📋</div>
+      <strong class="accent">Structured<br>Metadata</strong>
+      <div style="color:#888;font-size:0.8em;">name, triggers</div>
+    </div>
+    <div style="background:rgba(247,201,72,0.12); border:1px solid var(--accent2); border-radius:8px; padding:0.6em 0.8em; font-size:0.6em; text-align:center; width:140px;">
+      <div style="font-size:1.5em;">📝</div>
+      <strong class="accent2">Markdown<br>Instructions</strong>
+      <div style="color:#888;font-size:0.8em;">rules, examples</div>
+    </div>
+    <div style="background:rgba(85,214,166,0.12); border:1px solid var(--accent3); border-radius:8px; padding:0.6em 0.8em; font-size:0.6em; text-align:center; width:140px;">
+      <div style="font-size:1.5em;">📦</div>
+      <strong class="accent3">Reference<br>Resources</strong>
+      <div style="color:#888;font-size:0.8em;">data, scripts</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06); border:1px solid #666; border-radius:8px; padding:0.6em 0.8em; font-size:0.6em; text-align:center; width:140px;">
+      <div style="font-size:1.5em;">🔍</div>
+      <strong style="color:#ccc;">Progressive<br>Disclosure</strong>
+      <div style="color:#888;font-size:0.8em;">load on demand</div>
+    </div>
+  </div>
+  <p style="font-size:0.5em; color:#888; margin-top:0.8em;">
+    🔗 Emerging standard: <a href="https://agentskills.io" style="color:var(--accent);">agentskills.io</a>
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 24 — Key Takeaways
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Key Takeaways</h2>
+  <div style="font-size:0.68em; text-align:left; max-width:650px; margin:0 auto;">
+    <p>1️⃣ &nbsp;<strong>Heroes don't scale</strong> — package the knowledge</p>
+    <p>2️⃣ &nbsp;<strong>Be explicit</strong> — AI has zero tacit understanding</p>
+    <p>3️⃣ &nbsp;<strong>Anti-patterns</strong> are as valuable as patterns</p>
+    <p>4️⃣ &nbsp;<strong>Semantic tokens</strong> with descriptions = AI-readable design</p>
+    <p>5️⃣ &nbsp;<strong>Figma MCP</strong> is the highest-leverage integration</p>
+    <p>6️⃣ &nbsp;<strong>Start with one file</strong> — iterate from there</p>
+  </div>
+  <aside class="notes">
+    Recap the key points. The most important thing is to START —
+    even a single DESIGN_SYSTEM.md file gives enormous value.
+  </aside>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     SLIDE 25 — Further Reading + Close
+     ════════════════════════════════════════════════════ -->
+<section>
+  <h2>Further Reading</h2>
+  <div style="font-size:0.5em; text-align:left; max-width:700px; margin:0 auto; color:#ccc;">
+    <p>📘 <a href="https://claude.com/blog/how-to-create-skills-key-steps-limitations-and-examples" style="color:var(--accent);">Anthropic: How to Create Skills for Claude</a></p>
+    <p>📗 <a href="https://www.figma.com/blog/design-systems-ai-mcp/" style="color:var(--accent);">Figma: Design Systems and AI — Why MCP Servers Are the Unlock</a></p>
+    <p>📙 <a href="https://learn.thedesignsystem.guide/p/design-tokens-that-ai-can-actually" style="color:var(--accent);">Design Tokens That AI Can Actually Read</a> — Romina Kavcic</p>
+    <p>📕 <a href="https://trigger.dev/blog/cursor-rules" style="color:var(--accent);">Trigger.dev: How to Write Great Cursor Rules</a></p>
+    <p>📓 <a href="https://agentskills.io" style="color:var(--accent);">Agent Skills Specification</a> — Emerging cross-platform standard</p>
+  </div>
+  <hr style="border:none; border-top:1px solid #444; margin:1em 0;" />
+  <p style="font-size:0.6em; color:var(--accent2);">Thank you! 🙏</p>
+  <p style="font-size:0.45em; color:#666;">
+    Research & presentation by Bob · February 2026
+  </p>
+</section>
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<!-- Reveal.js + plugins via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/markdown/markdown.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    showSlideNumber: 'all',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    center: true,
+    width: 1100,
+    height: 700,
+    margin: 0.08,
+    plugins: [RevealHighlight, RevealNotes, RevealMarkdown]
+  });
+</script>
+</body>
+</html>
