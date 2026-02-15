@@ -175,6 +175,71 @@
   <aside class="notes">These aren't "nice to haves." Each one has bitten someone who skipped it. We'll go through each with concrete examples and things you can do this week.</aside>
 </section>
 
+<!-- ============ 4b. AI INSTRUCTIONS FILES ============ -->
+<section>
+  <section>
+    <h2>📜 AI Instructions Files</h2>
+    <p style="text-align:center; font-size:0.8em;">Your <span class="accent2">engineering constitution</span> for AI teammates</p>
+  </section>
+
+  <section>
+    <h3>📜 Your Engineering Constitution</h3>
+    <p style="font-size:0.8em;">Write your engineering standards <span class="accent">ONCE</span>, AI follows them <span class="accent2">EVERY time</span>.</p>
+    <table>
+      <thead><tr><th>File</th><th>Tool</th></tr></thead>
+      <tbody>
+        <tr><td><code>.github/copilot-instructions.md</code></td><td>GitHub Copilot</td></tr>
+        <tr><td><code>CLAUDE.md</code></td><td>Claude Code</td></tr>
+        <tr><td><code>.cursorrules</code></td><td>Cursor</td></tr>
+        <tr><td><code>AGENTS.md</code></td><td>VS Code agents</td></tr>
+      </tbody>
+    </table>
+    <div class="tip-box">
+      💡 <strong>Analogy:</strong> It's like an onboarding doc for your AI teammate. New hire? Read the handbook. New AI session? Read the instructions file.
+    </div>
+    <aside class="notes">Different tools, same concept. You define the rules once in a markdown file at the root of your project. Every AI session picks it up automatically — no need to repeat yourself in every prompt.</aside>
+  </section>
+
+  <section>
+    <h3>What Goes in Your Instructions File</h3>
+    <pre><code class="language-markdown">## Role
+You are a senior engineering partner. I am a PM learning to code.
+Explain what you're doing and why. Teach as you go.
+
+## Code Style
+- Descriptive names (getUserById, not doStuff)
+- One function does one thing
+- Prefer readability over cleverness
+
+## Security
+- NEVER hardcode secrets — use .env
+- Validate all user input
+- Use parameterized queries
+
+## Testing
+- Write tests alongside code
+- Test happy path AND edge cases
+
+## Git
+- Meaningful commits: feat(auth): add login form
+- Never commit .env or node_modules</code></pre>
+    <p style="font-size:0.65em;">💡 Add framework-specific overrides too — React patterns, iOS conventions, Python style sections.</p>
+    <aside class="notes">This is a condensed example. Real files can be longer with framework-specific sections. The key is: define your standards once, and the AI follows them every session without you having to re-explain.</aside>
+  </section>
+
+  <section>
+    <h3>Resources for AI Instructions</h3>
+    <ul>
+      <li>📚 <span class="accent">github/awesome-copilot</span> — community templates &amp; examples</li>
+      <li>🔒 <span class="accent2">Snyk's vibe coding personalization guide</span> — security-focused instructions</li>
+      <li>🌐 <span class="accent3">"One Prompt to Rule Them All"</span> — cross-tool instructions pattern</li>
+    </ul>
+    <div class="tip-box">
+      💡 <strong>Start simple:</strong> Copy a base template, customize as you learn what matters for YOUR projects. Your instructions file will evolve with you.
+    </div>
+  </section>
+</section>
+
 <!-- ============ 5. BASH & TERMINAL ============ -->
 <section>
   <section>
@@ -470,6 +535,30 @@ Then implement the function to pass these tests."</code></pre>
   </section>
 
   <section>
+    <h3>Two Levels of Evaluation</h3>
+    <div class="cols">
+      <div>
+        <p style="font-size:0.8em;"><span class="accent">Level 1:</span> Code Review</p>
+        <ul style="font-size:0.65em;">
+          <li>Checking AI-generated code before shipping</li>
+          <li>Manual, per-output inspection</li>
+          <li>Essential for <span class="accent2">vibe coding</span></li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:0.8em;"><span class="accent2">Level 2:</span> AI Product Evaluation</p>
+        <ul style="font-size:0.65em;">
+          <li>Systematic testing of LLM outputs <em>at scale</em></li>
+          <li>Rubrics, eval sets, scoring pipelines</li>
+          <li>Essential for <span class="accent3">shipping AI products</span></li>
+        </ul>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.75em; margin-top:1em;">Both matter. Level 1 is where you start. Level 2 is where you grow.</p>
+    <aside class="notes">Most people only think about Level 1 — reading the code AI gives you. But if you're building a product that uses AI (chatbots, content generation, etc.), you need Level 2: systematic evaluation at scale.</aside>
+  </section>
+
+  <section>
     <h3>The Code Review Checklist</h3>
     <p style="font-size:0.75em;">Before accepting any AI-generated code, ask:</p>
     <ul>
@@ -496,15 +585,83 @@ Then implement the function to pass these tests."</code></pre>
   </section>
 
   <section>
-    <h3>The Evaluation Loop</h3>
+    <h3>AI Product Evaluation Framework</h3>
     <div class="flow">
-      <div class="flow-box">🤖 AI writes code</div><div class="flow-arrow"></div>
-      <div class="flow-box">📖 You read it</div><div class="flow-arrow"></div>
-      <div class="flow-box">▶️ You run it</div><div class="flow-arrow"></div>
-      <div class="flow-box">🧪 You test it</div><div class="flow-arrow"></div>
-      <div class="flow-box">✅ Ship</div>
+      <div class="flow-box">📏 Define Rubrics</div><div class="flow-arrow"></div>
+      <div class="flow-box">📋 Build Eval Set</div><div class="flow-arrow"></div>
+      <div class="flow-box">🤖 Run Model</div><div class="flow-arrow"></div>
+      <div class="flow-box">📊 Score Outputs</div><div class="flow-arrow"></div>
+      <div class="flow-box">🔄 Analyze &amp; Iterate</div>
     </div>
-    <p style="text-align:center; font-size:0.75em;">Skip any step → you're gambling with production.</p>
+    <ul style="font-size:0.7em; margin-top:0.8em;">
+      <li><span class="accent">Rubrics:</span> What does "good" look like? (accuracy 1-5, tone match, no hallucination)</li>
+      <li><span class="accent2">Eval Set:</span> Representative inputs — normal cases + edge cases</li>
+      <li><span class="accent3">Scoring:</span> Human judges, LLM-as-Judge, or programmatic metrics</li>
+      <li><span class="accent">Iteration:</span> Change prompt/model → re-run eval → compare results</li>
+    </ul>
+    <aside class="notes">This is how professional AI teams evaluate their models. You don't guess if it's good — you measure it. PMs should own this process, not engineers.</aside>
+  </section>
+
+  <section>
+    <h3>Rubrics — Defining Quality</h3>
+    <table>
+      <thead><tr><th>Dimension</th><th>1 (Poor)</th><th>3 (Acceptable)</th><th>5 (Excellent)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="accent">Accuracy</span></td><td>Factually wrong</td><td>Mostly correct, minor errors</td><td>Fully accurate, verified</td></tr>
+        <tr><td><span class="accent2">Relevance</span></td><td>Off-topic</td><td>Addresses the question</td><td>Directly answers with context</td></tr>
+        <tr><td><span class="bad">Safety</span></td><td>Harmful content</td><td>No harm but no guardrails</td><td>Safe with disclaimers</td></tr>
+        <tr><td><span class="accent3">Tone</span></td><td>Wrong brand voice</td><td>Neutral</td><td>Matches brand perfectly</td></tr>
+      </tbody>
+    </table>
+    <p style="text-align:center; font-size:0.75em; margin-top:0.5em;">Rubrics turn <em>"does it feel right?"</em> into <span class="accent2">measurable scores</span>.</p>
+  </section>
+
+  <section>
+    <h3>Scoring Methods</h3>
+    <div class="cols">
+      <div>
+        <p style="font-size:0.75em; text-align:center;">👤 <span class="accent">Human Eval</span></p>
+        <ul style="font-size:0.6em;">
+          <li>Gold standard</li>
+          <li>Slow &amp; expensive</li>
+          <li>Use for high-stakes decisions</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:0.75em; text-align:center;">🤖 <span class="accent2">LLM-as-Judge</span></p>
+        <ul style="font-size:0.6em;">
+          <li>GPT-4/Claude scores outputs against rubrics</li>
+          <li>Fast, scalable</li>
+          <li>~80% agreement with humans</li>
+          <li>Watch for bias</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:0.75em; text-align:center;">📊 <span class="accent3">Programmatic</span></p>
+        <ul style="font-size:0.6em;">
+          <li>Exact match, ROUGE/BLEU, regex</li>
+          <li>Best for structured output</li>
+          <li>JSON, categories, formats</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-box">
+      💡 Start with human eval on <strong>50 examples</strong> to calibrate, then scale with LLM-as-Judge.
+    </div>
+  </section>
+
+  <section>
+    <h3>Regression Testing for AI</h3>
+    <ul>
+      <li>Changed a prompt or swapped models? Does quality go <span class="accent3">up</span> or <span class="bad">down</span>?</li>
+      <li>Run the <span class="accent">SAME eval set</span> before and after → compare scores</li>
+      <li>Catches: model updates breaking your app, prompt tweaks with <span class="bad">unexpected side effects</span></li>
+    </ul>
+    <p style="font-size:0.7em; margin-top:0.5em;"><strong>Tools:</strong> <span class="accent">Braintrust</span>, <span class="accent2">Promptfoo</span>, <span class="accent3">LangSmith</span>, OpenAI Evals</p>
+    <div class="tip-box">
+      💡 <strong>Key insight for PMs:</strong> This is YOUR job. Engineers write code. PMs define quality rubrics and <span class="accent2">own the eval pipeline</span>.
+    </div>
+    <aside class="notes">Think of this like A/B testing for AI outputs. You wouldn't ship a new UI without testing it. Don't ship a new prompt without evaluating it either. PMs are uniquely qualified to define "what good looks like" — that's literally the rubric.</aside>
   </section>
 </section>
 
@@ -609,6 +766,56 @@ jobs:
       - run: npm install
       - run: npm test</code></pre>
     <p style="font-size:0.7em;">That's it. Every push now runs your tests automatically. If they fail, you know before deploying.</p>
+  </section>
+
+  <section>
+    <h3>CD — Where Does Deployment Happen?</h3>
+    <table>
+      <thead><tr><th>Approach</th><th>How it works</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><span class="accent3">Platform auto-deploy</span></td><td>Connect GitHub → push = deploy</td><td>Vercel, Netlify, Railway</td></tr>
+        <tr><td><span class="accent2">Actions → Platform</span></td><td>Actions runs deploy command</td><td>AWS, Azure, custom servers</td></tr>
+        <tr><td><span class="accent">GitHub Pages</span></td><td>Actions builds → pushes to gh-pages</td><td>Static sites, docs</td></tr>
+      </tbody>
+    </table>
+    <div class="tip-box">
+      💡 <strong>For beginners:</strong> Vercel / Railway = zero-config CD. Just connect your repo and push. Done.
+    </div>
+    <aside class="notes">You don't always need GitHub Actions for deployment. Platforms like Vercel watch your repo directly. Actions-based CD gives more control but is more setup. Start simple.</aside>
+  </section>
+
+  <section>
+    <h3>GitHub Actions — CI + CD Together</h3>
+    <pre><code class="language-yaml">name: CI/CD
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm install
+      - run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist</code></pre>
+    <ul style="font-size:0.65em;">
+      <li><code>needs: test</code> → deploy <span class="accent">ONLY runs if tests pass</span></li>
+      <li><code>if: github.ref == 'refs/heads/main'</code> → only deploy from <span class="accent2">main branch</span>, not feature branches</li>
+    </ul>
   </section>
 </section>
 
