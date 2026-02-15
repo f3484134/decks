@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Literacy in the Age of Vibe Coding</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/moon.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+<style>
+:root {
+  --accent: #7EC8E3;
+  --accent2: #F7C948;
+  --accent3: #55D6A6;
+  --bad: #E85D75;
+}
+.reveal { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+.reveal h1, .reveal h2, .reveal h3 { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+.reveal code, .reveal pre code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+.reveal pre { width: 100%; box-shadow: none; }
+.reveal pre code { max-height: 480px; padding: 1em; border-radius: 8px; }
+.accent { color: var(--accent) !important; }
+.accent2 { color: var(--accent2) !important; }
+.accent3 { color: var(--accent3) !important; }
+.bad { color: var(--bad) !important; }
+.sub { font-size: 0.65em; opacity: 0.7; }
+.good::before { content: '✅ '; }
+.avoid::before { content: '❌ '; }
+
+.cols { display: flex; gap: 1.5em; align-items: flex-start; }
+.cols > * { flex: 1; }
+
+.flow { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; margin: 0.8em 0; }
+.flow-box { background: rgba(126,200,227,0.15); border: 2px solid var(--accent); border-radius: 10px; padding: 0.5em 1em; font-size: 0.7em; font-weight: 600; }
+.flow-arrow { font-size: 1.3em; margin: 0 0.3em; color: var(--accent2); }
+.flow-arrow::after { content: '→'; }
+
+.layer-diagram { display: flex; flex-direction: column; gap: 0; margin: 0.8em auto; max-width: 600px; }
+.layer-box { padding: 0.6em 1em; font-weight: 600; font-size: 0.7em; text-align: center; }
+.layer-box:nth-child(1) { background: rgba(126,200,227,0.25); border-radius: 10px 10px 0 0; }
+.layer-box:nth-child(2) { background: rgba(247,201,72,0.25); }
+.layer-box:nth-child(3) { background: rgba(85,214,166,0.25); }
+.layer-box:nth-child(4) { background: rgba(232,93,117,0.25); border-radius: 0 0 10px 10px; }
+
+.reveal table { border-collapse: collapse; margin: 0.5em auto; font-size: 0.65em; }
+.reveal table th, .reveal table td { border: 1px solid rgba(255,255,255,0.15); padding: 0.4em 0.8em; }
+.reveal table th { background: rgba(126,200,227,0.2); }
+
+.reveal ul { font-size: 0.8em; }
+.reveal li { margin-bottom: 0.3em; }
+.reveal section { text-align: left; }
+.reveal h1, .reveal h2, .reveal h3 { text-align: center; }
+.reveal .center { text-align: center; }
+
+.horror-box { background: rgba(232,93,117,0.12); border-left: 4px solid var(--bad); padding: 0.6em 1em; border-radius: 0 8px 8px 0; margin: 0.5em 0; font-size: 0.7em; }
+.tip-box { background: rgba(85,214,166,0.12); border-left: 4px solid var(--accent3); padding: 0.6em 1em; border-radius: 0 8px 8px 0; margin: 0.5em 0; font-size: 0.7em; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ 1. TITLE ============ -->
+<section>
+  <h1 style="font-size:1.6em;">🛠️ Engineering Literacy<br>in the Age of <span class="accent2">Vibe Coding</span></h1>
+  <p class="sub" style="text-align:center;">For Product Managers &amp; Designers who want to ship — not just prompt</p>
+  <aside class="notes">Welcome! This deck is for non-engineers who are using or planning to use AI to write code. The goal: give you the engineering fundamentals that separate people who ship reliably from those who create messes.</aside>
+</section>
+
+<!-- ============ 2. VIBE CODING REVOLUTION ============ -->
+<section>
+  <section>
+    <h2>🌊 The Vibe Coding Revolution</h2>
+    <p style="text-align:center; font-size:0.85em;">What changed — and why it matters to you</p>
+  </section>
+
+  <section>
+    <h3>What is <span class="accent2">Vibe Coding</span>?</h3>
+    <ul>
+      <li>You describe what you want in <span class="accent">plain English</span></li>
+      <li>AI (ChatGPT, Claude, Copilot, Cursor…) writes the code</li>
+      <li>You <strong>accept, run, iterate</strong></li>
+      <li>The barrier to writing code dropped to <span class="accent2">zero</span></li>
+    </ul>
+    <div class="flow">
+      <div class="flow-box">💬 Prompt</div><div class="flow-arrow"></div>
+      <div class="flow-box">🤖 AI generates code</div><div class="flow-arrow"></div>
+      <div class="flow-box">▶️ Run it</div><div class="flow-arrow"></div>
+      <div class="flow-box">🔄 Iterate</div>
+    </div>
+    <aside class="notes">Coined by Andrej Karpathy. The idea is you "vibe" with the AI — describe intent, let it write code, accept results. It's real and it works… sometimes.</aside>
+  </section>
+
+  <section>
+    <h3>The Opportunity 🚀</h3>
+    <ul>
+      <li>PMs can <span class="accent3">prototype ideas</span> in hours, not sprints</li>
+      <li>Designers can build <span class="accent3">interactive mockups</span> that actually run</li>
+      <li>Solo makers can ship <span class="accent3">full products</span></li>
+      <li>The gap between <em>"I have an idea"</em> and <em>"here, try it"</em> is <strong>vanishing</strong></li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>The Risk ⚠️</h3>
+    <ul>
+      <li>AI code <span class="bad">looks correct</span> but may be subtly broken</li>
+      <li>You can generate a <span class="bad">mountain of code</span> you don't understand</li>
+      <li>No one reviews it → it ships → it <span class="bad">breaks in production</span></li>
+      <li><strong>Speed without understanding = a ticking time bomb</strong></li>
+    </ul>
+    <div class="horror-box">
+      🗣️ <em>"I asked ChatGPT to build my backend. It worked in dev. In production it exposed every user's data to every other user."</em>
+    </div>
+  </section>
+</section>
+
+<!-- ============ 3. WHY ENGINEERING LITERACY MATTERS ============ -->
+<section>
+  <section>
+    <h2>🏗️ Why Engineering Literacy Matters</h2>
+    <p style="text-align:center; font-size:0.85em;">Speed without structure = tech debt on a credit card</p>
+  </section>
+
+  <section>
+    <h3>Horror Stories 😱</h3>
+    <div class="horror-box">
+      <strong>The Exposed .env:</strong> A startup founder vibe-coded a SaaS app. The AI helpfully hardcoded the Stripe API key in the frontend JavaScript. Attackers found it. <span class="bad">$14,000 in fraudulent charges.</span>
+    </div>
+    <div class="horror-box">
+      <strong>The Hallucinated Package:</strong> AI suggested <code>npm install flask-auth-helper</code> — a package that <em>doesn't exist</em>. An attacker published a malicious package with that exact name. <span class="bad">Supply chain attack.</span>
+    </div>
+    <div class="horror-box">
+      <strong>The 800-line God File:</strong> PM asked AI to add feature after feature in one file. 6 months later — no one (including AI) can modify it without breaking everything. <span class="bad">Full rewrite.</span>
+    </div>
+  </section>
+
+  <section>
+    <h3>The Pattern</h3>
+    <div class="flow">
+      <div class="flow-box">🏃 Ship fast</div><div class="flow-arrow"></div>
+      <div class="flow-box">🙈 Skip fundamentals</div><div class="flow-arrow"></div>
+      <div class="flow-box">💥 Break in production</div><div class="flow-arrow"></div>
+      <div class="flow-box">🔥 Expensive fix</div>
+    </div>
+    <br>
+    <p style="text-align:center; font-size:0.9em;">Engineering literacy is the <span class="accent2">immune system</span> that prevents this.</p>
+    <p style="text-align:center; font-size:0.75em;">You don't need to be an engineer. You need to <span class="accent">think like one</span>.</p>
+  </section>
+</section>
+
+<!-- ============ 4. CORE COMPETENCIES OVERVIEW ============ -->
+<section>
+  <h2>📋 The 8 Core Competencies</h2>
+  <div class="cols">
+    <div>
+      <ol style="font-size:0.7em;">
+        <li>🖥️ <span class="accent">Bash &amp; Terminal</span></li>
+        <li>🏛️ <span class="accent">Code Architecture</span></li>
+        <li>📦 <span class="accent">Version Control (Git)</span></li>
+        <li>🐛 <span class="accent">Debugging</span></li>
+      </ol>
+    </div>
+    <div>
+      <ol start="5" style="font-size:0.7em;">
+        <li>🧪 <span class="accent2">Testing</span></li>
+        <li>🔍 <span class="accent2">LLM Output Evaluation</span></li>
+        <li>🔒 <span class="accent2">Security Fundamentals</span></li>
+        <li>🚀 <span class="accent2">CI/CD &amp; Deployment</span></li>
+      </ol>
+    </div>
+  </div>
+  <p class="sub" style="text-align:center;">Plus: Cloud &amp; Deployment as a capstone skill</p>
+  <aside class="notes">These aren't "nice to haves." Each one has bitten someone who skipped it. We'll go through each with concrete examples and things you can do this week.</aside>
+</section>
+
+<!-- ============ 5. BASH & TERMINAL ============ -->
+<section>
+  <section>
+    <h2>🖥️ Bash &amp; Terminal Fundamentals</h2>
+    <p style="text-align:center; font-size:0.8em;">The command line is your <span class="accent2">cockpit</span>, not a scary relic</p>
+  </section>
+
+  <section>
+    <h3>Why Terminal Matters</h3>
+    <ul>
+      <li>AI tools <strong>output terminal commands</strong> — you need to run them</li>
+      <li>GUIs hide what's happening; the terminal shows <span class="accent">truth</span></li>
+      <li>Servers don't have a desktop — <span class="accent">terminal is all there is</span></li>
+      <li>It's the <strong>universal interface</strong> to every dev tool</li>
+    </ul>
+    <div class="tip-box">
+      💡 <strong>Analogy:</strong> The terminal is like texting your computer. The GUI is like pointing and grunting. Texting is more precise.
+    </div>
+  </section>
+
+  <section>
+    <h3>Essential Commands</h3>
+    <pre><code class="language-bash"># Navigate
+pwd                    # Where am I?
+ls -la                 # What's here? (with details)
+cd my-project          # Go into a folder
+cd ..                  # Go up one level
+
+# Read files
+cat README.md          # Print file contents
+head -20 server.js     # First 20 lines
+grep "error" log.txt   # Find "error" in a file
+
+# Chain commands with pipes
+cat log.txt | grep "ERROR" | wc -l   # Count errors
+
+# Permissions & packages
+chmod +x script.sh     # Make it runnable
+npm install            # Install JS dependencies
+brew install git       # Install git (macOS)</code></pre>
+  </section>
+
+  <section>
+    <h3>Reading Error Messages</h3>
+    <pre><code class="language-bash">$ npm start
+Error: Cannot find module 'express'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1075:15)
+    at Module._load (node:internal/modules/cjs/loader:920:27)</code></pre>
+    <ul>
+      <li><span class="accent">Line 1:</span> What went wrong → <code>Cannot find module 'express'</code></li>
+      <li><span class="accent2">Fix:</span> <code>npm install express</code></li>
+      <li>🚫 Don't just paste the error back to AI — <span class="accent3">read it first</span></li>
+    </ul>
+    <div class="tip-box">
+      💡 80% of errors tell you exactly what's wrong. The skill is learning to <strong>read</strong>, not to panic.
+    </div>
+  </section>
+</section>
+
+<!-- ============ 6. CODE ARCHITECTURE ============ -->
+<section>
+  <section>
+    <h2>🏛️ Code Architecture &amp; Planning</h2>
+    <p style="text-align:center; font-size:0.8em;">Think before you prompt</p>
+  </section>
+
+  <section>
+    <h3>The #1 Vibe Coding Mistake</h3>
+    <div class="cols">
+      <div>
+        <p class="avoid" style="font-size:0.75em;"><strong>No plan</strong></p>
+        <pre><code class="language-text">"Build me a todo app"
+→ 500 lines in one file
+→ No structure
+→ Can't add features
+→ Start over</code></pre>
+      </div>
+      <div>
+        <p class="good" style="font-size:0.75em;"><strong>With a plan</strong></p>
+        <pre><code class="language-text">"Here's my file structure:
+  /src
+    /components
+    /api
+    /utils
+  Build the TodoList component"
+→ Clean, modular, extendable</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3>Project Structure Patterns</h3>
+    <pre><code class="language-text">my-app/
+├── src/
+│   ├── components/    # UI pieces (buttons, forms)
+│   ├── pages/         # Full screens
+│   ├── api/           # Backend calls
+│   ├── utils/         # Helper functions
+│   └── styles/        # CSS / design tokens
+├── tests/             # Test files
+├── public/            # Static assets
+├── .env               # Secrets (NEVER commit)
+├── .gitignore         # What git should ignore
+├── package.json       # Dependencies
+└── README.md          # What is this & how to run it</code></pre>
+    <aside class="notes">Give this structure to the AI before asking it to build anything. It's like giving an architect a floor plan before they start building rooms.</aside>
+  </section>
+
+  <section>
+    <h3>Key Principles</h3>
+    <ul>
+      <li><span class="accent">Separation of concerns</span> — each file does ONE thing</li>
+      <li><span class="accent2">Naming conventions</span> — <code>getUserById</code> not <code>doStuff</code></li>
+      <li><span class="accent3">Modularity</span> — small Lego blocks, not one giant sculpture</li>
+      <li><span class="accent">DRY</span> — Don't Repeat Yourself (reuse, don't copy-paste)</li>
+    </ul>
+    <div class="tip-box">
+      💡 <strong>Analogy:</strong> Architecture is like organizing your kitchen. You <em>could</em> dump all utensils in one drawer — but cooking becomes a nightmare.
+    </div>
+  </section>
+</section>
+
+<!-- ============ 7. VERSION CONTROL & GIT ============ -->
+<section>
+  <section>
+    <h2>📦 Version Control &amp; Git</h2>
+    <p style="text-align:center; font-size:0.8em;">Your code's <span class="accent2">save game</span> system</p>
+  </section>
+
+  <section>
+    <h3>Why Git?</h3>
+    <ul>
+      <li>🔙 <span class="accent">Undo anything</span> — go back to any point in time</li>
+      <li>👥 <span class="accent">Collaborate</span> — multiple people, same codebase, no conflicts</li>
+      <li>📜 <span class="accent">History</span> — "who changed this and why?"</li>
+      <li>🛡️ <span class="accent">Safety net</span> — experiment without fear of breaking things</li>
+    </ul>
+    <div class="tip-box">
+      💡 <strong>Analogy:</strong> Git is like <em>save game</em> in a video game. You save before the boss fight. If you die, you reload. Without git, there's no reload.
+    </div>
+  </section>
+
+  <section>
+    <h3>The Essential Commands</h3>
+    <pre><code class="language-bash"># Start tracking a project
+git init
+git add .
+git commit -m "Initial commit: project setup"
+
+# Daily workflow
+git add .
+git commit -m "Add user login form"
+git push origin main
+
+# Branching (safe experimentation)
+git checkout -b feature/dark-mode
+# ... make changes ...
+git commit -m "Add dark mode toggle"
+git push origin feature/dark-mode
+# Then: open a Pull Request on GitHub</code></pre>
+  </section>
+
+  <section>
+    <h3>Commit Messages &amp; .gitignore</h3>
+    <div class="cols">
+      <div>
+        <p style="font-size:0.75em;"><strong>Commit messages</strong></p>
+        <p class="good" style="font-size:0.65em;">Add password reset email flow</p>
+        <p class="good" style="font-size:0.65em;">Fix: cart total not updating on remove</p>
+        <p class="avoid" style="font-size:0.65em;">update stuff</p>
+        <p class="avoid" style="font-size:0.65em;">asdfasdf</p>
+        <p class="avoid" style="font-size:0.65em;">fix</p>
+      </div>
+      <div>
+        <p style="font-size:0.75em;"><strong>.gitignore</strong> (never commit these)</p>
+        <pre><code class="language-text">node_modules/
+.env
+.DS_Store
+dist/
+*.log</code></pre>
+        <p style="font-size:0.6em;" class="bad">⚠️ Once a secret is committed, it's in the history forever — even if you delete it</p>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ============ 8. DEBUGGING ============ -->
+<section>
+  <section>
+    <h2>🐛 Debugging &amp; Troubleshooting</h2>
+    <p style="text-align:center; font-size:0.8em;">Read the error. <em>Then</em> ask AI for help.</p>
+  </section>
+
+  <section>
+    <h3>The Anti-Pattern</h3>
+    <div class="flow">
+      <div class="flow-box">🔴 See error</div><div class="flow-arrow"></div>
+      <div class="flow-box">📋 Copy-paste to AI</div><div class="flow-arrow"></div>
+      <div class="flow-box">🤖 AI guesses a fix</div><div class="flow-arrow"></div>
+      <div class="flow-box">🔴 New error</div>
+    </div>
+    <p style="text-align:center; font-size:0.7em;" class="bad">Repeat until you have 47 open tabs and no idea what's happening</p>
+    <br>
+    <h4 style="text-align:center;">The Better Way</h4>
+    <div class="flow">
+      <div class="flow-box">🔴 See error</div><div class="flow-arrow"></div>
+      <div class="flow-box">📖 Read it</div><div class="flow-arrow"></div>
+      <div class="flow-box">🧠 Understand it</div><div class="flow-arrow"></div>
+      <div class="flow-box">🔧 Fix (or ask AI with context)</div>
+    </div>
+  </section>
+
+  <section>
+    <h3>Debugging Toolkit</h3>
+    <ul>
+      <li><span class="accent">console.log / print</span> — the oldest trick, still the best
+        <pre><code class="language-javascript">console.log("user data:", user);  // What is this actually?
+console.log("reached step 3");    // Did we get here?</code></pre>
+      </li>
+      <li><span class="accent2">Browser DevTools</span> (F12) — Network tab, Console, Elements</li>
+      <li><span class="accent3">Stack traces</span> — read bottom to top; your code is usually near the top</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Common AI-Code Failures</h3>
+    <ul>
+      <li>🤖 <span class="bad">Hallucinated imports</span> — AI uses a library that doesn't exist</li>
+      <li>🤖 <span class="bad">Wrong API version</span> — trained on old docs, uses deprecated methods</li>
+      <li>🤖 <span class="bad">Works in isolation</span> — AI code works alone but conflicts with your existing code</li>
+      <li>🤖 <span class="bad">Silent failures</span> — no errors, but the logic is just… wrong</li>
+    </ul>
+    <div class="tip-box">
+      💡 <strong>Rule of thumb:</strong> If AI gives you code and you can't explain what each line does — <strong>don't ship it</strong>.
+    </div>
+  </section>
+</section>
+
+<!-- ============ 9. TESTING ============ -->
+<section>
+  <section>
+    <h2>🧪 Testing</h2>
+    <p style="text-align:center; font-size:0.8em;">Your safety net against AI hallucinations</p>
+  </section>
+
+  <section>
+    <h3>Why Test?</h3>
+    <div class="tip-box">
+      💡 <strong>Analogy:</strong> Testing is like spell-check for code. You <em>could</em> skip it — but you'll publish embarrassing mistakes.
+    </div>
+    <ul>
+      <li>AI-generated code is <span class="accent2">confident but not always correct</span></li>
+      <li>Tests catch bugs <span class="accent">before your users do</span></li>
+      <li>Tests let you <span class="accent3">refactor fearlessly</span> — change code, run tests, still works? Ship it.</li>
+      <li>Tests are <span class="accent">documentation</span> — they show what the code is supposed to do</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Types of Tests</h3>
+    <div class="layer-diagram">
+      <div class="layer-box">🔬 Unit Tests — test one function in isolation</div>
+      <div class="layer-box">🔗 Integration Tests — test components working together</div>
+      <div class="layer-box">🖱️ End-to-End — test the full user flow</div>
+      <div class="layer-box">👀 Manual Testing — you click around and try to break it</div>
+    </div>
+    <p style="text-align:center; font-size:0.7em;">Start with <span class="accent">unit tests</span>. They're fast, easy, and catch the most bugs per effort.</p>
+  </section>
+
+  <section>
+    <h3>Test-Driven Prompting 🧠</h3>
+    <p style="font-size:0.8em;">Tell AI to write <span class="accent2">tests first</span>, then the code:</p>
+    <pre><code class="language-text">Prompt: "Write unit tests for a function called
+calculateDiscount(price, couponCode) that:
+- Returns 10% off for code 'SAVE10'
+- Returns 0 for invalid codes
+- Throws an error for negative prices
+
+Then implement the function to pass these tests."</code></pre>
+    <ul>
+      <li>Tests define the <span class="accent">spec</span> — what "correct" means</li>
+      <li>If AI hallucinates logic, <span class="accent3">the tests catch it</span></li>
+      <li>You can read the tests even if you can't read the code</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ============ 10. LLM OUTPUT EVALUATION ============ -->
+<section>
+  <section>
+    <h2>🔍 LLM Output Evaluation</h2>
+    <p style="text-align:center; font-size:0.8em;">Trust, but <span class="accent2">verify</span></p>
+  </section>
+
+  <section>
+    <h3>The Code Review Checklist</h3>
+    <p style="font-size:0.75em;">Before accepting any AI-generated code, ask:</p>
+    <ul>
+      <li>✅ Does it <span class="accent">actually do what I asked</span>? (Not just look right)</li>
+      <li>✅ Can I <span class="accent">explain</span> what each section does?</li>
+      <li>✅ Did I <span class="accent2">run it</span>? (Not just read it)</li>
+      <li>✅ Are the imports/libraries <span class="accent3">real</span>? (Search npm/PyPI to verify)</li>
+      <li>✅ Are there any <span class="bad">hardcoded secrets</span>?</li>
+      <li>✅ Does it handle <span class="accent">errors and edge cases</span>?</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Hallucination Red Flags 🚩</h3>
+    <ul>
+      <li><span class="bad">Unknown packages:</span> <code>pip install super-easy-auth</code> — Google it. Does it exist?</li>
+      <li><span class="bad">Too-good-to-be-true APIs:</span> <code>magicLibrary.doEverything()</code></li>
+      <li><span class="bad">Outdated syntax:</span> AI trained on old data may use deprecated patterns</li>
+      <li><span class="bad">Confident comments, wrong code:</span> <code>// This securely hashes the password</code> … it doesn't</li>
+    </ul>
+    <div class="tip-box">
+      💡 <strong>Pro move:</strong> Ask a <em>second</em> AI to review the first AI's code. They catch each other's mistakes surprisingly well.
+    </div>
+  </section>
+
+  <section>
+    <h3>The Evaluation Loop</h3>
+    <div class="flow">
+      <div class="flow-box">🤖 AI writes code</div><div class="flow-arrow"></div>
+      <div class="flow-box">📖 You read it</div><div class="flow-arrow"></div>
+      <div class="flow-box">▶️ You run it</div><div class="flow-arrow"></div>
+      <div class="flow-box">🧪 You test it</div><div class="flow-arrow"></div>
+      <div class="flow-box">✅ Ship</div>
+    </div>
+    <p style="text-align:center; font-size:0.75em;">Skip any step → you're gambling with production.</p>
+  </section>
+</section>
+
+<!-- ============ 11. SECURITY ============ -->
+<section>
+  <section>
+    <h2>🔒 Security Fundamentals</h2>
+    <p style="text-align:center; font-size:0.8em;">Don't ship what you don't understand</p>
+  </section>
+
+  <section>
+    <h3>AI's Security Blind Spots</h3>
+    <div class="horror-box">
+      <strong>Exposed Secrets:</strong> AI puts your API key directly in the code → it ends up on GitHub → bots scrape it within minutes → <span class="bad">your AWS bill: $47,000</span>
+    </div>
+    <div class="horror-box">
+      <strong>No Auth:</strong> AI builds a beautiful admin panel but forgets to add login. Anyone with the URL can access it. <span class="bad">All your data is public.</span>
+    </div>
+    <div class="horror-box">
+      <strong>SQL Injection:</strong> AI concatenates user input into database queries. Attacker types <code>' OR 1=1 --</code> and downloads your entire database.
+    </div>
+  </section>
+
+  <section>
+    <h3>Security Essentials</h3>
+    <ul>
+      <li><span class="accent">.env files</span> — secrets go here, <strong>never</strong> in code
+        <pre><code class="language-bash"># .env (add to .gitignore!)
+DATABASE_URL=postgres://user:pass@host/db
+STRIPE_KEY=sk_live_abc123</code></pre>
+      </li>
+      <li><span class="accent2">HTTPS everywhere</span> — no exceptions</li>
+      <li><span class="accent3">Authentication</span> — every route that touches data needs auth</li>
+      <li><span class="accent">Input validation</span> — never trust user input; sanitize everything</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Security Prompt Pattern</h3>
+    <pre><code class="language-text">When generating code, ALWAYS:
+- Use environment variables for secrets (never hardcode)
+- Add authentication checks to all API routes
+- Sanitize and validate all user input
+- Use parameterized queries (never string concatenation)
+- Add rate limiting to public endpoints
+- Set CORS headers appropriately</code></pre>
+    <div class="tip-box">
+      💡 Add this to your system prompt or project rules. Make the AI's default behavior secure.
+    </div>
+  </section>
+</section>
+
+<!-- ============ 12. CI/CD ============ -->
+<section>
+  <section>
+    <h2>🔄 CI/CD Pipelines</h2>
+    <p style="text-align:center; font-size:0.8em;">If it's not automated, it's broken</p>
+  </section>
+
+  <section>
+    <h3>What is CI/CD?</h3>
+    <div class="cols">
+      <div>
+        <p style="font-size:0.8em;"><span class="accent">CI</span> — Continuous Integration</p>
+        <ul style="font-size:0.65em;">
+          <li>Every code push triggers automated tests</li>
+          <li>Catches bugs before they merge</li>
+          <li>"Does the new code break anything?"</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:0.8em;"><span class="accent2">CD</span> — Continuous Deployment</p>
+        <ul style="font-size:0.65em;">
+          <li>Tests pass → code deploys automatically</li>
+          <li>No manual "upload to server" step</li>
+          <li>"Ship it — safely, every time"</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flow" style="margin-top:1em;">
+      <div class="flow-box">git push</div><div class="flow-arrow"></div>
+      <div class="flow-box">🧪 Tests run</div><div class="flow-arrow"></div>
+      <div class="flow-box">✅ Pass?</div><div class="flow-arrow"></div>
+      <div class="flow-box">🚀 Deploy</div>
+    </div>
+  </section>
+
+  <section>
+    <h3>GitHub Actions — Your First Pipeline</h3>
+    <pre><code class="language-yaml"># .github/workflows/ci.yml
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm test</code></pre>
+    <p style="font-size:0.7em;">That's it. Every push now runs your tests automatically. If they fail, you know before deploying.</p>
+  </section>
+</section>
+
+<!-- ============ 13. CLOUD & DEPLOYMENT ============ -->
+<section>
+  <section>
+    <h2>☁️ Cloud &amp; Deployment</h2>
+    <p style="text-align:center; font-size:0.8em;">Package and ship your vibe-coded project</p>
+  </section>
+
+  <section>
+    <h3>Docker — "Works on My Machine" Solved</h3>
+    <pre><code class="language-dockerfile"># Dockerfile
+FROM node:20-slim
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]</code></pre>
+    <pre><code class="language-bash"># Build and run
+docker build -t my-app .
+docker run -p 3000:3000 my-app</code></pre>
+    <div class="tip-box">
+      💡 <strong>Analogy:</strong> A container is like a shipping container. Everything your app needs is packed inside. It runs the same everywhere.
+    </div>
+  </section>
+
+  <section>
+    <h3>Where to Deploy</h3>
+    <table>
+      <thead><tr><th>Platform</th><th>Best For</th><th>Difficulty</th></tr></thead>
+      <tbody>
+        <tr><td><span class="accent3">Vercel</span></td><td>Frontend, Next.js</td><td>⭐ Easy</td></tr>
+        <tr><td><span class="accent3">Railway</span></td><td>Full-stack, databases</td><td>⭐ Easy</td></tr>
+        <tr><td><span class="accent2">Render</span></td><td>APIs, web services</td><td>⭐⭐ Medium</td></tr>
+        <tr><td><span class="accent">AWS / Azure / GCP</span></td><td>Enterprise, scale</td><td>⭐⭐⭐ Hard</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.7em; text-align:center;">Start with <span class="accent3">Vercel or Railway</span>. Graduate to AWS/Azure when you need to.</p>
+  </section>
+
+  <section>
+    <h3>Deployment Checklist</h3>
+    <ul>
+      <li>✅ <span class="accent">Environment variables</span> set in production (not in code)</li>
+      <li>✅ <span class="accent2">HTTPS</span> enabled</li>
+      <li>✅ <span class="accent3">Health check endpoint</span> — can you tell if it's alive?</li>
+      <li>✅ <span class="accent">Logging</span> — can you see errors after deploy?</li>
+      <li>✅ <span class="accent2">Cost alerts</span> — set a budget! AI-generated code can be resource-hungry</li>
+      <li>✅ <span class="bad">Billing cap</span> — don't wake up to a $10K bill</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ============ 14. THE NEW SKILL MIX ============ -->
+<section>
+  <section>
+    <h2>🎯 The New Skill Mix</h2>
+    <p style="text-align:center; font-size:0.8em;">You're the <span class="accent2">architect</span>. AI is the <span class="accent">builder</span>.</p>
+  </section>
+
+  <section>
+    <h3>What Changed</h3>
+    <div class="cols">
+      <div>
+        <p style="font-size:0.75em;"><strong>Before AI</strong></p>
+        <ul style="font-size:0.65em;">
+          <li>Writing code = the hard part</li>
+          <li>PM describes → Engineer builds</li>
+          <li>Weeks to prototype</li>
+          <li>Knowledge gap = dependency</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:0.75em;"><strong>With AI</strong></p>
+        <ul style="font-size:0.65em;">
+          <li><em>Knowing what to build</em> = the hard part</li>
+          <li>PM describes → <span class="accent2">PM builds (with AI)</span></li>
+          <li>Hours to prototype</li>
+          <li>Engineering literacy = <span class="accent3">independence</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3>The Superpower Formula</h3>
+    <div class="layer-diagram">
+      <div class="layer-box">🧠 Domain Knowledge (PM/Design expertise)</div>
+      <div class="layer-box">🛠️ Engineering Literacy (this deck)</div>
+      <div class="layer-box">💬 Prompt Engineering (talk to AI effectively)</div>
+      <div class="layer-box">🤖 AI Tools (Cursor, Claude, Copilot, v0…)</div>
+    </div>
+    <p style="text-align:center; font-size:0.8em;"><span class="accent2">All four layers</span> = you can ship products <strong>independently</strong></p>
+    <aside class="notes">The PM who has all four layers doesn't need to wait for sprint planning to test an idea. They can build and validate in a weekend.</aside>
+  </section>
+</section>
+
+<!-- ============ 15. PRACTICAL LEARNING PATH ============ -->
+<section>
+  <section>
+    <h2>🗺️ Practical Learning Path</h2>
+    <p style="text-align:center; font-size:0.8em;">Concrete steps to build these skills</p>
+  </section>
+
+  <section>
+    <h3>Week 1-2: Foundation</h3>
+    <ul>
+      <li>📺 Open your terminal. Run <code>ls</code>, <code>cd</code>, <code>pwd</code>. Navigate around.</li>
+      <li>📦 Install <span class="accent">git</span>. Create a repo. Make 5 commits.</li>
+      <li>🐙 Push to <span class="accent2">GitHub</span>. You now have a portfolio.</li>
+      <li>📝 Create a simple project with the file structure from slide 4</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Week 3-4: Build Something</h3>
+    <ul>
+      <li>🤖 Use <span class="accent">Cursor or Claude</span> to build a small web app</li>
+      <li>🧪 Ask AI to write <span class="accent2">tests first</span>, then implementation</li>
+      <li>🔍 <strong>Review every line</strong> AI generates — look up what you don't understand</li>
+      <li>🐛 When it breaks (it will), <span class="accent3">debug before re-prompting</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Week 5-6: Ship It</h3>
+    <ul>
+      <li>🐳 Write a <span class="accent">Dockerfile</span> for your project</li>
+      <li>🔒 Move all secrets to <span class="accent2">.env</span> files</li>
+      <li>🔄 Set up a <span class="accent3">GitHub Actions CI pipeline</span></li>
+      <li>🚀 Deploy to <span class="accent">Vercel or Railway</span></li>
+      <li>📊 Share the URL. You shipped. <strong>You're a builder now.</strong></li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Resources</h3>
+    <div class="cols">
+      <div>
+        <p style="font-size:0.75em;"><strong>Free Courses</strong></p>
+        <ul style="font-size:0.6em;">
+          <li><span class="accent">The Missing Semester</span> (MIT) — terminal &amp; git</li>
+          <li><span class="accent">freeCodeCamp</span> — web development basics</li>
+          <li><span class="accent">GitHub Skills</span> — interactive git tutorials</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:0.75em;"><strong>Tools to Try</strong></p>
+        <ul style="font-size:0.6em;">
+          <li><span class="accent2">Cursor</span> — AI-native code editor</li>
+          <li><span class="accent2">v0.dev</span> — AI UI generation</li>
+          <li><span class="accent2">Replit</span> — code in the browser</li>
+          <li><span class="accent2">GitHub Codespaces</span> — cloud dev environment</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ============ 16. TAKEAWAY ============ -->
+<section>
+  <section>
+    <h2>🎬 Takeaway</h2>
+  </section>
+
+  <section>
+    <h3 style="text-align:center;">AI <span class="accent2">amplifies</span> you.</h3>
+    <h3 style="text-align:center;">Literacy determines <span class="accent">what</span> gets amplified.</h3>
+    <br>
+    <div class="cols" style="justify-content:center;">
+      <div style="text-align:center;">
+        <p style="font-size:0.75em;">Without engineering literacy:</p>
+        <p style="font-size:1.2em;">🐛 × 🤖 = <span class="bad">🐛🐛🐛</span></p>
+      </div>
+      <div style="text-align:center;">
+        <p style="font-size:0.75em;">With engineering literacy:</p>
+        <p style="font-size:1.2em;">🧠 × 🤖 = <span class="accent3">🚀🚀🚀</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 style="text-align:center;">The <span class="accent2">10x PM</span> is the one who can ship.</h3>
+    <br>
+    <ul>
+      <li>You don't need a CS degree</li>
+      <li>You don't need to write code from scratch</li>
+      <li>You <strong>do</strong> need to <span class="accent">understand what you're shipping</span></li>
+      <li>You <strong>do</strong> need these <span class="accent2">8 competencies</span> as your foundation</li>
+    </ul>
+    <br>
+    <p style="text-align:center; font-size:1em; margin-top:0.5em;"><strong>Start this week. Open a terminal. Init a repo. Build something.</strong></p>
+    <p style="text-align:center; font-size:0.8em;">🛠️ <span class="accent3">The future belongs to builders.</span></p>
+    <aside class="notes">Challenge: By next Friday, push one project to GitHub. Even if it's a single HTML page. The first commit is the hardest one.</aside>
+  </section>
+</section>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  plugins: [RevealHighlight, RevealNotes]
+});
+</script>
+</body>
+</html>
