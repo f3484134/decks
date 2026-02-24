@@ -36,6 +36,10 @@
     .reveal pre { font-size: 0.55em; box-shadow: none; width: 100%; }
     .reveal pre code { padding: 1em; border-radius: 8px; max-height: 520px; white-space: pre-wrap; word-wrap: break-word; overflow-x: visible; }
     .reveal code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
+    /* Fix line-number table wrapping */
+    .reveal pre code table { width: 100%; table-layout: fixed; }
+    .reveal pre code table td.hljs-ln-code { white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; }
+    .reveal pre code table td.hljs-ln-numbers { width: 2em; white-space: nowrap; }
 
     /* Diagram boxes */
     .layer-diagram {
