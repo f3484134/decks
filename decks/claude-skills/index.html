@@ -32,9 +32,9 @@
     .accent3 { color: var(--accent3); }
     .bad     { color: var(--bad);     }
 
-    /* Smaller code font */
-    .reveal pre { font-size: 0.55em; box-shadow: none; }
-    .reveal pre code { padding: 1em; border-radius: 8px; max-height: 520px; }
+    /* Code blocks */
+    .reveal pre { font-size: 0.55em; box-shadow: none; width: 100%; }
+    .reveal pre code { padding: 1em; border-radius: 8px; max-height: 520px; white-space: pre-wrap; word-wrap: break-word; overflow-x: visible; }
     .reveal code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; }
 
     /* Diagram boxes */
@@ -60,10 +60,11 @@
     .flow-arrow { font-size: 1.2em; color: #666; }
 
     /* Comparison table */
-    .reveal table { font-size: 0.55em; margin: 0 auto; }
+    .reveal table { font-size: 0.55em; margin: 0 auto; border-collapse: collapse; }
     .reveal table th { background: rgba(126,200,227,0.2); color: var(--accent); font-weight: 700; }
     .reveal table td, .reveal table th { border: 1px solid rgba(255,255,255,0.12); padding: 0.4em 0.65em; }
     .reveal table td { color: #ccc; }
+    .reveal table { border: 1px solid rgba(255,255,255,0.12); }
 
     /* Good / bad labels */
     .good::before { content: "✅ "; }
@@ -325,7 +326,7 @@ dependencies:
         <th>Claude Skills</th>
         <th>Custom GPTs</th>
         <th>Cursor Rules</th>
-        <th>AGENTS.md</th>
+        <th>AGENTS.md<br><span style="font-weight:400;font-size:0.8em;color:#888;">(GitHub Copilot)</span></th>
         <th>Figma MCP</th>
       </tr>
     </thead>
@@ -334,9 +335,12 @@ dependencies:
       <tr><td style="color:var(--accent);font-weight:700;">Activation</td><td>Auto by context</td><td>User selects</td><td>Glob / AI-decided</td><td>Always loaded</td><td>MCP protocol</td></tr>
       <tr><td style="color:var(--accent);font-weight:700;">Progressive</td><td>✅ 3-tier</td><td>❌</td><td>⚠️ Glob</td><td>❌</td><td>✅</td></tr>
       <tr><td style="color:var(--accent);font-weight:700;">Executable</td><td>✅ Scripts</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
-      <tr><td style="color:var(--accent);font-weight:700;">Composable</td><td>✅</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr>
+      <tr><td style="color:var(--accent);font-weight:700;" title="Can mix multiple skills/rules together">Composable</td><td>✅</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr>
     </tbody>
   </table>
+  <p style="font-size:0.4em; color:#888; margin-top:0.5em;">
+    <strong>Composable</strong> = can mix &amp; combine multiple skills/rules · <strong>AGENTS.md</strong> = GitHub Copilot's instruction file format
+  </p>
   <aside class="notes">
     All approaches converge on: structured metadata, markdown instructions,
     reference resources, and progressive disclosure. The Agent Skills spec at
@@ -538,7 +542,7 @@ dependencies:
   <h2>7 Principles of AI Knowledge</h2>
   <div style="font-size:0.58em; text-align:left; max-width:700px; margin:0 auto; columns:2; column-gap:1.5em;">
     <p><span class="accent2">1.</span> Be <strong>explicit</strong>, not implicit</p>
-    <p><span class="accent2">2.</span> <strong>Structure</strong> beats prose</p>
+    <p><span class="accent2">2.</span> <strong>Structure</strong> beats prose <span style="color:#888; font-size:0.85em;">(tables &amp; lists &gt; paragraphs)</span></p>
     <p><span class="accent2">3.</span> Include examples — <strong>good AND bad</strong></p>
     <p><span class="accent2">4.</span> State what <strong>NOT</strong> to do</p>
     <p><span class="accent2">5.</span> Use <strong>progressive disclosure</strong></p>
