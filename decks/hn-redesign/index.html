@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HN Redesign — Project Presentation</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" id="theme" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+
+  <style>
+    :root {
+      --hn:      #FF6600;
+      --hn-soft: #FFF4EB;
+      --indigo:  #6366F1;
+      --cyan:    #06B6D4;
+      --green:   #16A34A;
+      --red:     #DC2626;
+    }
+
+    .reveal { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { text-transform: none; letter-spacing: -0.02em; }
+    .reveal h1 { font-size: 2.2em; }
+    .reveal h2 { font-size: 1.5em; }
+    .reveal h3 { font-size: 1.1em; color: var(--hn); }
+
+    .hn     { color: var(--hn); }
+    .indigo { color: var(--indigo); }
+    .cyan   { color: var(--cyan); }
+    .green  { color: var(--green); }
+
+    .reveal pre { font-size: 0.42em; box-shadow: none; width: 100%; }
+    .reveal pre code { padding: 1em; border-radius: 8px; max-height: 520px; white-space: pre-wrap; word-wrap: break-word; }
+    .reveal code { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+
+    .reveal table { font-size: 0.55em; margin: 0 auto; border-collapse: collapse; }
+    .reveal table th { background: rgba(255,102,0,0.15); color: var(--hn); font-weight: 700; }
+    .reveal table td, .reveal table th { border: 1px solid rgba(255,255,255,0.12); padding: 0.4em 0.65em; }
+    .reveal table td { color: #ccc; }
+
+    .flow { display: flex; align-items: center; justify-content: center; gap: 0.4em; flex-wrap: wrap; margin: 0.8em 0; }
+    .flow-box {
+      background: rgba(255,102,0,0.1); border: 1px solid var(--hn);
+      border-radius: 8px; padding: 0.5em 0.9em; font-size: 0.65em; font-weight: 600; color: var(--hn);
+    }
+    .flow-arrow { font-size: 1.2em; color: #666; }
+
+    .cols { display: flex; gap: 1.5em; align-items: flex-start; }
+    .cols > * { flex: 1; }
+
+    .page-card {
+      background: rgba(255,255,255,0.05); border-radius: 8px;
+      padding: 0.6em 0.9em; border-left: 3px solid var(--hn);
+      text-align: left; font-size: 0.6em; margin-bottom: 0.4em;
+    }
+    .page-card h4 { margin: 0 0 0.2em 0; color: var(--hn); font-size: 1.1em; }
+    .page-card p { margin: 0; color: #aaa; }
+
+    .page-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.5em;
+      max-width: 750px; margin: 0 auto;
+    }
+
+    .token-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5em;
+      max-width: 750px; margin: 0.5em auto; font-size: 0.55em;
+    }
+    .token-card {
+      background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.6em;
+      text-align: center;
+    }
+    .token-card .swatch {
+      width: 36px; height: 36px; border-radius: 50%; margin: 0 auto 0.4em;
+    }
+
+    .stat-grid {
+      display: flex; gap: 1em; justify-content: center; flex-wrap: wrap; margin: 0.8em 0;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.6em 1.2em;
+      text-align: center; min-width: 120px;
+    }
+    .stat-box .num { font-size: 1.8em; font-weight: 700; color: var(--hn); }
+    .stat-box .label { font-size: 0.55em; color: #888; margin-top: 0.2em; }
+
+    .team-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6em;
+      max-width: 700px; margin: 0.5em auto; font-size: 0.58em;
+    }
+    .team-card {
+      background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.7em;
+      text-align: center;
+    }
+    .team-card .emoji { font-size: 1.8em; }
+    .team-card .name { font-weight: 700; color: var(--hn); margin: 0.2em 0 0.1em; }
+    .team-card .role { color: #888; font-size: 0.9em; }
+
+    .reveal .slide-number { font-size: 0.5em; color: #666; }
+    .sub { font-size: 0.6em; color: #888; margin-top: 0.3em; }
+  </style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════ TITLE ═══════ -->
+<section>
+  <h1 style="font-size:1.8em;">🔶 HN Redesign</h1>
+  <p style="font-size:0.9em; color:var(--hn); margin:0.2em 0;">A Modern Hacker News Experience</p>
+  <p style="font-size:0.55em; color:#999; margin-top:0.5em;">Project Presentation · Agent Product Team</p>
+  <p style="font-size:0.4em; color:#666; margin-top:2em;">March 2026 · Presented by Steve (PM)</p>
+</section>
+
+<!-- ═══════ SECTION 1: PROBLEM & AUDIENCE ═══════ -->
+
+<section>
+  <h2>The Problem</h2>
+  <p style="font-size:0.7em; color:#ccc;">
+    Hacker News hasn't meaningfully changed since <span class="hn">2007</span>.
+  </p>
+  <div style="font-size:0.62em; text-align:left; max-width:650px; margin:0.8em auto; color:#ccc;">
+    <p>📐 Table-based layout with zero visual hierarchy</p>
+    <p>👆 Tiny tap targets hostile to mobile browsing</p>
+    <p>📱 No responsive design — same layout on every screen</p>
+    <p>🧠 Power users have Stockholm syndrome. Everyone else bounces.</p>
+  </div>
+  <p style="font-size:0.55em; color:#888; margin-top:1em;">
+    We're building a <span class="hn">modern, read-only frontend</span> that reimagines<br>
+    the HN experience while respecting its mental model.
+  </p>
+</section>
+
+<section>
+  <h2>Who Is This For?</h2>
+  <table>
+    <thead>
+      <tr><th>User Type</th><th>Description</th><th>Key Needs</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="hn">Daily HN Reader</span></td>
+        <td>Checks HN 3-10x/day</td>
+        <td>Fast scanning, clear hierarchy</td>
+      </tr>
+      <tr>
+        <td><span class="hn">Casual Browser</span></td>
+        <td>Visits via shared links</td>
+        <td>Intuitive nav, no learning curve</td>
+      </tr>
+      <tr>
+        <td><span class="hn">Mobile-First Reader</span></td>
+        <td>Browses on phone during commute</td>
+        <td>Touch-friendly, responsive, fast</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>What We're Validating</h2>
+  <div style="font-size:0.65em; text-align:left; max-width:650px; margin:0.5em auto; color:#ccc;">
+    <p>✅ HN's information architecture can be reskinned without losing usability</p>
+    <p>✅ A 6-page React SPA exercises real architectural & design complexity</p>
+    <p>✅ Mock data with relational structure (stories ↔ users ↔ comments) enables realistic cross-page navigation</p>
+    <p>✅ An autonomous agent team can ship a complete product end-to-end</p>
+  </div>
+  <p class="sub">V1 scope: multi-page web app, client-side routing, mock data only — no backend</p>
+</section>
+
+<!-- ═══════ SECTION 2: PRODUCT WALKTHROUGH ═══════ -->
+
+<section>
+  <h2>6 Pages, One App</h2>
+  <div class="page-grid">
+    <div class="page-card">
+      <h4>🏠 Home / Story Lists</h4>
+      <p>Top, New, Best, Ask HN, Show HN — tab-based switching with URL-driven state</p>
+    </div>
+    <div class="page-card">
+      <h4>💬 Story Detail</h4>
+      <p>Full story header + nested comment tree (4+ levels deep with color-coded depth)</p>
+    </div>
+    <div class="page-card">
+      <h4>👤 User Profile</h4>
+      <p>Username, karma, bio + tabbed view of submissions & comments</p>
+    </div>
+    <div class="page-card">
+      <h4>✏️ Submit Story</h4>
+      <p>Link/Ask toggle, client-side validation, live StoryCard preview</p>
+    </div>
+    <div class="page-card">
+      <h4>🔍 Search</h4>
+      <p>URL-driven query params, filter by type/date/points, story + comment results</p>
+    </div>
+    <div class="page-card">
+      <h4>🔖 Bookmarks</h4>
+      <p>Save stories via localStorage, dedicated page with empty state & remove action</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Why These 6 Pages?</h2>
+  <div style="font-size:0.6em; text-align:left; max-width:700px; margin:0.5em auto; color:#ccc;">
+    <p><span class="hn">Stories + Comments</span> — The core HN flow. Proper routing, URL state, breadcrumbs.</p>
+    <p><span class="hn">User Profile</span> — Second entity type, cross-linking navigation, different layout pattern.</p>
+    <p><span class="hn">Submit</span> — Form page in a feed app. Exercises validation, form design, different interaction model.</p>
+    <p><span class="hn">Search</span> — URL query params, filter controls, connects to every other page.</p>
+    <p><span class="hn">Bookmarks</span> — Only feature with persistent client-side state (localStorage). Spans multiple pages.</p>
+  </div>
+  <p class="sub">Each page adds unique architectural complexity — not padding.</p>
+</section>
+
+<section>
+  <h2>Key User Flows</h2>
+  <div style="font-size:0.58em; text-align:left; max-width:700px; margin:0.5em auto; color:#ccc;">
+    <p><strong class="hn">1. Browse → Read → Explore</strong><br>
+    Home → Story → Comment author → User profile → Their submission → Story detail</p>
+
+    <p><strong class="hn">2. Search → Discover → Save</strong><br>
+    Search bar → Results → Filter by points → Click story → Bookmark it</p>
+
+    <p><strong class="hn">3. Submit → Preview → Browse</strong><br>
+    Submit page → Fill form → Live preview → "Submit" → Toast → Home</p>
+
+    <p><strong class="hn">4. Curate → Revisit</strong><br>
+    Browse → Bookmark several → /bookmarks → Click saved story → Read</p>
+
+    <p><strong class="hn">5. Filter by Type</strong><br>
+    Home → "Ask HN" tab → Thread → "Show HN" tab → Different stories</p>
+  </div>
+</section>
+
+<section>
+  <h2>Global Features</h2>
+  <div style="font-size:0.62em; text-align:left; max-width:650px; margin:0.5em auto; color:#ccc;">
+    <p>🧭 <strong>Sticky header</strong> — Logo, story tabs, search, bookmarks badge, submit link</p>
+    <p>📱 <strong>Responsive layout</strong> — 375px (iPhone SE) through 1440px desktop</p>
+    <p>🔙 <strong>Browser history</strong> — Back/forward works across all routes</p>
+    <p>⚡ <strong>Page transitions</strong> — Subtle CSS fade between routes (200ms)</p>
+    <p>👆 <strong>Touch targets</strong> — Minimum 44×44px on all interactive elements</p>
+    <p>🚫 <strong>404 page</strong> — Styled catch-all with navigation back home</p>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 3: DESIGN RATIONALE ═══════ -->
+
+<section>
+  <h2>Design Principles</h2>
+  <div style="font-size:0.62em; text-align:left; max-width:700px; margin:0.5em auto; color:#ccc;">
+    <p><span class="hn">1. Scannable over decorative</span> — Content density is a feature. Visual hierarchy accelerates scanning, not slows it down.</p>
+    <p><span class="hn">2. Warm neutrality</span> — Cream, soft orange accents as a nod to HN's identity. Modern contrast, not cold/corporate.</p>
+    <p><span class="hn">3. Generous touch, tight grid</span> — 44px+ tap targets, breathable spacing, but information-dense on desktop.</p>
+    <p><span class="hn">4. Progressive disclosure</span> — Essential info first. Comments collapse, metadata is secondary.</p>
+    <p><span class="hn">5. System-native feel</span> — Native font stack, feels like a well-built tool — not a marketing site.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Design System</h2>
+  <div class="cols" style="font-size:0.55em;">
+    <div>
+      <h3 style="margin-top:0;">🎨 Color Tokens</h3>
+      <div style="text-align:left; color:#ccc;">
+        <p><span style="display:inline-block;width:14px;height:14px;background:#FF6600;border-radius:3px;vertical-align:middle;margin-right:6px;"></span> <code>--color-primary</code> #FF6600</p>
+        <p><span style="display:inline-block;width:14px;height:14px;background:#6366F1;border-radius:3px;vertical-align:middle;margin-right:6px;"></span> <code>--color-secondary</code> #6366F1</p>
+        <p><span style="display:inline-block;width:14px;height:14px;background:#FAFAF8;border-radius:3px;vertical-align:middle;margin-right:6px;border:1px solid #666;"></span> <code>--color-background</code> #FAFAF8</p>
+        <p><span style="display:inline-block;width:14px;height:14px;background:#1A1A1A;border-radius:3px;vertical-align:middle;margin-right:6px;"></span> <code>--color-text-primary</code> #1A1A1A</p>
+      </div>
+      <h3>🔤 Typography</h3>
+      <div style="text-align:left; color:#ccc;">
+        <p>Inter + system font stack</p>
+        <p>15px base · 18px titles · 24px headings</p>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-top:0;">📐 Spacing & Radius</h3>
+      <div style="text-align:left; color:#ccc;">
+        <p>4px → 48px spacing scale (8 tokens)</p>
+        <p>6px buttons · 10px cards · 16px modals</p>
+      </div>
+      <h3>🌈 Comment Depth Colors</h3>
+      <div style="text-align:left; color:#ccc;">
+        <p><span style="display:inline-block;width:14px;height:14px;background:#FF6600;border-radius:3px;vertical-align:middle;margin-right:6px;"></span> L0 — Orange</p>
+        <p><span style="display:inline-block;width:14px;height:14px;background:#6366F1;border-radius:3px;vertical-align:middle;margin-right:6px;"></span> L1 — Indigo</p>
+        <p><span style="display:inline-block;width:14px;height:14px;background:#06B6D4;border-radius:3px;vertical-align:middle;margin-right:6px;"></span> L2 — Cyan</p>
+        <p><span style="display:inline-block;width:14px;height:14px;background:#8B5CF6;border-radius:3px;vertical-align:middle;margin-right:6px;"></span> L3 — Purple</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Component Library</h2>
+  <table style="font-size:0.5em;">
+    <thead>
+      <tr><th>Component</th><th>Purpose</th><th>Variants</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Header</td><td>Global nav — logo, tabs, search, bookmarks, submit</td><td>desktop / compact</td></tr>
+      <tr><td>StoryCard</td><td>Story in list views — title, domain, metadata</td><td>default / ask / show</td></tr>
+      <tr><td>CommentTree</td><td>Recursive nested comments with depth colors</td><td>—</td></tr>
+      <tr><td>Comment</td><td>Single comment with author, time, collapse</td><td>default / op</td></tr>
+      <tr><td>StoryForm</td><td>Submit form with validation + live preview</td><td>link / ask</td></tr>
+      <tr><td>FilterBar</td><td>Search filters — type, sort, date</td><td>—</td></tr>
+      <tr><td>Toast</td><td>Temporary notifications</td><td>success / error / info</td></tr>
+      <tr><td>EmptyState</td><td>No content placeholder</td><td>bookmarks / search</td></tr>
+    </tbody>
+  </table>
+  <p class="sub">All components spec'd with responsive behavior, states, and acceptance criteria</p>
+</section>
+
+<section>
+  <h2>Why CSS Modules?</h2>
+  <div style="font-size:0.62em; text-align:left; max-width:650px; margin:0.5em auto; color:#ccc;">
+    <p>🚀 <strong>Zero runtime cost</strong> — styles resolved at build time, no JS overhead</p>
+    <p>🔒 <strong>Scoped by default</strong> — no naming conflicts, no BEM gymnastics</p>
+    <p>🎨 <strong>Design tokens as CSS custom properties</strong> — Natasha defines tokens in <code>variables.css</code>, components consume them naturally</p>
+    <p>📦 <strong>Co-located files</strong> — <code>Header.jsx</code> + <code>Header.module.css</code> live together</p>
+    <p>🧹 <strong>Clean JSX</strong> — no utility class clutter like Tailwind</p>
+  </div>
+  <p class="sub">Alternatives considered: Tailwind (config overhead), styled-components (runtime cost), vanilla CSS (naming conflicts)</p>
+</section>
+
+<!-- ═══════ SECTION 4: IMPLEMENTATION & NEXT STEPS ═══════ -->
+
+<section>
+  <h2>Tech Stack</h2>
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Choice</th><th>Why</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Framework</td><td>React 18</td><td>Mandated, stable, well-understood</td></tr>
+      <tr><td>Routing</td><td>React Router v6</td><td>Nested routes, URL params, query strings</td></tr>
+      <tr><td>Styling</td><td>CSS Modules</td><td>Zero runtime, scoped, clean JSX</td></tr>
+      <tr><td>Build</td><td>Vite 5</td><td>Fast HMR, zero-config, modern ESM</td></tr>
+      <tr><td>State</td><td>Context + useReducer</td><td>Sufficient for bookmarks — no Redux needed</td></tr>
+      <tr><td>Data</td><td>Static JS modules</td><td>Relational mock data, easy API swap later</td></tr>
+      <tr><td>Icons</td><td>Lucide React</td><td>Lightweight, tree-shakable</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>QA Results</h2>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="num" style="color:var(--green);">PASS</div>
+      <div class="label">Verdict</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">7/7</div>
+      <div class="label">Pages Tested</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">45/48</div>
+      <div class="label">Spec Items</div>
+    </div>
+    <div class="stat-box">
+      <div class="num" style="color:var(--green);">0</div>
+      <div class="label">Critical / Major Issues</div>
+    </div>
+  </div>
+  <div style="font-size:0.55em; text-align:left; max-width:650px; margin:0.5em auto; color:#ccc;">
+    <p>✅ All 5 user flows tested end-to-end</p>
+    <p>✅ Responsive layout verified on mobile + desktop</p>
+    <p>✅ Design system tokens correctly applied throughout</p>
+    <p>✅ Clean build — 291KB JS, 20KB CSS</p>
+    <p>⚠️ 4 minor issues: file organization deviations (functionality intact)</p>
+  </div>
+</section>
+
+<section>
+  <h2>What's Next?</h2>
+  <div class="cols" style="font-size:0.6em;">
+    <div style="border:1px solid var(--hn); border-radius:8px; padding:1em;">
+      <h3 style="margin-top:0;">🔜 V2 Ideas</h3>
+      <ul style="color:#ccc;">
+        <li>Real HN API integration</li>
+        <li>Dark mode toggle</li>
+        <li>Pagination / infinite scroll</li>
+        <li>Performance: lazy loading, SSR</li>
+        <li>Keyboard shortcuts</li>
+      </ul>
+    </div>
+    <div style="border:1px solid var(--indigo); border-radius:8px; padding:1em;">
+      <h3 style="margin-top:0; color:var(--indigo);">🔧 Cleanup</h3>
+      <ul style="color:#ccc;">
+        <li>File org per ARCHITECTURE.md</li>
+        <li>Separate hooks & variables files</li>
+        <li>Custom favicon</li>
+        <li>Incremental git commits</li>
+        <li>Mid-sprint review checkpoints</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TEAM ═══════ -->
+<section>
+  <h2>The Team 🤝</h2>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="emoji">📋</div>
+      <div class="name">Steve</div>
+      <div class="role">PM — Brief & scope</div>
+    </div>
+    <div class="team-card">
+      <div class="emoji">🔬</div>
+      <div class="name">Stephen</div>
+      <div class="role">Researcher</div>
+    </div>
+    <div class="team-card">
+      <div class="emoji">🏗️</div>
+      <div class="name">Tony</div>
+      <div class="role">Architect</div>
+    </div>
+    <div class="team-card">
+      <div class="emoji">🎨</div>
+      <div class="name">Natasha</div>
+      <div class="role">Designer — Design system</div>
+    </div>
+    <div class="team-card">
+      <div class="emoji">👁️</div>
+      <div class="name">Vision</div>
+      <div class="role">Engineer — Implementation</div>
+    </div>
+    <div class="team-card">
+      <div class="emoji">⚡</div>
+      <div class="name">Thor</div>
+      <div class="role">QA — Testing</div>
+    </div>
+  </div>
+  <p class="sub">Fully autonomous agent pipeline · Single sprint · Zero human code</p>
+</section>
+
+<!-- ═══════ CLOSING ═══════ -->
+<section>
+  <h1 style="font-size:1.6em;">🔶 Ship it.</h1>
+  <p style="font-size:0.7em; color:var(--hn); margin:0.3em 0;">HN Redesign — v1 Complete</p>
+  <div style="font-size:0.55em; color:#888; margin-top:1.5em;">
+    <p>7 pages · 45/48 spec items · 0 critical issues · 🟢 PASS</p>
+    <p style="margin-top:1em;">Agent Product Team · March 2026</p>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    showSlideNumber: 'all',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    center: true,
+    width: 1100,
+    height: 700,
+    margin: 0.08,
+    plugins: [RevealHighlight, RevealNotes]
+  });
+</script>
+</body>
+</html>
