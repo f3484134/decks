@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计品味练习 — 知流（ZhiLiu）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Noto Sans SC', sans-serif; background: #fafafa; color: #222; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; }
+  h1 { font-size: 2rem; margin-bottom: 8px; }
+  .subtitle { color: #666; font-size: 1.1rem; margin-bottom: 48px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 960px; width: 100%; }
+  .card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .card .label { font-size: 0.85rem; color: #999; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+  .card h2 { font-size: 1.4rem; margin-bottom: 8px; }
+  .card p { color: #555; line-height: 1.6; font-size: 0.95rem; }
+  .instructions { max-width: 960px; width: 100%; margin-top: 48px; background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .instructions h3 { margin-bottom: 16px; }
+  .instructions ol { padding-left: 24px; line-height: 2; color: #444; }
+  .footer { margin-top: 48px; color: #aaa; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+  <h1>🎨 设计品味练习</h1>
+  <p class="subtitle">同一个产品，三种设计哲学 — 你选哪个？</p>
+
+  <div class="cards">
+    <a class="card" href="design-a.html">
+      <div class="label">方案 A</div>
+      <h2>极简理性</h2>
+      <p>黑白留白、Stripe/Linear 风格。用「减法」建立信任，传达专业与可信赖感。</p>
+    </a>
+    <a class="card" href="design-b.html">
+      <div class="label">方案 B</div>
+      <h2>科技未来感</h2>
+      <p>深色背景、渐变光效、模拟产品 UI。用视觉冲击力传达技术实力。</p>
+    </a>
+    <a class="card" href="design-c.html">
+      <div class="label">方案 C</div>
+      <h2>人文温暖</h2>
+      <p>米白大地色、衬线字体、叙事性结构。不卖功能，卖理念和价值观。</p>
+    </a>
+  </div>
+
+  <div class="instructions">
+    <h3>📋 练习指引</h3>
+    <ol>
+      <li>依次打开三个方案，仔细浏览</li>
+      <li>选择一个：如果你是这家公司的设计负责人，你会上线哪个？</li>
+      <li>写下你的理由（不超过三句话）</li>
+      <li>准备好和小组讨论你的选择</li>
+    </ol>
+  </div>
+
+  <p class="footer">HKU ICB AIBT — AI-driven Product Innovation and Service Experience</p>
+</body>
+</html>
