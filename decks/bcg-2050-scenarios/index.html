@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BCG 2050：四种情景</title>
+<style>
+:root {
+  --bg: #06060b;
+  --surface: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --text: #f0f0f5;
+  --text-secondary: #8a8a9a;
+  --accent: #6366f1;
+  --accent-glow: rgba(99,102,241,0.4);
+  --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --transition-duration: 0.8s;
+}
+html.light {
+  --bg: #f4f5f9;
+  --surface: rgba(0,0,0,0.03);
+  --border: rgba(0,0,0,0.08);
+  --text: #1a1a2e;
+  --text-secondary: #6b7280;
+  --accent: #4f46e5;
+  --accent-glow: rgba(79,70,229,0.25);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; font-family: 'SF Pro Display', -apple-system, 'Helvetica Neue', 'PingFang SC', sans-serif; background: var(--bg); color: var(--text); transition: background 0.5s, color 0.5s; }
+
+/* Ambient background canvas */
+#particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* Animated gradient orbs */
+.ambient-orbs { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.orb { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.15; animation: orbFloat 20s ease-in-out infinite; }
+html.light .orb { opacity:0.08; }
+.orb-1 { width:600px; height:600px; background: #667eea; top:-10%; left:-10%; animation-delay:0s; }
+.orb-2 { width:500px; height:500px; background: #f5576c; bottom:-15%; right:-10%; animation-delay:-7s; }
+.orb-3 { width:400px; height:400px; background: #43e97b; top:50%; left:50%; animation-delay:-14s; }
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 30px) scale(0.9); }
+}
+
+/* Controls */
+.controls { position:fixed; top:1.5rem; right:1.5rem; z-index:1000; display:flex; gap:0.75rem; }
+.ctrl-btn { width:42px; height:42px; border-radius:12px; border:1px solid var(--border); background: rgba(10,10,15,0.6); backdrop-filter:blur(16px); color: var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; transition: all 0.3s; }
+html.light .ctrl-btn { background: rgba(255,255,255,0.7); }
+.ctrl-btn:hover { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); transform:scale(1.05); }
+
+/* Progress */
+.progress { position:fixed; top:0; left:0; height:3px; background: linear-gradient(90deg, var(--accent), #a855f7, #ec4899); transition: width 0.6s cubic-bezier(0.4,0,0.2,1); z-index:1000; box-shadow: 0 0 10px var(--accent-glow); }
+
+/* Slide container */
+.slides { height:100%; width:100%; position:relative; z-index:1; perspective: 1200px; }
+.slide { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; padding: 4rem 2rem 3rem; opacity:0; pointer-events:none; overflow-y:auto; transform-origin: center center; }
+
+/* Transition states */
+.slide.active { opacity:1; pointer-events:all; animation: slideIn var(--transition-duration) cubic-bezier(0.16,1,0.3,1) forwards; }
+.slide.exit-left { animation: slideOutLeft var(--transition-duration) cubic-bezier(0.16,1,0.3,1) forwards; }
+.slide.exit-right { animation: slideOutRight var(--transition-duration) cubic-bezier(0.16,1,0.3,1) forwards; }
+
+@keyframes slideIn {
+  from { opacity:0; transform: translateY(40px) scale(0.95); filter:blur(4px); }
+  to { opacity:1; transform: translateY(0) scale(1); filter:blur(0); }
+}
+@keyframes slideOutLeft {
+  from { opacity:1; transform: translateX(0) scale(1); }
+  to { opacity:0; transform: translateX(-80px) scale(0.92); filter:blur(4px); }
+}
+@keyframes slideOutRight {
+  from { opacity:1; transform: translateX(0) scale(1); }
+  to { opacity:0; transform: translateX(80px) scale(0.92); filter:blur(4px); }
+}
+
+.slide-inner { max-width:900px; width:100%; position:relative; }
+
+/* Decorative scene backgrounds per scenario slide */
+.scene-bg { position:absolute; inset:0; z-index:-1; border-radius:32px; opacity:0.07; pointer-events:none; }
+html.light .scene-bg { opacity:0.04; }
+
+/* Typography */
+h1 { font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight:800; letter-spacing:-0.03em; margin-bottom:1rem; line-height:1.1; }
+h2 { font-size: clamp(1.6rem, 3.8vw, 2.5rem); font-weight:700; margin-bottom:1rem; letter-spacing:-0.02em; }
+h3 { font-size: 1.15rem; font-weight:700; margin-bottom:0.5rem; }
+p, li { font-size: clamp(0.95rem, 1.8vw, 1.1rem); line-height:1.75; color: var(--text-secondary); }
+.subtitle { font-size: clamp(1.05rem, 2.5vw, 1.4rem); color: var(--text-secondary); margin-bottom:2rem; }
+
+/* Glow text effect */
+.glow-text { text-shadow: 0 0 40px var(--accent-glow); }
+
+/* Cards */
+.card-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.25rem; margin-top:1.5rem; }
+.card { padding:1.5rem; border-radius:20px; border:1px solid var(--border); background: var(--surface); backdrop-filter:blur(12px); transition: all 0.4s cubic-bezier(0.16,1,0.3,1); position:relative; overflow:hidden; }
+.card::before { content:''; position:absolute; inset:0; border-radius:20px; background: linear-gradient(135deg, transparent 50%, rgba(99,102,241,0.05)); pointer-events:none; }
+.card:hover { transform:translateY(-4px); border-color: rgba(99,102,241,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 30px var(--accent-glow); }
+.card h3 { background: var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-size:1.2rem; }
+.card:nth-child(2) h3 { background: var(--gradient-2); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.card:nth-child(3) h3 { background: var(--gradient-3); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.card:nth-child(4) h3 { background: var(--gradient-4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.card:nth-child(5) h3 { background: var(--gradient-5); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.card ul { list-style:none; padding:0; }
+.card li { padding:0.35rem 0; padding-left:1.2rem; position:relative; }
+.card li::before { content:'›'; position:absolute; left:0; color:var(--accent); font-weight:700; font-size:1.2rem; }
+
+/* Stats */
+.stats { display:flex; flex-wrap:wrap; gap:2rem; margin-top:2rem; justify-content:center; }
+.stat { text-align:center; min-width:130px; padding:1.25rem; border-radius:16px; background: var(--surface); border:1px solid var(--border); backdrop-filter:blur(8px); transition: transform 0.3s; }
+.stat:hover { transform:scale(1.05); }
+.stat-value { font-size:2.2rem; font-weight:800; background: var(--gradient-1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat-label { font-size:0.85rem; color:var(--text-secondary); margin-top:0.4rem; }
+
+/* Scenario detail */
+.scenario-header { display:flex; align-items:center; gap:1.25rem; margin-bottom:2rem; }
+.scenario-icon { width:68px; height:68px; border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+.scenario-bullets { list-style:none; padding:0; }
+.scenario-bullets li { padding:0.75rem 0; padding-left:1.5rem; position:relative; border-bottom:1px solid var(--border); font-size:1rem; }
+.scenario-bullets li:last-child { border:none; }
+.scenario-bullets li::before { content:''; position:absolute; left:0; top:50%; width:8px; height:8px; border-radius:50%; transform:translateY(-50%); box-shadow: 0 0 8px currentColor; }
+.scenario-bullets li strong { color: var(--text); }
+
+.s1 .scenario-icon { background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(118,75,162,0.2)); }
+.s1 .scenario-bullets li::before { background: #667eea; color:#667eea; }
+.s2 .scenario-icon { background: linear-gradient(135deg, rgba(245,87,108,0.2), rgba(240,147,251,0.2)); }
+.s2 .scenario-bullets li::before { background: #f5576c; color:#f5576c; }
+.s3 .scenario-icon { background: linear-gradient(135deg, rgba(67,233,123,0.2), rgba(56,249,215,0.2)); }
+.s3 .scenario-bullets li::before { background: #43e97b; color:#43e97b; }
+.s4 .scenario-icon { background: linear-gradient(135deg, rgba(250,112,154,0.2), rgba(254,225,64,0.2)); }
+.s4 .scenario-bullets li::before { background: #fa709a; color:#fa709a; }
+
+/* Actions list */
+.actions-list { counter-reset: action; list-style:none; padding:0; }
+.actions-list li { padding:1.25rem 0 1.25rem 3.5rem; position:relative; border-bottom:1px solid var(--border); }
+.actions-list li::before { counter-increment:action; content:counter(action); position:absolute; left:0; top:1.25rem; width:2.2rem; height:2.2rem; border-radius:10px; background: linear-gradient(135deg, var(--accent), #a855f7); color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:700; box-shadow: 0 4px 12px var(--accent-glow); }
+.actions-list li strong { color:var(--text); display:block; margin-bottom:0.3rem; font-size:1.05rem; }
+
+/* Nav dots */
+.nav { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; gap:0.6rem; z-index:1000; background: rgba(10,10,15,0.5); backdrop-filter:blur(12px); padding:0.6rem 1rem; border-radius:20px; border:1px solid var(--border); }
+html.light .nav { background: rgba(255,255,255,0.6); }
+.dot { width:8px; height:8px; border-radius:50%; background: var(--text-secondary); opacity:0.3; cursor:pointer; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+.dot.active { opacity:1; background: var(--accent); width:28px; border-radius:4px; box-shadow: 0 0 10px var(--accent-glow); }
+
+/* Page number */
+.page-num { position:fixed; bottom:2rem; right:2rem; font-size:0.8rem; color:var(--text-secondary); z-index:1000; font-variant-numeric: tabular-nums; }
+
+/* Footer */
+.footer-credit { font-size:0.8rem; color:var(--text-secondary); margin-top:3rem; opacity:0.7; }
+
+/* Fullscreen tweaks */
+:fullscreen { background: var(--bg); }
+
+/* Stagger animations for children */
+.slide.active .card { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+.slide.active .card:nth-child(1) { animation-delay: 0.1s; }
+.slide.active .card:nth-child(2) { animation-delay: 0.2s; }
+.slide.active .card:nth-child(3) { animation-delay: 0.3s; }
+.slide.active .card:nth-child(4) { animation-delay: 0.4s; }
+.slide.active .stat { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+.slide.active .stat:nth-child(1) { animation-delay: 0.15s; }
+.slide.active .stat:nth-child(2) { animation-delay: 0.25s; }
+.slide.active .stat:nth-child(3) { animation-delay: 0.35s; }
+.slide.active .scenario-bullets li { animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+.slide.active .scenario-bullets li:nth-child(1) { animation-delay: 0.1s; }
+.slide.active .scenario-bullets li:nth-child(2) { animation-delay: 0.18s; }
+.slide.active .scenario-bullets li:nth-child(3) { animation-delay: 0.26s; }
+.slide.active .scenario-bullets li:nth-child(4) { animation-delay: 0.34s; }
+.slide.active .scenario-bullets li:nth-child(5) { animation-delay: 0.42s; }
+.slide.active .actions-list li { animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+.slide.active .actions-list li:nth-child(1) { animation-delay: 0.1s; }
+.slide.active .actions-list li:nth-child(2) { animation-delay: 0.18s; }
+.slide.active .actions-list li:nth-child(3) { animation-delay: 0.26s; }
+.slide.active .actions-list li:nth-child(4) { animation-delay: 0.34s; }
+.slide.active .actions-list li:nth-child(5) { animation-delay: 0.42s; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* Title slide special effects */
+.title-badge { display:inline-block; padding:0.4rem 1rem; border-radius:20px; border:1px solid rgba(99,102,241,0.3); background:rgba(99,102,241,0.1); color:var(--accent); font-size:0.85rem; letter-spacing:0.08em; font-weight:500; margin-bottom:1.5rem; backdrop-filter:blur(4px); }
+.title-main { background: linear-gradient(135deg, #fff 0%, #c7d2fe 50%, #a78bfa 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+html.light .title-main { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #6366f1 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* Quote style */
+.big-quote { font-size:clamp(1.3rem,3.2vw,2rem); font-weight:600; color:var(--text); line-height:1.5; position:relative; padding-left:1.5rem; border-left:3px solid var(--accent); }
+
+/* Mobile */
+@media (max-width:600px) {
+  .slide { padding: 3.5rem 1.25rem 5rem; }
+  .card-grid { grid-template-columns:1fr; }
+  .controls { top:1rem; right:1rem; }
+  .stats { gap:0.75rem; }
+  .stat { min-width:100px; padding:1rem; }
+  .orb { filter:blur(60px); }
+  .orb-1 { width:300px; height:300px; }
+  .orb-2 { width:250px; height:250px; }
+  .orb-3 { width:200px; height:200px; }
+}
+</style>
+</head>
+<body>
+<div class="ambient-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<canvas id="particles"></canvas>
+
+<div class="progress" id="progress"></div>
+<div class="controls">
+  <button class="ctrl-btn" onclick="toggleTheme()" title="切换主题">◐</button>
+  <button class="ctrl-btn" onclick="toggleFullscreen()" title="全屏">⛶</button>
+</div>
+
+<div class="slides" id="slides">
+
+<!-- Slide 1: Title -->
+<div class="slide active">
+<div class="slide-inner" style="text-align:center">
+  <div class="title-badge">BCG HENDERSON INSTITUTE · 2026</div>
+  <h1 class="title-main">超越明天</h1>
+  <p class="subtitle">2050 年世界的四种情景</p>
+  <p style="margin-top:1.5rem;font-size:1rem;line-height:1.8;">基于 100+ 大趋势与一个世纪历史数据<br>描绘未来 25 年的可能路径</p>
+  <p style="margin-top:3rem;color:var(--text-secondary);font-size:0.85rem;opacity:0.6;">← → 键翻页 · 点击底部导航跳转</p>
+</div>
+</div>
+
+<!-- Slide 2: Core thesis -->
+<div class="slide">
+<div class="slide-inner" style="text-align:center">
+  <h2 class="glow-text">核心观点</h2>
+  <div class="big-quote" style="text-align:left;max-width:600px;margin:2.5rem auto 0;">
+    未来五年的决策<br>将塑造未来 25 年
+  </div>
+  <p style="margin-top:2rem;text-align:left;max-width:600px;margin-left:auto;margin-right:auto;">四种截然不同的情景，不是预测，而是战略准备的框架</p>
+  <div class="stats" style="margin-top:3rem;">
+    <div class="stat"><div class="stat-value">1.8–5%</div><div class="stat-label">GDP 年增长范围</div></div>
+    <div class="stat"><div class="stat-value">1.6–3.4×</div><div class="stat-label">经济总量倍数</div></div>
+    <div class="stat"><div class="stat-value">35–60%</div><div class="stat-label">全球贸易/GDP</div></div>
+  </div>
+</div>
+</div>
+
+<!-- Slide 3: Overview 4 scenarios -->
+<div class="slide">
+<div class="slide-inner">
+  <h2 style="text-align:center;margin-bottom:0.5rem;">四种情景总览</h2>
+  <p style="text-align:center;margin-bottom:1.5rem;color:var(--text-secondary)">每种情景代表一条可能的发展路径</p>
+  <div class="card-grid">
+    <div class="card"><h3>🤖 AI 丰裕时代</h3><p>全球合作 · GDP +5%/年 · 三天工作周</p></div>
+    <div class="card"><h3>⚔️ 对抗阵营</h3><p>地缘分裂 · GDP +1.8%/年 · 贸易骤降</p></div>
+    <div class="card"><h3>🌍 气候联盟</h3><p>气候优先 · 1.8°C · 碳市场全球化</p></div>
+    <div class="card"><h3>💎 数字达尔文主义</h3><p>技术驱动 · GDP +4%/年 · 极端不平等</p></div>
+  </div>
+</div>
+</div>
+
+<!-- Slide 4: Scenario 1 -->
+<div class="slide">
+<div class="slide-inner s1">
+  <div class="scenario-header">
+    <div class="scenario-icon">🤖</div>
+    <div><h2 style="margin:0">情景一：AI 丰裕时代</h2><p style="font-size:0.9rem;color:var(--text-secondary)">AI Abundance</p></div>
+  </div>
+  <ul class="scenario-bullets">
+    <li><strong>全球合作制定 AI 标准</strong>，生产力高速增长</li>
+    <li>GDP 年增 <strong>~5%</strong>（四情景最高），总量增至今天的 <strong>3.4 倍</strong></li>
+    <li>工作时间减少 ~25%，<strong>三四天工作周</strong>普及</li>
+    <li>AI 加速新材料和碳移除 → 延迟但可信的净零路径</li>
+    <li>人类从重复劳动解放，聚焦创造力与意义</li>
+  </ul>
+</div>
+</div>
+
+<!-- Slide 5: Scenario 2 -->
+<div class="slide">
+<div class="slide-inner s2">
+  <div class="scenario-header">
+    <div class="scenario-icon">⚔️</div>
+    <div><h2 style="margin:0">情景二：对抗阵营</h2><p style="font-size:0.9rem;color:var(--text-secondary)">Battling Blocs</p></div>
+  </div>
+  <ul class="scenario-bullets">
+    <li>地缘政治紧张 → 世界分裂为<strong>竞争集团</strong></li>
+    <li>全球贸易降至 GDP 的 <strong>~35%</strong>（冷战水平），从 2024 年 57% 大幅下降</li>
+    <li>国防支出升至 GDP 的 <strong>~7%</strong>（四情景最高）</li>
+    <li>GDP 年增仅 <strong>~1.8%</strong>（四情景最低）</li>
+    <li>供应链本地化，创新因隔离而减速</li>
+  </ul>
+</div>
+</div>
+
+<!-- Slide 6: Scenario 3 -->
+<div class="slide">
+<div class="slide-inner s3">
+  <div class="scenario-header">
+    <div class="scenario-icon">🌍</div>
+    <div><h2 style="margin:0">情景三：气候联盟</h2><p style="font-size:0.9rem;color:var(--text-secondary)">Climate Coalition</p></div>
+  </div>
+  <ul class="scenario-bullets">
+    <li>极端天气事件推动政府<strong>优先气候行动</strong></li>
+    <li>全球变暖稳定在 <strong>~1.8°C</strong></li>
+    <li>化石能源占比从 81% 降至 <strong>35%</strong></li>
+    <li>碳市场全球扩展，2040 年前主要经济体参与</li>
+    <li>GDP 年增 <strong>~2.5%</strong>，绿色经济成为增长引擎</li>
+  </ul>
+</div>
+</div>
+
+<!-- Slide 7: Scenario 4 -->
+<div class="slide">
+<div class="slide-inner s4">
+  <div class="scenario-header">
+    <div class="scenario-icon">💎</div>
+    <div><h2 style="margin:0">情景四：数字达尔文主义</h2><p style="font-size:0.9rem;color:var(--text-secondary)">Digital Darwinism</p></div>
+  </div>
+  <ul class="scenario-bullets">
+    <li>技术快速进步 + <strong>有限监管</strong></li>
+    <li>GDP 年增 <strong>~4%</strong>，经济近乎三倍</li>
+    <li>最富 1% 持有近<strong>一半全球财富</strong>，中产持续萎缩</li>
+    <li>零工经济和短期合同扩张，就业不稳定</li>
+    <li>全球贸易维持开放（商业利益驱动）</li>
+  </ul>
+</div>
+</div>
+
+<!-- Slide 8: Comparison -->
+<div class="slide">
+<div class="slide-inner">
+  <h2 style="text-align:center">关键指标对比</h2>
+  <div class="card-grid" style="margin-top:2rem;">
+    <div class="card">
+      <h3>GDP 增速</h3>
+      <ul>
+        <li>AI 丰裕: 5.0%</li>
+        <li>数字达尔文: 4.0%</li>
+        <li>气候联盟: 2.5%</li>
+        <li>对抗阵营: 1.8%</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>全球贸易/GDP</h3>
+      <ul>
+        <li>AI 丰裕: ~60%</li>
+        <li>数字达尔文: ~55%</li>
+        <li>气候联盟: ~50%</li>
+        <li>对抗阵营: ~35%</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>低碳电力占比</h3>
+      <ul>
+        <li>气候联盟: ~90%</li>
+        <li>AI 丰裕: ~80%</li>
+        <li>数字达尔文: ~65%</li>
+        <li>对抗阵营: ~55%</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Slide 9: Actions -->
+<div class="slide">
+<div class="slide-inner">
+  <h2 style="text-align:center;margin-bottom:1.5rem;">领导者的"低遗憾"行动</h2>
+  <p style="text-align:center;color:var(--text-secondary);margin-bottom:2rem;">无论哪种情景发生，这五项行动都值得立即启动</p>
+  <ol class="actions-list">
+    <li><strong>增强结构韧性</strong>从效率优先转向韧性优先，构建抗冲击能力</li>
+    <li><strong>重新想象人才策略</strong>应对老龄化 + AI 双重冲击，重新定义工作</li>
+    <li><strong>构建数字灵活性和信任</strong>技术架构可适应多种未来，同时赢得利益相关者信任</li>
+    <li><strong>强化感知和影响能力</strong>建立预警系统，提前识别情景转变信号</li>
+    <li><strong>拥抱更广泛的社会角色</strong>企业需在社会中承担更大责任</li>
+  </ol>
+</div>
+</div>
+
+<!-- Slide 10: Closing -->
+<div class="slide">
+<div class="slide-inner" style="text-align:center">
+  <h2 class="glow-text">结语</h2>
+  <div class="big-quote" style="text-align:center;border:none;padding:0;margin-top:2rem;">
+    未来不是等来的<br>是由今天的决策塑造的
+  </div>
+  <p style="margin-top:2rem;">用情景思维代替单一预测<br>用韧性战略代替效率执念</p>
+  <p class="footer-credit">
+    来源：BCG Henderson Institute《Beyond Tomorrow》2026<br>
+    HKU ICB AIBT 制作组 - Steve 团队
+  </p>
+</div>
+</div>
+
+</div><!-- /slides -->
+
+<div class="nav" id="nav"></div>
+<div class="page-num" id="pageNum"></div>
+
+<script>
+// Particle system
+(function() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+  const PARTICLE_COUNT = 50;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * w;
+      this.y = Math.random() * h;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.size = Math.random() * 2 + 0.5;
+      this.alpha = Math.random() * 0.3 + 0.05;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(99,102,241,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => { p.update(); p.draw(); });
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(99,102,241,${0.06 * (1 - dist/120)})`;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+// Slide navigation
+const slides = document.querySelectorAll('.slide');
+const nav = document.getElementById('nav');
+const progress = document.getElementById('progress');
+const pageNum = document.getElementById('pageNum');
+let current = 0;
+let animating = false;
+
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goTo(i);
+  nav.appendChild(dot);
+});
+
+function goTo(n) {
+  if (n < 0 || n >= slides.length || n === current || animating) return;
+  animating = true;
+  const direction = n > current ? 'left' : 'right';
+  
+  slides[current].classList.remove('active');
+  slides[current].classList.add(direction === 'left' ? 'exit-left' : 'exit-right');
+  nav.children[current].classList.remove('active');
+  
+  const prev = current;
+  current = n;
+  slides[current].classList.add('active');
+  nav.children[current].classList.add('active');
+  progress.style.width = ((current / (slides.length - 1)) * 100) + '%';
+  pageNum.textContent = (current + 1) + ' / ' + slides.length;
+
+  setTimeout(() => {
+    slides[prev].classList.remove('exit-left', 'exit-right');
+    animating = false;
+  }, 800);
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); goTo(current - 1); }
+});
+
+// Touch
+let touchStart = 0;
+document.addEventListener('touchstart', e => { touchStart = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const diff = touchStart - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) { diff > 0 ? goTo(current + 1) : goTo(current - 1); }
+});
+
+// Theme
+function toggleTheme() { document.documentElement.classList.toggle('light'); }
+
+// Fullscreen
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+// Init
+goTo(0);
+</script>
+</body>
+</html>

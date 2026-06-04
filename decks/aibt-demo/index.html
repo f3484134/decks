@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIBT — AI 到底改變了什麼？</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --accent2: #0f3460;
+      --accent3: #16213e;
+      --warm: #f2a365;
+      --green: #2ecc71;
+      --light: #f8f9fa;
+      --muted: #6c757d;
+      --card-bg: #ffffff;
+      --card-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+
+    .reveal {
+      font-family: 'Noto Sans SC', 'Inter', -apple-system, sans-serif;
+      color: var(--primary);
+    }
+    .reveal .slides { text-align: left; }
+    .reveal h1, .reveal h2, .reveal h3 {
+      text-transform: none;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .reveal h1 { font-size: 2.6em; line-height: 1.15; }
+    .reveal h2 { font-size: 1.8em; line-height: 1.2; }
+    .reveal h3 { font-size: 1.2em; color: var(--accent2); font-weight: 600; }
+
+    /* Section slide */
+    .section-slide {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .section-slide h1 {
+      font-size: 3.2em;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 0.2em;
+    }
+    .section-slide .subtitle {
+      font-size: 1.1em;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .section-slide .accent-line {
+      width: 80px;
+      height: 4px;
+      background: var(--accent);
+      margin: 0.6em 0;
+      border-radius: 2px;
+    }
+
+    /* Accent colors */
+    .accent { color: var(--accent); }
+    .accent2 { color: var(--accent2); }
+    .warm { color: var(--warm); }
+    .green { color: var(--green); }
+    .muted { color: var(--muted); }
+    .bold { font-weight: 700; }
+    .light { font-weight: 300; }
+    .big { font-size: 1.4em; }
+    .small { font-size: 0.75em; }
+    .center { text-align: center; }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.2em 1.5em;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-accent {
+      border-left: 4px solid var(--accent);
+    }
+    .card-blue {
+      border-left: 4px solid var(--accent2);
+    }
+    .card-warm {
+      border-left: 4px solid var(--warm);
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2em;
+      margin: 0.8em 0;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1em;
+      margin: 0.8em 0;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 0.8em;
+      margin: 0.8em 0;
+    }
+
+    /* Flow / Timeline */
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6em;
+      margin: 1.2em 0;
+    }
+    .flow-item {
+      background: var(--card-bg);
+      border: 2px solid var(--accent2);
+      border-radius: 10px;
+      padding: 0.8em 1.2em;
+      font-size: 0.7em;
+      font-weight: 600;
+      text-align: center;
+      color: var(--accent2);
+    }
+    .flow-item.active {
+      background: var(--accent2);
+      color: white;
+    }
+    .flow-arrow {
+      font-size: 1.5em;
+      color: var(--muted);
+    }
+
+    /* Stats */
+    .stat {
+      text-align: center;
+    }
+    .stat .number {
+      font-size: 3em;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--accent);
+    }
+    .stat .label {
+      font-size: 0.65em;
+      color: var(--muted);
+      margin-top: 0.3em;
+    }
+
+    /* Quote */
+    .quote-block {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 16px;
+      padding: 1.5em 2em;
+      position: relative;
+      margin: 1em 0;
+    }
+    .quote-block::before {
+      content: '"';
+      font-size: 4em;
+      color: var(--accent);
+      opacity: 0.3;
+      position: absolute;
+      top: -0.1em;
+      left: 0.2em;
+      font-family: Georgia, serif;
+    }
+    .quote-block p {
+      font-size: 0.85em;
+      line-height: 1.6;
+      font-style: italic;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .quote-block .author {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--accent2);
+      margin-top: 0.6em;
+      font-size: 0.75em;
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      background: rgba(15,52,96,0.08);
+      color: var(--accent2);
+      padding: 0.25em 0.75em;
+      border-radius: 20px;
+      font-size: 0.6em;
+      font-weight: 500;
+      margin: 0.15em;
+    }
+    .tag-accent {
+      background: rgba(233,69,96,0.1);
+      color: var(--accent);
+    }
+    .tag-warm {
+      background: rgba(242,163,101,0.15);
+      color: #c87a30;
+    }
+
+    /* Comparison table */
+    .reveal table {
+      font-size: 0.6em;
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8em 0;
+    }
+    .reveal table th {
+      background: var(--accent2);
+      color: white;
+      font-weight: 600;
+      padding: 0.6em 1em;
+      text-align: left;
+    }
+    .reveal table td {
+      padding: 0.5em 1em;
+      border-bottom: 1px solid #eee;
+      color: var(--primary);
+    }
+    .reveal table tr:nth-child(even) td {
+      background: #f8f9fa;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      display: flex;
+      gap: 0;
+      margin: 1em 0;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 30px;
+    }
+    .progress-segment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.5em;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* List style */
+    .reveal ul { list-style: none; padding: 0; }
+    .reveal ul li {
+      padding: 0.3em 0 0.3em 1.5em;
+      position: relative;
+      font-size: 0.8em;
+      line-height: 1.5;
+    }
+    .reveal ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent2);
+    }
+
+    /* Slide number */
+    .reveal .slide-number { color: var(--muted); font-size: 0.5em; }
+
+    /* Speaker notes indicator */
+    .reveal .speaker-notes-indicator { display: none; }
+
+    /* Background override for section slides */
+    .section-bg {
+      background: linear-gradient(135deg, var(--accent3) 0%, var(--primary) 100%) !important;
+    }
+    .section-bg h1, .section-bg h2, .section-bg h3,
+    .section-bg p, .section-bg .subtitle { color: white !important; }
+    .section-bg .accent-line { background: var(--accent) !important; }
+
+    /* Icon circles */
+    .icon-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    .icon-blue { background: rgba(15,52,96,0.1); }
+    .icon-red { background: rgba(233,69,96,0.1); }
+    .icon-warm { background: rgba(242,163,101,0.15); }
+    .icon-green { background: rgba(46,204,113,0.15); }
+
+    /* Fade fragments */
+    .reveal .slides section .fragment.custom-fade {
+      opacity: 0.3;
+      transition: opacity 0.3s;
+    }
+    .reveal .slides section .fragment.custom-fade.visible {
+      opacity: 1;
+    }
+
+    /* PDF hide class */
+    @media print {
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- SLIDE 1: Title -->
+<!-- ============================================================ -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)">
+  <div style="text-align: center; color: white;">
+    <p style="font-size: 0.7em; letter-spacing: 0.3em; color: rgba(255,255,255,0.5); margin-bottom: 0.5em;">HKU ICB · AIBT</p>
+    <h1 style="color: white; font-size: 3em; margin: 0;">AI 到底<br/>改變了什麼？</h1>
+    <div style="width: 60px; height: 4px; background: #e94560; margin: 0.8em auto; border-radius: 2px;"></div>
+    <p style="font-size: 0.9em; color: rgba(255,255,255,0.7); font-weight: 300;">從器具到系統，從執行者到判斷者</p>
+    <p style="font-size: 0.6em; color: rgba(255,255,255,0.4); margin-top: 2em;">模組二 · 商業衝擊篇</p>
+  </div>
+  <aside class="notes">
+    這一節我們不講技術細節，而是從更大的視角來看：AI 到底在改變什麼？
+
+    我會從四個維度來分析：歷史脈絡、個人角色、商業組織、文化思維。每個維度都會有案例和數據支撐。
+
+    目標：讓大家離開這個教室的時候，能夠清楚地告訴別人「AI 對我的行業意味著什麼」。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 2: 歷史脈絡 -->
+<!-- ============================================================ -->
+<section>
+  <h2>從歷史的洪流來看</h2>
+  <p class="muted small" style="margin-bottom: 1em;">每一次範式轉移，都不只改變了工具，而是改變了思維方式</p>
+
+  <div class="flow">
+    <div class="flow-item">🔧<br/>器具時代<br/><span style="font-size:0.8em; font-weight:400;">延伸人的手</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item">⚙️<br/>流程時代<br/><span style="font-size:0.8em; font-weight:400;">標準化效率</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item active">🧠<br/>系統時代<br/><span style="font-size:0.8em; font-weight:400;">重構思維</span></div>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 1em;">
+    <p style="font-size: 0.75em; margin: 0;">
+      <span class="bold">今天的 AI 不是更好的工具。</span><br/>
+      它是一次<span class="accent bold">思維方式的根本轉變</span>——從「我怎麼做」到「我怎麼判斷該做什麼」。
+    </p>
+  </div>
+
+  <aside class="notes">
+    人類歷史上的三次工具革命：
+    1. 器具時代 — 錘子、筆、計算器，延伸人的物理和認知能力
+    2. 流程時代 — 工業革命、泰勒制、瀑布式開發，用標準化提升效率
+    3. 系統時代 — AI 不只是工具，它改變了我們思考問題的方式
+
+    關鍵洞見：每一次轉變，被淘汰的不是不會用新工具的人，而是沒有改變思維方式的人。
+
+    打字機沒有淘汰寫字的人——它淘汰了以「寫字速度」為競爭力的人。
+    AI 不會淘汰做產品的人——它會淘汰以「執行速度」為競爭力的人。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 3: 個人角色變化 - Title -->
+<!-- ============================================================ -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)">
+  <div class="section-slide" style="text-align: center; color: white;">
+    <p style="font-size: 0.65em; letter-spacing: 0.2em; color: rgba(255,255,255,0.5);">第一個維度</p>
+    <h1 style="color: white; font-size: 2.8em;">個人角色的變化</h1>
+    <div style="width: 60px; height: 4px; background: #e94560; margin: 0.8em auto; border-radius: 2px;"></div>
+    <p style="font-size: 0.9em; color: rgba(255,255,255,0.6); font-weight: 300;">邊界模糊、角色重新定義</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 4: 角色轉變 -->
+<!-- ============================================================ -->
+<section>
+  <h2>角色不是消失，而是<span class="accent">升級</span></h2>
+
+  <div class="grid-3" style="margin-top: 1em;">
+    <div class="card card-blue" style="text-align: center;">
+      <div class="icon-circle icon-blue" style="margin: 0 auto 0.3em;">🎨</div>
+      <h3 style="font-size: 0.85em; margin: 0.3em 0;">設計師</h3>
+      <p class="muted small" style="margin: 0;">出圖、做原型、測試</p>
+      <div style="font-size: 1.5em; margin: 0.3em 0;">↓</div>
+      <p class="accent2 bold" style="font-size: 0.8em; margin: 0;">體驗指揮官</p>
+      <p class="muted small" style="margin: 0;">定義標準、評估品質</p>
+    </div>
+    <div class="card card-accent" style="text-align: center;">
+      <div class="icon-circle icon-red" style="margin: 0 auto 0.3em;">📋</div>
+      <h3 style="font-size: 0.85em; margin: 0.3em 0;">產品經理</h3>
+      <p class="muted small" style="margin: 0;">寫 PRD、排優先級</p>
+      <div style="font-size: 1.5em; margin: 0.3em 0;">↓</div>
+      <p class="accent bold" style="font-size: 0.8em; margin: 0;">價值判斷者</p>
+      <p class="muted small" style="margin: 0;">做什麼 > 怎麼做</p>
+    </div>
+    <div class="card card-warm" style="text-align: center;">
+      <div class="icon-circle icon-warm" style="margin: 0 auto 0.3em;">💻</div>
+      <h3 style="font-size: 0.85em; margin: 0.3em 0;">工程師</h3>
+      <p class="muted small" style="margin: 0;">寫代碼、修 Bug</p>
+      <div style="font-size: 1.5em; margin: 0.3em 0;">↓</div>
+      <p class="warm bold" style="font-size: 0.8em; margin: 0;">系統架構師</p>
+      <p class="muted small" style="margin: 0;">定義規格、把關品質</p>
+    </div>
+  </div>
+
+  <aside class="notes">
+    三個核心角色都在經歷根本轉變：
+
+    設計師：以前的核心能力是「做得漂亮」，現在 AI 幾秒就能出圖。新的核心能力是「判斷什麼是好的」——定義設計標準、評估 AI 產出、策展最佳方案。
+
+    產品經理：以前花 80% 時間寫文件、對齊需求。AI 接管了執行層的工作後，PM 的價值在於「判斷什麼值得做」。Lenny Rachitsky 說得很好：「AI 不是在縮小 PM 的角色，而是在提高門檻。」
+
+    工程師：Karpathy 從自己寫 80% 代碼到 0%。工程師的新角色不是寫代碼，而是定義代碼應該做什麼、驗證代碼做得對不對。
+
+    共同趨勢：從「怎麼做」轉向「做什麼」和「做得好不好」。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 5: Karpathy -->
+<!-- ============================================================ -->
+<section>
+  <h2>連 AI 專家都在焦慮</h2>
+
+  <div class="quote-block">
+    <p>我現在已經不再自己寫任何代碼了。我向 AI 描述需求，然後 Review 它的產出。我的角色從工程師變成了<span class="accent bold">規格定義者和品質把關者</span>。</p>
+    <p class="author">— Andrej Karpathy，前 Tesla AI 總監 / OpenAI 創始成員</p>
+  </div>
+
+  <div class="flow" style="margin-top: 1.5em;">
+    <div class="card" style="text-align: center; padding: 1em;">
+      <p class="number" style="font-size: 2em; margin: 0; color: var(--accent2);">80%</p>
+      <p class="muted small" style="margin: 0;">自己寫<br/>2023</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="card" style="text-align: center; padding: 1em;">
+      <p class="number" style="font-size: 2em; margin: 0; color: var(--warm);">20%</p>
+      <p class="muted small" style="margin: 0;">自己寫<br/>2025</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="card" style="text-align: center; padding: 1em; border: 2px solid var(--accent);">
+      <p class="number" style="font-size: 2em; margin: 0; color: var(--accent);">0%</p>
+      <p class="muted small" style="margin: 0;">自己寫<br/>2026</p>
+    </div>
+  </div>
+
+  <aside class="notes">
+    Karpathy 是業界最有代表性的 AI 原住民之一。他從 2023 年開始越來越多地依賴 AI 寫代碼，到 2026 年 3 月公開表示他已經不再自己寫任何代碼了。
+
+    重點不是「AI 會寫代碼」——這大家都知道。重點是：連最頂尖的技術人員都在重新定義自己的角色。
+
+    如果 Karpathy 的工作從「寫代碼」變成了「定義規格和把關品質」，那你的工作呢？
+
+    這不是威脅論。這是一個機會：如果你能比別人更快地從「執行者」轉變為「判斷者」，你就有了新的競爭優勢。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 6: Builder 概念 -->
+<!-- ============================================================ -->
+<section>
+  <h2>每個人都是 <span class="accent">Builder</span></h2>
+
+  <div class="grid-2">
+    <div>
+      <div class="card card-blue" style="margin-bottom: 0.8em;">
+        <h3 style="margin: 0 0 0.3em; font-size: 0.85em;">🔨 Builder</h3>
+        <p style="font-size: 0.7em; margin: 0; color: var(--muted);">用 AI 親手做出產品原型</p>
+      </div>
+      <div class="card card-accent" style="margin-bottom: 0.8em;">
+        <h3 style="margin: 0 0 0.3em; font-size: 0.85em;">🎬 Director</h3>
+        <p style="font-size: 0.7em; margin: 0; color: var(--muted);">指揮 AI 完成複雜任務</p>
+      </div>
+      <div class="card card-warm" style="margin-bottom: 0.8em;">
+        <h3 style="margin: 0 0 0.3em; font-size: 0.85em;">🏛️ Architect</h3>
+        <p style="font-size: 0.7em; margin: 0; color: var(--muted);">設計系統、定義標準</p>
+      </div>
+    </div>
+    <div>
+      <div class="quote-block" style="margin-top: 0;">
+        <p>We're moving away from product managers to <span class="accent bold">product builders</span>.</p>
+        <p class="author">— Tomer Cohen, LinkedIn CPO</p>
+      </div>
+      <div class="card" style="margin-top: 0.8em; background: #f8f9fa;">
+        <p style="font-size: 0.7em; margin: 0;">
+          <span class="accent bold">89%</span> 的員工已經在使用 AI 工具——無論公司是否知道。
+        </p>
+        <p style="font-size: 0.6em; margin: 0.3em 0 0; color: var(--muted);">Microsoft & LinkedIn 2025 Work Trend Index</p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    LinkedIn CPO Tomer Cohen 在 2025 年提出：未來不需要「產品經理」，需要的是「產品建造者」。
+
+    這不是說 PM 要去學寫代碼。而是說，當 AI 讓建造的門檻極低時，能不能快速把想法變成可體驗的東西，就成了核心能力。
+
+    三個進化階段：
+    - Builder：能用 AI 做出東西
+    - Director：能指揮 AI 完成複雜任務鏈
+    - Architect：能設計整個系統和標準
+
+    另一個驚人數字：89% 的 Shadow AI 使用率。也就是說，你的員工已經在用了，問題不是「要不要用」，而是「怎麼用得對」。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 7: 工具演化 Section -->
+<!-- ============================================================ -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)">
+  <div style="text-align: center; color: white;">
+    <p style="font-size: 0.65em; letter-spacing: 0.2em; color: rgba(255,255,255,0.5);">第二個維度</p>
+    <h1 style="color: white; font-size: 2.8em;">工具的演化</h1>
+    <div style="width: 60px; height: 4px; background: #e94560; margin: 0.8em auto; border-radius: 2px;"></div>
+    <p style="font-size: 0.9em; color: rgba(255,255,255,0.6); font-weight: 300;">Chat → Copilot → Agentic Workflow</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 8: 工具三代 -->
+<!-- ============================================================ -->
+<section>
+  <h2>AI 工具的三個世代</h2>
+
+  <div class="grid-3" style="margin-top: 1em;">
+    <div class="card" style="text-align: center;">
+      <p style="font-size: 2em; margin: 0;">💬</p>
+      <h3 style="margin: 0.3em 0; font-size: 0.9em;">第一代：Chat</h3>
+      <p style="font-size: 0.65em; color: var(--muted); margin: 0;">
+        一問一答<br/>
+        人驅動，AI 回應<br/>
+        <span class="tag">ChatGPT</span>
+        <span class="tag">Claude</span>
+      </p>
+      <div style="margin-top: 0.8em; padding-top: 0.6em; border-top: 1px solid #eee;">
+        <p style="font-size: 0.6em; margin: 0;"><span class="accent2 bold">人的角色：</span>提問者</p>
+      </div>
+    </div>
+    <div class="card" style="text-align: center;">
+      <p style="font-size: 2em; margin: 0;">🤝</p>
+      <h3 style="margin: 0.3em 0; font-size: 0.9em;">第二代：Copilot</h3>
+      <p style="font-size: 0.65em; color: var(--muted); margin: 0;">
+        即時協作<br/>
+        AI 嵌入工作流程<br/>
+        <span class="tag">GitHub Copilot</span>
+        <span class="tag">Cursor</span>
+      </p>
+      <div style="margin-top: 0.8em; padding-top: 0.6em; border-top: 1px solid #eee;">
+        <p style="font-size: 0.6em; margin: 0;"><span class="accent2 bold">人的角色：</span>協作者</p>
+      </div>
+    </div>
+    <div class="card" style="text-align: center; border: 2px solid var(--accent);">
+      <p style="font-size: 2em; margin: 0;">🤖</p>
+      <h3 style="margin: 0.3em 0; font-size: 0.9em; color: var(--accent);">第三代：Agentic</h3>
+      <p style="font-size: 0.65em; color: var(--muted); margin: 0;">
+        自主執行任務鏈<br/>
+        人定義目標，AI 執行<br/>
+        <span class="tag tag-accent">Claude Code</span>
+        <span class="tag tag-accent">Devin</span>
+      </p>
+      <div style="margin-top: 0.8em; padding-top: 0.6em; border-top: 1px solid #eee;">
+        <p style="font-size: 0.6em; margin: 0;"><span class="accent bold">人的角色：</span>判斷者</p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    三代 AI 工具的演化：
+
+    第一代 Chat（2023）：你問一個問題，AI 給你一個答案。人是主動方，AI 是被動回應。核心技能是「問對問題」。
+
+    第二代 Copilot（2024）：AI 嵌入你的工作環境，即時建議。你寫代碼時它自動補全，你寫文件時它自動建議。核心技能是「判斷建議好不好」。
+
+    第三代 Agentic（2025-2026）：你給 AI 一個目標，它自主規劃和執行整個任務鏈。你的角色從「做事的人」變成「定義目標和驗收成果的人」。
+
+    注意每一代中人的角色變化：提問者 → 協作者 → 判斷者。
+
+    越往後，「做」的部分越少，「判斷」的部分越多。這就是為什麼我們這門課的核心是判斷力，不是操作技巧。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 9: 商業組織 Section -->
+<!-- ============================================================ -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)">
+  <div style="text-align: center; color: white;">
+    <p style="font-size: 0.65em; letter-spacing: 0.2em; color: rgba(255,255,255,0.5);">第三個維度</p>
+    <h1 style="color: white; font-size: 2.8em;">商業與組織</h1>
+    <div style="width: 60px; height: 4px; background: #e94560; margin: 0.8em auto; border-radius: 2px;"></div>
+    <p style="font-size: 0.9em; color: rgba(255,255,255,0.6); font-weight: 300;">SaaS 已死 · 一人企業崛起 · 前沿企業誕生</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 10: SaaS is Dead -->
+<!-- ============================================================ -->
+<section>
+  <h2>SaaS is <span class="accent">Dead</span></h2>
+  <p class="muted small">軟體即服務 → 結果即服務</p>
+
+  <div class="grid-2" style="margin-top: 1em;">
+    <div class="card" style="border-top: 3px solid var(--muted);">
+      <h3 style="font-size: 0.85em; margin: 0 0 0.5em;">傳統 SaaS</h3>
+      <ul style="font-size: 0.7em;">
+        <li>賣軟體授權 / 訂閱</li>
+        <li>用戶自己操作完成任務</li>
+        <li>功能越多越好</li>
+        <li>人力成本 = 最大支出</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--accent);">
+      <h3 style="font-size: 0.85em; margin: 0 0 0.5em; color: var(--accent);">AI-Native 服務</h3>
+      <ul style="font-size: 0.7em;">
+        <li>賣<span class="accent bold">結果</span>，不是工具</li>
+        <li>AI 自主完成任務</li>
+        <li>介面越少越好</li>
+        <li>計算成本 = 最大支出</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 1em;">
+    <p style="font-size: 0.7em; margin: 0;">
+      <span class="bold">思考題：</span>你的公司在賣「工具」還是在賣「結果」？<br/>
+      如果 AI 能直接交付結果，用戶為什麼還需要你的軟體？
+    </p>
+  </div>
+
+  <aside class="notes">
+    Bret Taylor（前 Salesforce CEO，現 Sierra AI CEO）在 2025 年提出：SaaS 商業模式的核心假設——「人用軟體完成工作」——正在被顛覆。
+
+    傳統 SaaS：Salesforce 賣 CRM 軟體，你的銷售團隊用它管客戶。你付月費，自己操作。
+    AI-Native：Sierra 的 AI Agent 直接幫你回覆客戶、處理退貨、預約服務。你付的是「成功處理了多少客戶問題」。
+
+    從「賣鏟子」到「賣已經挖好的金子」。
+
+    對在座各位的啟示：如果你的產品本質是「讓用戶自己操作」，AI 可能會讓這個需求消失。你需要思考：用戶真正要的不是你的軟體，而是軟體帶來的結果。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 11: OPE -->
+<!-- ============================================================ -->
+<section>
+  <h2>一人企業的崛起 <span class="tag tag-warm">OPE</span></h2>
+
+  <div class="grid-2">
+    <div>
+      <div class="stat card" style="margin-bottom: 0.8em;">
+        <p class="number" style="color: var(--accent);">1</p>
+        <p class="label">人 = 完整商業閉環</p>
+      </div>
+      <div class="card card-warm">
+        <p style="font-size: 0.7em; margin: 0;">
+          Sahil Lavingia（Gumroad 創始人）用 <span class="warm bold">10 個核心技能</span>定義了一人公司的能力體系：
+        </p>
+        <p style="font-size: 0.6em; color: var(--muted); margin: 0.3em 0 0;">
+          找社群 → 驗證想法 → MVP → 首批客戶 → 定價 → 營銷 → 穩健增長
+        </p>
+      </div>
+    </div>
+    <div>
+      <div class="quote-block" style="margin-top: 0;">
+        <p>如果今天讓你獨立面對市場，你有沒有能力<span class="accent bold">讓一個人付錢給你</span>？</p>
+        <p class="author">— 《The Minimalist Entrepreneur》</p>
+      </div>
+      <div class="card" style="margin-top: 0.8em; background: #f8f9fa;">
+        <p style="font-size: 0.65em; margin: 0;">
+          <span class="bold">AI 讓「一人」不再是限制</span><br/>
+          ⚡ AI 做執行 → 人做判斷<br/>
+          ⚡ AI 做客服 → 人做關係<br/>
+          ⚡ AI 做分析 → 人做決策
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    另一個趨勢：AI 讓一個人可以完成過去需要一個團隊才能完成的事。
+
+    Sahil Lavingia 的 Gumroad 是一個經典案例。他把公司從高增長模式（70+人）轉變為一人公司模式，反而更賺錢。他提煉出 10 個核心技能，從「找社群」到「極簡複盤」。
+
+    對高管的意義：不是說你要辭職創業。而是你需要理解，當一個人就能做到以前需要一個部門才能做的事，你的組織結構是否還有意義？
+
+    Frontier Firm 的概念：未來的企業不一定更大，但一定更扁平、更敏捷。每個人都需要有「一人閉環」的能力基礎。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 12: Frontier Firm -->
+<!-- ============================================================ -->
+<section>
+  <h2>前沿企業 <span class="accent2 light">Frontier Firm</span></h2>
+  <p class="muted small">微軟 & LinkedIn《2025 工作趨勢指數》</p>
+
+  <div class="grid-2" style="margin-top: 0.8em;">
+    <div>
+      <div class="card" style="margin-bottom: 0.6em; padding: 0.8em 1em;">
+        <p style="font-size: 0.75em; margin: 0;">🧠 <span class="bold">智能隨手可得</span></p>
+        <p style="font-size: 0.6em; color: var(--muted); margin: 0.2em 0 0;">AI 嵌入每個工作流程，任何人都能使用</p>
+      </div>
+      <div class="card" style="margin-bottom: 0.6em; padding: 0.8em 1em;">
+        <p style="font-size: 0.75em; margin: 0;">👥 <span class="bold">人機混合團隊</span></p>
+        <p style="font-size: 0.6em; color: var(--muted); margin: 0.2em 0 0;">AI Agent 作為團隊成員，人負責監督和判斷</p>
+      </div>
+      <div class="card" style="margin-bottom: 0.6em; padding: 0.8em 1em;">
+        <p style="font-size: 0.75em; margin: 0;">📊 <span class="bold">扁平化結構</span></p>
+        <p style="font-size: 0.6em; color: var(--muted); margin: 0.2em 0 0;">AI 消除資訊不對稱，組織層級減少</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom: 0.6em; padding: 0.8em 1em;">
+        <p style="font-size: 0.75em; margin: 0;">📈 <span class="bold">每人產出倍增</span></p>
+        <p style="font-size: 0.6em; color: var(--muted); margin: 0.2em 0 0;">同樣的人數，10 倍的產出能力</p>
+      </div>
+      <div class="card" style="margin-bottom: 0.6em; padding: 0.8em 1em;">
+        <p style="font-size: 0.75em; margin: 0;">🔄 <span class="bold">持續學習文化</span></p>
+        <p style="font-size: 0.6em; color: var(--muted); margin: 0.2em 0 0;">AI Fluency 成為基本要求，終身學習不是口號</p>
+      </div>
+      <div class="card card-accent" style="padding: 0.8em 1em;">
+        <p style="font-size: 0.7em; margin: 0; font-weight: 600;">
+          🤔 你的公司離 Frontier Firm 有多遠？
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">
+    微軟和 LinkedIn 的報告把未來企業定義為 Frontier Firm。五個核心特徵：
+
+    1. 智能隨手可得：不是 IT 部門才能用 AI，而是每個人的工作流程裡都內建了 AI 能力
+    2. 人機混合團隊：AI Agent 不是工具，是團隊成員。就像你有一個不會累、不會請假的同事
+    3. 扁平化結構：當 AI 讓每個人都能獲取完整資訊、直接做決策時，中間管理層的價值需要重新定義
+    4. 每人產出倍增：同樣 50 人的公司，產出相當於過去 500 人
+    5. 持續學習文化：AI Fluency 變成像英語能力一樣的基本要求
+
+    給高管的直接問題：在你的公司，誰在用 AI？是所有人，還是只有少數技術部門？
+    如果答案是後者，你可能正在被 Frontier Firm 拉開距離。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 13: 文化思維 Section -->
+<!-- ============================================================ -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)">
+  <div style="text-align: center; color: white;">
+    <p style="font-size: 0.65em; letter-spacing: 0.2em; color: rgba(255,255,255,0.5);">第四個維度</p>
+    <h1 style="color: white; font-size: 2.8em;">文化與思維</h1>
+    <div style="width: 60px; height: 4px; background: #e94560; margin: 0.8em auto; border-radius: 2px;"></div>
+    <p style="font-size: 0.9em; color: rgba(255,255,255,0.6); font-weight: 300;">新時代需要什麼樣的人？</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 14: 能力轉變 -->
+<!-- ============================================================ -->
+<section>
+  <h2>AI 時代的<span class="accent">個人護城河</span></h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">過去的優勢</th>
+        <th style="width: 5%; text-align: center;">→</th>
+        <th style="width: 30%;">新的護城河</th>
+        <th style="width: 35%;">為什麼</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>專業知識深度</td>
+        <td style="text-align: center;">→</td>
+        <td><span class="accent bold">跨域整合能力</span></td>
+        <td>AI 已經「什麼都知道」，你的價值是連接不同領域</td>
+      </tr>
+      <tr>
+        <td>執行速度</td>
+        <td style="text-align: center;">→</td>
+        <td><span class="accent bold">判斷品質</span></td>
+        <td>AI 比你快 100 倍，但不知道該做什麼</td>
+      </tr>
+      <tr>
+        <td>資訊不對稱</td>
+        <td style="text-align: center;">→</td>
+        <td><span class="accent bold">品味與眼光</span></td>
+        <td>資訊人人可得，能辨別好壞才是差距</td>
+      </tr>
+      <tr>
+        <td>穩定性</td>
+        <td style="text-align: center;">→</td>
+        <td><span class="accent bold">適應力與韌性</span></td>
+        <td>變化是常態，能快速調整才能生存</td>
+      </tr>
+      <tr>
+        <td>服從性</td>
+        <td style="text-align: center;">→</td>
+        <td><span class="accent bold">主動性 (Agency)</span></td>
+        <td>AI 做了你說的事，但你需要主動定義要做什麼</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <aside class="notes">
+    最後一個維度：什麼樣的人才在 AI 時代有競爭力？
+
+    五個關鍵轉變：
+    1. 從「知道很多」到「連接不同的知道」——AI 什麼都知道，你的價值是整合
+    2. 從「做得快」到「判斷得準」——AI 比你快 100 倍，但判斷力是你的
+    3. 從「掌握資訊」到「識別品質」——Google 時代靠搜索能力，AI 時代靠品味
+    4. 從「穩定可靠」到「快速適應」——半年前的最佳實踐現在可能已經過時
+    5. 從「被動執行」到「主動定義」——最有價值的能力是 Agency——主動去發現和定義問題
+
+    這就是為什麼後面兩個模組會專門講「品味」、「判斷力」和「Eval」。
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 15: 總結 -->
+<!-- ============================================================ -->
+<section>
+  <h2 style="text-align: center;">四個維度，一個結論</h2>
+
+  <div class="grid-4" style="margin-top: 1.5em;">
+    <div class="card" style="text-align: center; padding: 1em;">
+      <p style="font-size: 1.8em; margin: 0;">🕰️</p>
+      <p class="bold" style="font-size: 0.7em; margin: 0.3em 0 0;">歷史脈絡</p>
+      <p class="muted" style="font-size: 0.55em; margin: 0;">器具→流程→系統</p>
+    </div>
+    <div class="card" style="text-align: center; padding: 1em;">
+      <p style="font-size: 1.8em; margin: 0;">👤</p>
+      <p class="bold" style="font-size: 0.7em; margin: 0.3em 0 0;">個人角色</p>
+      <p class="muted" style="font-size: 0.55em; margin: 0;">執行者→判斷者</p>
+    </div>
+    <div class="card" style="text-align: center; padding: 1em;">
+      <p style="font-size: 1.8em; margin: 0;">🏢</p>
+      <p class="bold" style="font-size: 0.7em; margin: 0.3em 0 0;">商業組織</p>
+      <p class="muted" style="font-size: 0.55em; margin: 0;">賣工具→賣結果</p>
+    </div>
+    <div class="card" style="text-align: center; padding: 1em;">
+      <p style="font-size: 1.8em; margin: 0;">🧠</p>
+      <p class="bold" style="font-size: 0.7em; margin: 0.3em 0 0;">文化思維</p>
+      <p class="muted" style="font-size: 0.55em; margin: 0;">專才→通才+判斷</p>
+    </div>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 1.5em; text-align: center;">
+    <p style="font-size: 1em; margin: 0; font-weight: 700;">
+      AI 讓執行變便宜，讓<span class="accent">判斷</span>變昂貴。
+    </p>
+    <p style="font-size: 0.7em; color: var(--muted); margin: 0.3em 0 0;">
+      你的競爭優勢不再是「做了什麼」，而是「選擇做什麼、不做什麼」。
+    </p>
+  </div>
+
+  <aside class="notes">
+    四個維度的核心結論是同一件事：AI 讓執行變便宜，讓判斷變昂貴。
+
+    歷史告訴我們：每次範式轉移，被淘汰的是沒有改變思維方式的人。
+    角色告訴我們：你的價值從「做」轉移到「判斷」。
+    商業告訴我們：賣工具的模式正在被賣結果取代。
+    文化告訴我們：AI 時代的個人護城河是品味、判斷力和主動性。
+
+    接下來的討論環節，我想聽聽大家：AI 如何影響著你們的行業和公司？你觀察到了什麼？
+  </aside>
+</section>
+
+<!-- ============================================================ -->
+<!-- SLIDE 16: 討論 -->
+<!-- ============================================================ -->
+<section>
+  <div style="text-align: center; padding: 1em 0;">
+    <p style="font-size: 0.7em; color: var(--muted); letter-spacing: 0.1em;">小組討論</p>
+    <h1 style="font-size: 2.4em; margin: 0.2em 0;">🤔</h1>
+    <h2 style="margin: 0.3em 0;">AI 如何影響著<br/>你的行業與公司？</h2>
+    <div style="width: 60px; height: 4px; background: var(--accent); margin: 0.8em auto; border-radius: 2px;"></div>
+
+    <div class="grid-2" style="max-width: 700px; margin: 1.5em auto 0; text-align: left;">
+      <div class="card card-blue">
+        <p style="font-size: 0.75em; margin: 0;">
+          <span class="accent2 bold">Q1：</span>你的行業中，AI 正在改變什麼？<br/>
+          <span class="muted small">（角色、流程、商業模式？）</span>
+        </p>
+      </div>
+      <div class="card card-accent">
+        <p style="font-size: 0.75em; margin: 0;">
+          <span class="accent bold">Q2：</span>你個人的工作，有什麼因為 AI 變得不同了？<br/>
+          <span class="muted small">（更快？更好？還是更焦慮？）</span>
+        </p>
+      </div>
+    </div>
+
+    <p style="font-size: 0.6em; color: var(--muted); margin-top: 1.5em;">⏱ 15 分鐘小組討論 → 每組 2 分鐘分享</p>
+  </div>
+
+  <aside class="notes">
+    討論環節。分成小組，每組 4-5 人。
+
+    兩個問題：
+    1. 你的行業中，AI 正在改變什麼？是角色在變、流程在變、還是整個商業模式在變？
+    2. 你個人的工作，有什麼因為 AI 變得不同了？
+
+    提示學員：不需要有「正確答案」。重要的是觀察和反思。
+
+    15 分鐘討論，然後每組選一位代表分享 2 分鐘。
+
+    老師要做的事：走動聆聽，記住有趣的觀點，在分享環節串起不同組的觀點。
+  </aside>
+</section>
+
+</div><!-- .slides -->
+</div><!-- .reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    showNotes: false,
+    width: 1280,
+    height: 720,
+    margin: 0.08,
+    transition: 'fade',
+    transitionSpeed: 'default',
+    plugins: [ RevealNotes ]
+  });
+</script>
+</body>
+</html>
