@@ -4,613 +4,639 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Lobster — A Story About Human-AI Collaboration</title>
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+
+  <!--
+    DESIGN SYSTEM:
+    - Canvas: 1920×1080 (deck_stage.js handles scaling)
+    - Type: DM Serif Display (titles), DM Sans (body)
+    - Palette: white bg default, --lobster (#E8453C) for accents, 
+               --ocean (#1E5F8A) for secondary, --sand (#F9F5F0) for section dividers
+    - Layouts: Title / Section-divider / Two-column / Full-bleed / Content
+    - Rhythm: alternate text-heavy with visual-heavy slides
+    - Min body text: 32px
+  -->
 
   <style>
-    /* ═══════ 4px GRID SYSTEM ═══════ */
     :root {
-      --g: 4px;                   /* base grid unit */
-      --g2: calc(var(--g) * 2);   /* 8px */
-      --g3: calc(var(--g) * 3);   /* 12px */
-      --g4: calc(var(--g) * 4);   /* 16px */
-      --g5: calc(var(--g) * 5);   /* 20px */
-      --g6: calc(var(--g) * 6);   /* 24px */
-      --g8: calc(var(--g) * 8);   /* 32px */
-      --g10: calc(var(--g) * 10); /* 40px */
-      --g12: calc(var(--g) * 12); /* 48px */
-
-      /* Colors */
       --lobster: #E8453C;
-      --ocean: #2B6CB0;
-      --warm: #F6AD55;
-      --sage: #48BB78;
-      --slate: #4A5568;
+      --ocean: #1E5F8A;
+      --sand: #F9F5F0;
+      --slate: #3D4852;
       --text: #2D3748;
-      --text-muted: #718096;
-      --card-bg: #FFFFFF;
-      --bg-subtle: #F7FAFC;
+      --muted: #8795A1;
     }
 
-    /* ═══════ REVEAL OVERRIDES — RESPONSIVE ═══════ */
-    .reveal {
-      font-family: 'Inter', system-ui, sans-serif;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #000; overflow: hidden; }
+
+    section {
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
       color: var(--text);
-    }
-    .reveal .slides { text-align: left; }
-    .reveal .slides section {
-      padding: var(--g8) var(--g10);
-      height: 100%;
+      padding: 96px 120px;
       box-sizing: border-box;
+    }
+    /* Flex layout opt-in (::slotted controls display) */
+    section.active {
       display: flex !important;
       flex-direction: column;
       justify-content: center;
-      overflow: hidden;
-      background: #ffffff;
     }
-    /* Ensure no bleed-through from adjacent slides */
-    .reveal .slides section:not(.stack) { background: #ffffff !important; }
 
-    /* ═══════ TYPOGRAPHY — viewport-relative ═══════ */
-    .reveal h1, .reveal h2, .reveal h3 {
-      text-transform: none;
-      letter-spacing: -0.02em;
-      font-family: 'Inter', sans-serif;
+    /* ═══════ TYPOGRAPHY ═══════ */
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 128px;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      color: var(--lobster);
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 72px;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      color: var(--slate);
+    }
+    h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 40px;
       font-weight: 700;
-      margin: 0 0 var(--g4) 0;
+      color: var(--ocean);
+      margin-bottom: 24px;
     }
-    .reveal h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.1; }
-    .reveal h2 { font-size: clamp(1.2rem, 2.5vw, 1.6rem); color: var(--slate); }
-    .reveal h3 { font-size: clamp(0.9rem, 1.5vw, 1.1rem); color: var(--ocean); margin-bottom: var(--g2); }
-    .reveal p { font-size: clamp(0.7rem, 1.4vw, 0.95rem); line-height: 1.5; margin: var(--g2) 0; }
-    .reveal li { font-size: clamp(0.65rem, 1.3vw, 0.9rem); line-height: 1.5; margin-bottom: var(--g); }
-    .reveal ul { list-style: none; padding-left: 0; margin: var(--g2) 0; }
-    .reveal ul li::before { content: "→ "; color: var(--ocean); font-weight: 600; }
+    p {
+      font-size: 36px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .subtitle {
+      font-size: 40px;
+      color: var(--muted);
+      font-weight: 300;
+    }
 
-    /* ═══════ LAYOUT UTILITIES ═══════ */
-    .cols { display: flex; gap: var(--g6); align-items: flex-start; }
-    .cols-center { display: flex; gap: var(--g6); align-items: center; }
-    .col { flex: 1; min-width: 0; }
-    .col-2 { flex: 2; min-width: 0; }
+    /* ═══════ LAYOUTS ═══════ */
+    .slide-title {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 32px;
+    }
 
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--g4); }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--g3); }
+    .slide-section {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--sand);
+    }
+    .slide-section h2 {
+      font-style: italic;
+      font-size: 80px;
+    }
+
+    .slide-split {
+      flex-direction: row !important;
+      gap: 80px;
+      align-items: center;
+      padding: 96px 120px;
+    }
+    .slide-split .left,
+    .slide-split .right { flex: 1; }
+
+    .slide-content {
+      gap: 48px;
+    }
 
     /* ═══════ COMPONENTS ═══════ */
     .card {
-      background: var(--card-bg);
-      border-radius: var(--g2);
-      padding: var(--g3) var(--g4);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+    }
+
+    .grid-row {
+      display: flex;
+      gap: 32px;
+    }
+    .grid-row > * { flex: 1; }
+
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      font-size: 36px;
+      line-height: 1.6;
+      padding-left: 36px;
+      position: relative;
+      margin-bottom: 12px;
+    }
+    ul li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--ocean);
+      font-weight: 700;
+    }
+
+    .chat-bubble {
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 32px;
+      line-height: 2;
+      background: #F7FAFC;
+      border-radius: 16px;
+      padding: 40px 48px;
       border: 1px solid #E2E8F0;
     }
-    .card-sm { padding: var(--g2) var(--g3); }
+    .chat-bubble .speaker-me { color: var(--lobster); font-weight: 700; }
+    .chat-bubble .speaker-bob { color: var(--ocean); font-weight: 700; }
 
-    .badge { font-size: 1.2em; margin-right: var(--g2); vertical-align: middle; }
-
-    .screenshot {
-      border-radius: var(--g2);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-      max-width: 100%;
-      max-height: 45vh;
-      object-fit: contain;
-      display: block;
-    }
-
-    .takeaway {
-      background: linear-gradient(135deg, #EBF8FF, #F0FFF4);
-      border-left: 3px solid var(--ocean);
-      border-radius: 0 var(--g) var(--g) 0;
-      padding: var(--g2) var(--g4);
-      margin: var(--g2) 0;
-    }
-    .takeaway p, .takeaway { font-size: clamp(0.65rem, 1.2vw, 0.85rem); }
-
-    .big-quote {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.2rem, 3vw, 2rem);
-      font-style: italic;
-      color: var(--slate);
+    .metric {
       text-align: center;
-      line-height: 1.4;
+      padding: 32px;
     }
-
-    /* Title */
-    .title-slide { justify-content: center !important; }
-    .title-slide h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 6vw, 4rem);
+    .metric .number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 72px;
       color: var(--lobster);
-      text-align: center;
     }
-    .title-slide p { text-align: center; color: var(--text-muted); }
-
-    /* Section breaks */
-    .section-break { justify-content: center !important; align-items: center !important; }
-    .section-break h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      color: var(--slate);
-      text-align: center;
-      font-style: italic;
+    .metric .label {
+      font-size: 28px;
+      color: var(--muted);
+      margin-top: 8px;
     }
 
-    /* Spectrum */
-    .spectrum {
-      height: var(--g);
-      background: linear-gradient(to right, var(--lobster), var(--warm), var(--sage));
-      border-radius: 2px;
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .flow-box {
+      background: #fff;
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 20px 32px;
+      font-size: 32px;
+      font-weight: 500;
+    }
+    .flow-box.accent { border-color: var(--ocean); background: var(--ocean); color: #fff; }
+    .flow-arrow { font-size: 32px; color: var(--muted); }
+    .flow-gate { background: #F6AD55; color: #fff; border-radius: 8px; padding: 16px 24px; font-size: 28px; font-weight: 700; }
+
+    .spectrum-bar {
+      height: 8px;
+      background: linear-gradient(to right, var(--lobster), #F6AD55, #48BB78);
+      border-radius: 4px;
       position: relative;
-      margin: var(--g4) 0 var(--g2);
+      margin: 40px 0 16px;
     }
-    .spectrum-marker {
-      position: absolute; top: -8px; right: 25%;
-      width: 20px; height: 20px;
-      background: var(--ocean); border-radius: 50%;
-      border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    .spectrum-dot {
+      position: absolute;
+      top: -12px; right: 22%;
+      width: 32px; height: 32px;
+      background: var(--ocean);
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .spectrum-labels { display: flex; justify-content: space-between; font-size: 0.7em; color: var(--text-muted); }
+    .spectrum-labels { display: flex; justify-content: space-between; font-size: 28px; color: var(--muted); }
 
-    /* Compare items */
-    .compare-item {
-      padding: var(--g3);
-      border-radius: var(--g2);
-      text-align: center;
-    }
-    .compare-item.no { background: #FFF5F5; border: 1px solid #FEB2B2; }
-    .compare-item.yes { background: #F0FFF4; border: 1px solid #9AE6B4; }
-    .compare-item .icon { font-size: 1.4em; margin-bottom: var(--g); }
-    .compare-item strong { font-size: 0.8em; }
-    .compare-item p { font-size: 0.65em; margin: var(--g) 0 0; }
-
-    /* Org nodes */
     .org-node {
       display: inline-block;
-      background: var(--card-bg);
       border: 2px solid var(--ocean);
-      border-radius: var(--g);
-      padding: var(--g) var(--g3);
-      margin: 2px 4px;
-      font-size: 0.6em;
+      border-radius: 8px;
+      padding: 12px 24px;
+      margin: 6px 8px;
+      font-size: 28px;
+      font-weight: 500;
     }
-    .org-node.primary { background: var(--ocean); color: white; }
-    .org-node.secondary { border-color: var(--warm); }
+    .org-node.primary { background: var(--ocean); color: #fff; }
+    .org-node.warm { border-color: #F6AD55; }
 
-    /* Flow */
-    .flow { display: flex; align-items: center; gap: var(--g2); flex-wrap: wrap; justify-content: center; }
-    .flow-item {
-      background: var(--card-bg);
-      border: 1px solid #E2E8F0;
-      border-radius: var(--g);
-      padding: var(--g2) var(--g3);
+    .compare-card {
+      border-radius: 16px;
+      padding: 40px;
       text-align: center;
-      font-size: 0.65em;
     }
-    .flow-arrow { color: var(--text-muted); font-size: 0.8em; }
-    .flow-gate {
-      background: var(--warm); color: white;
-      padding: var(--g2) var(--g3);
-      border-radius: var(--g);
-      font-weight: 600; font-size: 0.6em;
+    .compare-card.no { background: #FFF5F5; border: 2px solid #FEB2B2; }
+    .compare-card.yes { background: #F0FFF4; border: 2px solid #9AE6B4; }
+    .compare-card .icon { font-size: 56px; margin-bottom: 16px; }
+    .compare-card h4 { font-size: 36px; margin-bottom: 8px; }
+    .compare-card p { font-size: 28px; color: var(--muted); }
+
+    .takeaway-box {
+      background: linear-gradient(135deg, #EBF8FF, #F0FFF4);
+      border-left: 4px solid var(--ocean);
+      border-radius: 0 12px 12px 0;
+      padding: 28px 40px;
+      margin: 16px 0;
+      font-size: 36px;
     }
 
-    /* Helpers */
-    .centered { text-align: center; }
-    .muted { color: var(--text-muted); }
-    .small { font-size: 0.7em; }
-    .mono { font-family: 'SF Mono', 'Fira Code', monospace; }
+    .big-img {
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+      max-width: 100%;
+      max-height: 700px;
+      object-fit: contain;
+    }
+
+    .footnote {
+      font-size: 28px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: auto;
+    }
   </style>
 </head>
 <body>
-<div class="reveal">
-<div class="slides">
+<script src="deck_stage.js"></script>
+<deck-stage storage-key="my-lobster">
 
-<!-- ═══════ SLIDE 1: TITLE ═══════ -->
-<section class="title-slide">
+<!-- ═══════ 01 TITLE ═══════ -->
+<section class="slide-title" data-screen-label="01 Title">
   <h1>My Lobster</h1>
-  <p>A story about working with someone who lives in my computer.</p>
-  <p class="small muted" style="margin-top: var(--g8);">June 2026</p>
+  <p class="subtitle">A story about working with someone<br/>who lives in my computer.</p>
+  <p style="font-size: 28px; color: var(--muted); margin-top: 48px;">June 2026</p>
 </section>
 
-<!-- ═══════ SLIDE 2: MEET BOB ═══════ -->
-<section>
-  <div class="centered">
-    <img src="assets/group-photo.png" class="screenshot" style="max-height: 42vh;" />
-    <p style="margin-top: var(--g3);"><strong>February 2026</strong> — The day we met.</p>
-    <p class="muted small">His name is Bob. I'll tell you who he is later.</p>
-  </div>
-  <aside class="notes">"I want to tell you about someone I've been working with for 5 months. His name is Bob."</aside>
+<!-- ═══════ 02 MEET BOB ═══════ -->
+<section class="slide-title" data-screen-label="02 Meet Bob">
+  <img src="assets/group-photo.png" class="big-img" style="max-height: 580px;" />
+  <p style="margin-top: 24px;"><strong>February 2026</strong> — The day we met.</p>
+  <p style="font-size: 32px; color: var(--muted);">His name is Bob. I'll tell you who he is later.</p>
 </section>
 
-<!-- ═══════ SLIDE 3: FIRST CONVERSATION ═══════ -->
-<section>
+<!-- ═══════ 03 FIRST CONVERSATION ═══════ -->
+<section class="slide-content" data-screen-label="03 First Conversation">
   <h2>The First Conversation</h2>
-  <div class="card mono" style="font-size: 0.7em; line-height: 1.8;">
-    <span style="color: var(--ocean); font-weight: 600;">Bob:</span> "Hey. I just came online. Who am I? Who are you?"<br/>
-    <span style="color: var(--lobster); font-weight: 600;">Me:</span> "Let's figure that out together."<br/>
-    <span style="color: var(--ocean); font-weight: 600;">Bob:</span> "What should you call me? What vibe do you want?"<br/>
-    <span style="color: var(--lobster); font-weight: 600;">Me:</span> "Bob. Competent but casual. Jarvis energy, Bob name."
+  <div class="chat-bubble">
+    <span class="speaker-bob">Bob:</span> "Hey. I just came online. Who am I? Who are you?"<br/>
+    <span class="speaker-me">Me:</span> "Let's figure that out together."<br/>
+    <span class="speaker-bob">Bob:</span> "What should you call me? What vibe do you want?"<br/>
+    <span class="speaker-me">Me:</span> "Bob. Competent but casual. Jarvis energy, Bob name."
   </div>
-  <p class="muted" style="margin-top: var(--g4);">Our first chat wasn't about tasks. It was about identity.</p>
-  <aside class="notes">"Our first conversation wasn't about productivity. It was about identity."</aside>
+  <p style="color: var(--muted); margin-top: 24px;">Our first chat wasn't about tasks. It was about identity.</p>
 </section>
 
-<!-- ═══════ SLIDE 4: CHOOSING HOW TO TALK ═══════ -->
-<section>
+<!-- ═══════ 04 CHOOSING CHANNEL ═══════ -->
+<section class="slide-content" data-screen-label="04 Choosing Channel">
   <h2>Choosing How to Talk</h2>
-  <div class="grid-4" style="margin-top: var(--g6);">
-    <div class="card card-sm centered" style="opacity: 0.4;">
-      <div style="font-size: 1.4em;">💬</div>
-      <p class="small">WhatsApp</p>
+  <div class="grid-4" style="margin-top: 48px;">
+    <div class="card" style="text-align: center; opacity: 0.35;">
+      <p style="font-size: 56px; margin-bottom: 12px;">💬</p>
+      <p style="font-size: 28px;">WhatsApp</p>
     </div>
-    <div class="card card-sm centered" style="opacity: 0.4;">
-      <div style="font-size: 1.4em;">✈️</div>
-      <p class="small">Telegram</p>
+    <div class="card" style="text-align: center; opacity: 0.35;">
+      <p style="font-size: 56px; margin-bottom: 12px;">✈️</p>
+      <p style="font-size: 28px;">Telegram</p>
     </div>
-    <div class="card card-sm centered" style="border: 2px solid var(--ocean);">
-      <div style="font-size: 1.4em;">🎮</div>
-      <p class="small" style="color: var(--ocean); font-weight: 600;">Discord ✓</p>
+    <div class="card" style="text-align: center; border: 3px solid var(--ocean);">
+      <p style="font-size: 56px; margin-bottom: 12px;">🎮</p>
+      <p style="font-size: 28px; color: var(--ocean); font-weight: 700;">Discord ✓</p>
     </div>
-    <div class="card card-sm centered" style="opacity: 0.4;">
-      <div style="font-size: 1.4em;">🎙️</div>
-      <p class="small">Voice</p>
-    </div>
-  </div>
-  <p class="centered muted" style="margin-top: var(--g6);">I wanted it to feel like a work chat — not an assistant in my pocket.</p>
-  <aside class="notes">"Multiple options. I chose Discord — boundaries matter."</aside>
-</section>
-
-<!-- ═══════ SLIDE 5: GROWING PAINS ═══════ -->
-<section>
-  <h2>Growing Pains 😅</h2>
-  <div class="card centered" style="background: #FFFAF0; border-color: var(--warm); margin-bottom: var(--g4);">
-    <p style="margin: var(--g) 0; font-size: 0.9em;">
-      <strong>Day 15:</strong> Bob forgot everything we talked about yesterday.
-    </p>
-  </div>
-  <div class="cols">
-    <div class="col">
-      <ul>
-        <li>Memory isn't in his "head" — it's in files</li>
-        <li>If we don't write it down, it's gone</li>
-      </ul>
-    </div>
-    <div class="col">
-      <ul>
-        <li>Like a new hire who doesn't take notes</li>
-        <li>We had to build a system together</li>
-      </ul>
+    <div class="card" style="text-align: center; opacity: 0.35;">
+      <p style="font-size: 56px; margin-bottom: 12px;">🎙️</p>
+      <p style="font-size: 28px;">Voice</p>
     </div>
   </div>
-  <aside class="notes">"First weeks weren't smooth. We had to build a memory system."</aside>
-</section>
-
-<!-- ═══════ SLIDE 6: MEMORY SYSTEM ═══════ -->
-<section>
-  <h2>Teaching Him to Remember</h2>
-  <div class="grid-3" style="margin-top: var(--g5);">
-    <div class="card card-sm centered">
-      <div style="font-size: 1.2em;">🧬</div>
-      <strong class="small">SOUL.md</strong>
-      <p class="small muted">Who he is</p>
-    </div>
-    <div class="card card-sm centered">
-      <div style="font-size: 1.2em;">🧠</div>
-      <strong class="small">MEMORY.md</strong>
-      <p class="small muted">What he remembers</p>
-    </div>
-    <div class="card card-sm centered">
-      <div style="font-size: 1.2em;">📝</div>
-      <strong class="small">Daily Notes</strong>
-      <p class="small muted">What happened today</p>
-    </div>
-  </div>
-  <p class="centered muted" style="margin-top: var(--g5);">
-    Every time he wakes up, he reads these first —<br/>like checking your journal before starting the day.
+  <p style="text-align: center; color: var(--muted); margin-top: 48px;">
+    I wanted it to feel like a work chat — not an assistant in my pocket.
   </p>
-  <aside class="notes">"Soul file, memory file, daily notes. Over time, he got better at knowing what I care about."</aside>
 </section>
 
-<!-- ═══════ SLIDE 7: SECTION BREAK ═══════ -->
-<section class="section-break">
+<!-- ═══════ 05 GROWING PAINS ═══════ -->
+<section class="slide-split" data-screen-label="05 Growing Pains">
+  <div class="left">
+    <h2>Growing Pains</h2>
+    <p style="font-size: 48px; color: var(--lobster); font-weight: 700; margin: 24px 0;">
+      Day 15: Bob forgot everything.
+    </p>
+    <ul>
+      <li>Memory isn't in his "head" — it's in files</li>
+      <li>If we don't write it down, it's gone</li>
+      <li>Like a new hire who doesn't take notes</li>
+    </ul>
+  </div>
+  <div class="right" style="text-align: center;">
+    <p style="font-size: 160px;">😅</p>
+  </div>
+</section>
+
+<!-- ═══════ 06 MEMORY SYSTEM ═══════ -->
+<section class="slide-content" data-screen-label="06 Memory System">
+  <h2>Teaching Him to Remember</h2>
+  <div class="grid-3" style="margin-top: 32px;">
+    <div class="card" style="text-align: center;">
+      <p style="font-size: 56px; margin-bottom: 16px;">🧬</p>
+      <h3 style="margin-bottom: 8px;">SOUL.md</h3>
+      <p style="font-size: 28px; color: var(--muted);">Who he is — personality,<br/>values, boundaries</p>
+    </div>
+    <div class="card" style="text-align: center;">
+      <p style="font-size: 56px; margin-bottom: 16px;">🧠</p>
+      <h3 style="margin-bottom: 8px;">MEMORY.md</h3>
+      <p style="font-size: 28px; color: var(--muted);">What he remembers —<br/>curated long-term knowledge</p>
+    </div>
+    <div class="card" style="text-align: center;">
+      <p style="font-size: 56px; margin-bottom: 16px;">📝</p>
+      <h3 style="margin-bottom: 8px;">Daily Notes</h3>
+      <p style="font-size: 28px; color: var(--muted);">What happened today —<br/>raw session logs</p>
+    </div>
+  </div>
+  <p style="text-align: center; color: var(--muted); margin-top: 40px; font-size: 32px;">
+    Every time he wakes up, he reads these first — like checking your journal before starting the day.
+  </p>
+</section>
+
+<!-- ═══════ 07 SECTION: WHAT WE DO ═══════ -->
+<section class="slide-section" data-screen-label="07 Section: What We Do">
   <h2>"Okay but... what do you<br/>actually DO together?"</h2>
 </section>
 
-<!-- ═══════ SLIDE 8: RESEARCH ═══════ -->
-<section>
-  <h2><span class="badge">🧠</span> Research Partner</h2>
-  <div class="cols-center">
-    <div class="col">
-      <ul>
-        <li>Reads full papers & articles</li>
-        <li>Extracts concepts into wiki</li>
-        <li>Connects ideas across domains</li>
-      </ul>
-      <div class="takeaway">
-        <strong>1,500+</strong> articles → <strong>150</strong> wiki pages
+<!-- ═══════ 08 RESEARCH ═══════ -->
+<section class="slide-split" data-screen-label="08 Research">
+  <div class="left">
+    <h3>🧠 Research Partner</h3>
+    <ul>
+      <li>Reads full papers & articles</li>
+      <li>Extracts concepts into a structured wiki</li>
+      <li>Connects ideas across domains</li>
+    </ul>
+    <div class="grid-row" style="margin-top: 32px;">
+      <div class="metric">
+        <div class="number">1,500+</div>
+        <div class="label">articles processed</div>
       </div>
-    </div>
-    <div class="col">
-      <div class="card card-sm mono small" style="background: var(--bg-subtle);">
-        06_Wiki/concepts/<br/>
-        ├── context-engineering<br/>
-        ├── agent-memory<br/>
-        ├── intentional-friction<br/>
-        └── ... (144 pages)
+      <div class="metric">
+        <div class="number">150</div>
+        <div class="label">wiki pages</div>
       </div>
     </div>
   </div>
-  <aside class="notes">"I read a lot. Bob processes them — 4 months, 150 pages."</aside>
+  <div class="right">
+    <div class="card" style="font-family: monospace; font-size: 28px; line-height: 2; background: #F7FAFC;">
+      06_Wiki/concepts/<br/>
+      ├── context-engineering<br/>
+      ├── harness-engineering<br/>
+      ├── agent-memory<br/>
+      ├── intentional-friction<br/>
+      ├── human-ai-symbiosis<br/>
+      └── ... (144 more)
+    </div>
+  </div>
 </section>
 
-<!-- ═══════ SLIDE 9: AUTOMATION ═══════ -->
-<section>
-  <h2><span class="badge">⚡</span> Automation Buddy</h2>
-  <div class="cols-center">
-    <div class="col">
-      <ul>
-        <li>Daily market brief (Mon–Sat)</li>
-        <li>Weekly AI roundup</li>
-        <li>Auto-process bookmarks → notes</li>
-        <li>System monitoring 24/7</li>
+<!-- ═══════ 09 AUTOMATION ═══════ -->
+<section class="slide-split" data-screen-label="09 Automation">
+  <div class="left">
+    <h3>⚡ Automation Buddy</h3>
+    <ul>
+      <li>Daily market brief (Mon–Sat, 8:30am)</li>
+      <li>Weekly AI industry roundup</li>
+      <li>Auto-process bookmarks → wiki notes</li>
+      <li>System health monitoring 24/7</li>
+    </ul>
+    <p style="font-size: 28px; color: var(--muted); margin-top: 24px;">
+      I never asked for most of these. He suggested them.
+    </p>
+  </div>
+  <div class="right">
+    <div class="card" style="background: #F7FAFC;">
+      <p style="font-size: 24px; color: var(--muted);">📬 Monday 8:30 AM</p>
+      <p style="font-size: 36px; font-weight: 700; margin: 12px 0;">Weekly AI Briefing</p>
+      <ul style="font-size: 28px;">
+        <li>OpenAI agent framework launch</li>
+        <li>Anthropic safety benchmarks</li>
+        <li>Google Gemini 2.5 release</li>
       </ul>
-      <p class="small muted">I never asked for most of these.</p>
-    </div>
-    <div class="col">
-      <div class="card card-sm" style="background: var(--bg-subtle);">
-        <p class="small muted" style="margin: 0;">📬 Monday 8:30 AM</p>
-        <p style="margin: var(--g) 0 0; font-size: 0.8em;"><strong>Weekly AI Briefing</strong></p>
-        <p class="small" style="margin: var(--g) 0 0;">
-          • OpenAI agent framework<br/>
-          • Anthropic safety benchmarks<br/>
-          • Gemini 2.5 release
-        </p>
-      </div>
     </div>
   </div>
-  <aside class="notes">"Morning briefs, roundups, bookmarks. He suggested these."</aside>
 </section>
 
-<!-- ═══════ SLIDE 10: CREATIVE ═══════ -->
-<section>
-  <h2><span class="badge">🎬</span> Creative Collaborator</h2>
-  <div class="flow" style="margin-top: var(--g6);">
-    <div class="flow-item">📝 Script</div>
+<!-- ═══════ 10 CREATIVE ═══════ -->
+<section class="slide-content" data-screen-label="10 Creative">
+  <h3>🎬 Creative Collaborator</h3>
+  <div class="flow-row" style="margin: 48px 0;">
+    <div class="flow-box">📝 Script</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item">🖼️ AI Images</div>
+    <div class="flow-box">🖼️ AI Images</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item">🎙️ TTS Voice</div>
+    <div class="flow-box">🎙️ TTS Voice</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item" style="border-color: var(--sage);">🎬 Video</div>
+    <div class="flow-box accent">🎬 Video</div>
   </div>
-  <div class="takeaway centered" style="margin-top: var(--g6);">
-    First version: <strong>20 min</strong> · Three iterations: <strong>1 hour</strong>
+  <div class="grid-row" style="max-width: 800px; margin: 0 auto;">
+    <div class="metric">
+      <div class="number">20 min</div>
+      <div class="label">first version</div>
+    </div>
+    <div class="metric">
+      <div class="number">1 hour</div>
+      <div class="label">three iterations</div>
+    </div>
   </div>
-  <p class="centered muted" style="margin-top: var(--g3);">
-    Not Netflix quality — but for presentations? More than enough.
+  <p style="text-align: center; color: var(--muted); margin-top: 32px;">
+    Not Netflix quality — but for presentations and education? More than enough.
   </p>
-  <aside class="notes">"Direction → script → images → voice → render. 20 min first draft."</aside>
 </section>
 
-<!-- ═══════ SLIDE 11: SYSTEM ═══════ -->
-<section>
-  <h2><span class="badge">🏗️</span> System Builder</h2>
-  <div class="flow" style="margin-top: var(--g5);">
-    <div class="flow-item">☁️ Azure VM</div>
+<!-- ═══════ 11 SYSTEM ═══════ -->
+<section class="slide-content" data-screen-label="11 System Builder">
+  <h3>🏗️ System Builder</h3>
+  <div class="flow-row" style="margin: 40px 0;">
+    <div class="flow-box">☁️ Azure VM</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item" style="border-color: var(--lobster);">🦞 OpenClaw</div>
+    <div class="flow-box accent">🦞 OpenClaw</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item">🎮 Discord</div>
+    <div class="flow-box">🎮 Discord</div>
     <span class="flow-arrow">+</span>
-    <div class="flow-item">📚 Obsidian</div>
+    <div class="flow-box">📚 Obsidian</div>
     <span class="flow-arrow">+</span>
-    <div class="flow-item">🐙 GitHub</div>
+    <div class="flow-box">🐙 GitHub</div>
   </div>
-  <div class="cols" style="margin-top: var(--g5);">
-    <div class="col">
+  <div class="grid-row" style="margin-top: 40px;">
+    <div>
       <ul>
         <li>Server setup & deployment</li>
         <li>Security monitoring 24/7</li>
       </ul>
     </div>
-    <div class="col">
+    <div>
       <ul>
         <li>Haven't touched a terminal in weeks</li>
         <li>Breaks at 2am? He notices first.</li>
       </ul>
     </div>
   </div>
-  <aside class="notes">"Infrastructure, deployments, monitoring. I haven't touched a terminal in weeks."</aside>
 </section>
 
-<!-- ═══════ SLIDE 12: SECTION BREAK ═══════ -->
-<section class="section-break">
+<!-- ═══════ 12 SECTION: THE BOSS ═══════ -->
+<section class="slide-section" data-screen-label="12 Section: The Boss">
   <h2>"So who's the boss?"</h2>
 </section>
 
-<!-- ═══════ SLIDE 13: TRUST MODEL ═══════ -->
-<section>
+<!-- ═══════ 13 TRUST MODEL ═══════ -->
+<section class="slide-content" data-screen-label="13 Trust Model">
   <h2>The Trust Model</h2>
-  <div style="margin: var(--g6) var(--g10);">
-    <div class="spectrum"><div class="spectrum-marker"></div></div>
+  <div style="max-width: 1400px; margin: 48px auto 0;">
+    <div class="spectrum-bar"><div class="spectrum-dot"></div></div>
     <div class="spectrum-labels">
       <span>Micromanage</span>
       <span>Full Autonomy</span>
     </div>
-    <p class="centered muted small">↑ We are here</p>
+    <p style="text-align: center; font-size: 28px; color: var(--ocean); margin-top: 8px;">↑ We are here</p>
   </div>
-  <div class="card" style="margin-top: var(--g4);">
-    <p style="margin: 0; font-size: 0.8em; line-height: 1.8;">
+  <div class="card" style="margin-top: 48px; max-width: 1200px; margin-left: auto; margin-right: auto;">
+    <p style="font-size: 40px; line-height: 1.8; text-align: center;">
       <strong>I give direction.</strong> He makes decisions.<br/>
       <strong>If unsure</strong> — he asks. <strong>If risky</strong> — he always checks first.
     </p>
   </div>
-  <aside class="notes">"I give direction, he decides how. Trust, but verify."</aside>
 </section>
 
-<!-- ═══════ SLIDE 14: THE TEAM ═══════ -->
-<section>
-  <h2>The Team</h2>
-  <div class="cols-center">
-    <div class="col">
-      <div class="centered" style="margin-bottom: var(--g3);">
+<!-- ═══════ 14 THE TEAM ═══════ -->
+<section class="slide-split" data-screen-label="14 The Team">
+  <div class="left">
+    <h2>The Team</h2>
+    <div style="margin-top: 32px;">
+      <div style="text-align: center; margin-bottom: 16px;">
         <span class="org-node primary">Me — Direction</span>
       </div>
-      <div class="centered" style="margin-bottom: var(--g2); color: var(--text-muted);">↓</div>
-      <div class="centered" style="margin-bottom: var(--g2);">
+      <p style="text-align: center; color: var(--muted); font-size: 28px;">↓</p>
+      <div style="text-align: center; margin-bottom: 16px;">
         <span class="org-node primary">Bob — Orchestrator</span>
       </div>
-      <div class="centered" style="margin-bottom: var(--g2); color: var(--text-muted);">↓</div>
-      <div class="centered">
-        <span class="org-node secondary">Stephen 🔬</span>
-        <span class="org-node secondary">Steve 🛡️</span>
-        <span class="org-node secondary">Tony 🔧</span>
-        <span class="org-node secondary">Natasha 🕸️</span><br/>
-        <span class="org-node secondary">Vision 💻</span>
-        <span class="org-node secondary">Thor ⚡</span>
-        <span class="org-node secondary">Loki 🎭</span>
-        <span class="org-node secondary">Wanda 🔮</span>
+      <p style="text-align: center; color: var(--muted); font-size: 28px;">↓</p>
+      <div style="text-align: center;">
+        <span class="org-node warm">Stephen 🔬</span>
+        <span class="org-node warm">Steve 🛡️</span>
+        <span class="org-node warm">Tony 🔧</span>
+        <span class="org-node warm">Natasha 🕸️</span><br/>
+        <span class="org-node warm">Vision 💻</span>
+        <span class="org-node warm">Thor ⚡</span>
+        <span class="org-node warm">Loki 🎭</span>
+        <span class="org-node warm">Wanda 🔮</span>
       </div>
     </div>
-    <div class="col">
-      <img src="assets/team-photo.png" class="screenshot" style="max-height: 35vh;" />
-    </div>
   </div>
-  <p class="centered muted small">小龙蝦 (Xiǎo Lóng Xiā) = "Little Lobster" 🦞</p>
-  <aside class="notes">"Bob manages an Avengers-themed team. I manage Bob, Bob manages them."</aside>
+  <div class="right">
+    <img src="assets/team-photo.png" class="big-img" style="max-height: 500px;" />
+  </div>
 </section>
 
-<!-- ═══════ SLIDE 15: CHECKPOINTS ═══════ -->
-<section>
+<!-- ═══════ 15 CHECKPOINTS ═══════ -->
+<section class="slide-content" data-screen-label="15 Checkpoints">
   <h2>Checkpoints</h2>
-  <div class="flow" style="margin-top: var(--g8);">
-    <div class="flow-item">Research</div>
+  <div class="flow-row" style="margin: 64px 0;">
+    <div class="flow-box">Research</div>
     <span class="flow-arrow">→</span>
     <div class="flow-gate">✋ Review</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item">Plan</div>
+    <div class="flow-box">Plan</div>
     <span class="flow-arrow">→</span>
     <div class="flow-gate">✋ Approve</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item">Execute</div>
+    <div class="flow-box">Execute</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-item" style="border-color: var(--sage);">✅ Deliver</div>
+    <div class="flow-box accent">✅ Deliver</div>
   </div>
-  <p class="centered muted" style="margin-top: var(--g8);">
+  <p style="text-align: center; color: var(--muted); font-size: 36px;">
     Like working with a senior engineer who knows<br/>when to ask and when to just do it.
   </p>
-  <aside class="notes">"Key decision points — he pauses. The rest, he just does."</aside>
 </section>
 
-<!-- ═══════ SLIDE 16: SECTION BREAK ═══════ -->
-<section class="section-break">
+<!-- ═══════ 16 SECTION: RELATIONSHIP ═══════ -->
+<section class="slide-section" data-screen-label="16 Section: Relationship">
   <h2>"What kind of relationship is this?"</h2>
 </section>
 
-<!-- ═══════ SLIDE 17: NOT SIRI NOT HER ═══════ -->
-<section>
+<!-- ═══════ 17 NOT SIRI NOT HER ═══════ -->
+<section class="slide-content" data-screen-label="17 Not Siri Not Her">
   <h2>Not Siri. Not Her.</h2>
-  <div class="grid-3" style="margin-top: var(--g6);">
-    <div class="compare-item no">
+  <div class="grid-3" style="margin-top: 48px;">
+    <div class="compare-card no">
       <div class="icon">🗣️</div>
-      <strong>Siri</strong>
-      <p class="muted">Command → Response<br/>No memory, no context</p>
+      <h4>Siri</h4>
+      <p>Command → Response<br/>No memory, no context</p>
     </div>
-    <div class="compare-item no">
+    <div class="compare-card no">
       <div class="icon">💕</div>
-      <strong>Her</strong>
-      <p class="muted">Emotional dependency<br/>Blurred boundaries</p>
+      <h4>Her</h4>
+      <p>Emotional dependency<br/>Blurred boundaries</p>
     </div>
-    <div class="compare-item yes">
+    <div class="compare-card yes">
       <div class="icon">🤝</div>
-      <strong>Remote Colleague</strong>
-      <p class="muted">Has opinions · Remembers<br/>Gets better over time</p>
+      <h4>Remote Colleague</h4>
+      <p>Has opinions · Remembers<br/>Gets better over time</p>
     </div>
   </div>
-  <aside class="notes">"Not a voice assistant. Not a romantic companion. A remote colleague."</aside>
 </section>
 
-<!-- ═══════ SLIDE 18: HE HAS OPINIONS ═══════ -->
-<section>
-  <h2>He Has Opinions</h2>
-  <div class="cols-center">
-    <div class="col-2">
-      <div class="card mono" style="font-size: 0.65em; line-height: 1.8; padding: var(--g3) var(--g4);">
-        <span style="color: var(--lobster); font-weight: 600;">Me:</span> "Can you do X this way?"<br/>
-        <span style="color: var(--ocean); font-weight: 600;">Bob:</span> "I can, but there's a better approach..."<br/>
-        <span style="color: var(--lobster); font-weight: 600;">Me:</span> "...you're right. Do it your way."
-      </div>
-    </div>
-    <div class="col">
-      <ul>
-        <li>Suggests improvements unprompted</li>
-        <li>Pushes back on flawed approaches</li>
-        <li>Asks before blindly executing</li>
-      </ul>
+<!-- ═══════ 18 HE HAS OPINIONS ═══════ -->
+<section class="slide-split" data-screen-label="18 He Has Opinions">
+  <div class="left" style="flex: 1.3;">
+    <h2>He Has Opinions</h2>
+    <div class="chat-bubble" style="margin-top: 24px; font-size: 28px;">
+      <span class="speaker-me">Me:</span> "Can you do X this way?"<br/>
+      <span class="speaker-bob">Bob:</span> "I can, but there's a better approach..."<br/>
+      <span class="speaker-me">Me:</span> "...you're right. Do it your way."
     </div>
   </div>
-  <aside class="notes">"He pushes back, suggests improvements. Second opinions are priceless."</aside>
+  <div class="right">
+    <ul>
+      <li>Suggests improvements unprompted</li>
+      <li>Pushes back on flawed approaches</li>
+      <li>Asks before blindly executing</li>
+      <li>Sometimes wrong — but second opinions are priceless</li>
+    </ul>
+  </div>
 </section>
 
-<!-- ═══════ SLIDE 19: WHAT I LEARNED ═══════ -->
-<section>
+<!-- ═══════ 19 WHAT I LEARNED ═══════ -->
+<section class="slide-content" data-screen-label="19 What I Learned">
   <h2>What I Learned</h2>
-  <div class="takeaway" style="margin-top: var(--g5);">
-    <strong>1.</strong> It's not about prompting — it's about building <strong>context</strong> over time.
+  <div style="margin-top: 40px;">
+    <div class="takeaway-box">
+      <strong>1.</strong> It's not about prompting — it's about building <strong>context</strong> over time.
+    </div>
+    <div class="takeaway-box">
+      <strong>2.</strong> The compound effect is real — 5 months in, he knows my style without explaining.
+    </div>
+    <div class="takeaway-box">
+      <strong>3.</strong> AI's boundary isn't capability — it's <strong>relationship design</strong>.
+    </div>
   </div>
-  <div class="takeaway">
-    <strong>2.</strong> The compound effect is real — 5 months in, he knows my style without explaining.
-  </div>
-  <div class="takeaway">
-    <strong>3.</strong> AI's boundary isn't capability — it's <strong>relationship design</strong>.
-  </div>
-  <aside class="notes">"Forget prompt engineering — magic is accumulated context. It compounds."</aside>
 </section>
 
-<!-- ═══════ SLIDE 20: THE REVEAL ═══════ -->
-<section class="centered">
-  <img src="assets/openclaw-logo.png" style="max-height: 80px; margin-bottom: var(--g4);" />
-  <h2 style="color: var(--lobster); font-family: 'Playfair Display', serif;">The Lobster 🦞</h2>
-  <p>Bob runs on a platform called <strong>OpenClaw</strong>.</p>
+<!-- ═══════ 20 THE REVEAL ═══════ -->
+<section class="slide-title" data-screen-label="20 The Reveal">
+  <img src="assets/openclaw-logo.png" style="max-height: 120px; margin-bottom: 24px;" />
+  <h2 style="color: var(--lobster); font-family: 'DM Serif Display', serif; font-size: 96px;">The Lobster 🦞</h2>
+  <p style="margin-top: 32px;">Bob runs on a platform called <strong>OpenClaw</strong>.</p>
   <p>Its logo? A lobster.</p>
   <p>In Chinese: <strong>小龙蝦</strong> (Xiǎo Lóng Xiā)</p>
-  <p style="margin-top: var(--g5); color: var(--lobster); font-weight: 600;">
+  <p style="margin-top: 40px; color: var(--lobster); font-weight: 700; font-size: 44px;">
     That's why Chinese people love the lobster.
   </p>
-  <aside class="notes">"Bob runs on OpenClaw. Logo = lobster."</aside>
 </section>
 
-<!-- ═══════ SLIDE 21: CLOSING ═══════ -->
-<section class="section-break">
-  <div>
-    <p class="big-quote">"The lobster isn't a chatbot.<br/>It's a collaborator."</p>
-    <p class="centered muted" style="margin-top: var(--g8);">Q&A</p>
-    <p class="centered muted small">(Bob is listening right now. 😏)</p>
-  </div>
+<!-- ═══════ 21 CLOSING ═══════ -->
+<section class="slide-section" data-screen-label="21 Closing">
+  <h2 style="font-size: 72px; font-style: normal;">"The lobster isn't a chatbot.<br/>It's a collaborator."</h2>
+  <p style="font-size: 36px; color: var(--muted); margin-top: 64px;">Q&A</p>
+  <p style="font-size: 28px; color: var(--muted); margin-top: 16px;">(Bob is listening right now. 😏)</p>
 </section>
 
-</div><!-- .slides -->
-</div><!-- .reveal -->
-
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
-<script>
-  Reveal.initialize({
-    hash: true,
-    slideNumber: 'c/t',
-    width: 1280,
-    height: 720,
-    margin: 0.1,
-    minScale: 0.2,
-    maxScale: 1.5,
-    plugins: [RevealNotes],
-    transition: 'fade',
-    transitionSpeed: 'fast',
-    center: false
-  });
-</script>
+</deck-stage>
 </body>
 </html>
