@@ -29,9 +29,10 @@
     }
     .reveal .slides { text-align: left; }
     .reveal .slides section {
-      padding: 30px 50px;
+      padding: 24px 50px;
       height: 100%;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .reveal h1, .reveal h2, .reveal h3 {
       text-transform: none;
@@ -564,22 +565,19 @@
 <!-- ═══════ SLIDE 18: HE HAS OPINIONS ═══════ -->
 <section>
   <h2>He Has Opinions</h2>
-  <div class="card" style="font-family: monospace; font-size: 0.65em; line-height: 2; margin-top: 16px;">
-    <span style="color: var(--lobster); font-weight: 600;">Me:</span> "Can you do X this way?"<br/>
-    <span style="color: var(--ocean); font-weight: 600;">Bob:</span> "I can, but I think there's a better approach. Here's why..."<br/>
-    <span style="color: var(--lobster); font-weight: 600;">Me:</span> "...you're right. Do it your way."
-  </div>
-  <div class="cols" style="margin-top: 16px;">
-    <div class="col">
-      <ul>
-        <li>Suggests improvements unprompted</li>
-        <li>Pushes back when my approach has flaws</li>
-      </ul>
+  <div class="cols-center" style="margin-top: 12px;">
+    <div class="col-2">
+      <div class="card" style="font-family: monospace; font-size: 0.6em; line-height: 1.8; padding: 12px 16px;">
+        <span style="color: var(--lobster); font-weight: 600;">Me:</span> "Can you do X this way?"<br/>
+        <span style="color: var(--ocean); font-weight: 600;">Bob:</span> "I can, but there's a better approach..."<br/>
+        <span style="color: var(--lobster); font-weight: 600;">Me:</span> "...you're right. Do it your way."
+      </div>
     </div>
     <div class="col">
       <ul>
-        <li>Asks clarifying questions first</li>
-        <li>Sometimes wrong — but second opinions are priceless</li>
+        <li>Suggests improvements unprompted</li>
+        <li>Pushes back on flawed approaches</li>
+        <li>Asks before blindly executing</li>
       </ul>
     </div>
   </div>
@@ -646,7 +644,9 @@
     slideNumber: 'c/t',
     width: 1280,
     height: 720,
-    margin: 0.04,
+    margin: 0.08,
+    minScale: 0.2,
+    maxScale: 1.0,
     plugins: [RevealNotes],
     transition: 'fade',
     transitionSpeed: 'fast'
