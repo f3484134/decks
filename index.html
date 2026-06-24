@@ -1,11 +1,522 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=/pixel-room/">
-  <title>VincentGPT</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YH-BOB Garage</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --glass: rgba(255,255,255,0.72);
+      --glass-border: rgba(255,255,255,0.5);
+      --blur: blur(20px) saturate(180%);
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --accent: #0071e3;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* WALLPAPER */
+    #wallpaper {
+      position: fixed; inset: 0; z-index: 0;
+      background: url('pixel-room/icons/garage-wallpaper.png') center/cover no-repeat;
+      transition: background-image 0.6s;
+    }
+
+    /* MENUBAR */
+    .menubar {
+      position: fixed; top: 0; left: 0; right: 0; height: 28px;
+      background: var(--glass); backdrop-filter: var(--blur);
+      display: flex; align-items: center; padding: 0 16px;
+      font-size: 13px; font-weight: 500; z-index: 9999;
+      border-bottom: 0.5px solid rgba(0,0,0,0.08);
+    }
+    .menubar .logo { font-size: 14px; margin-right: 12px; cursor: pointer; }
+    .menubar .app-name { font-weight: 700; margin-right: 20px; font-size: 13px; }
+    .menubar .menu-items span { margin-right: 16px; cursor: pointer; opacity: 0.8; }
+    .menubar .menu-items span:hover { opacity: 1; }
+    .menubar .right { margin-left: auto; font-size: 12px; color: var(--text); }
+
+    /* STOCKS WIDGET — LEFT SIDE */
+    .widget-stocks {
+      position: fixed; top: 44px; left: 16px; width: 200px;
+      background: var(--glass); backdrop-filter: var(--blur);
+      border-radius: 14px; border: 0.5px solid var(--glass-border);
+      padding: 14px; z-index: 100;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .widget-stocks h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+    .stock-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 11px; }
+    .stock-row .ticker { font-weight: 600; width: 44px; }
+    .stock-row .price { color: var(--muted); font-size: 10px; }
+    .stock-row .chg { font-weight: 500; font-size: 10px; padding: 1px 5px; border-radius: 3px; }
+    .chg.up { background: #dcfce7; color: #16a34a; }
+    .chg.down { background: #fef2f2; color: #dc2626; }
+
+    /* DESKTOP */
+    .desktop {
+      position: fixed; top: 36px; left: 0; right: 0; bottom: 72px;
+      padding: 20px 20px 20px 232px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 88px);
+      grid-auto-rows: 100px;
+      gap: 4px;
+      align-content: start;
+      z-index: 1;
+    }
+    .desktop-icon {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      cursor: pointer; padding: 6px; border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .desktop-icon:hover { background: rgba(255,255,255,0.25); }
+    .desktop-icon:active { background: rgba(255,255,255,0.4); }
+    .desktop-icon img {
+      width: 54px; height: 54px; border-radius: 0;
+      box-shadow: none;
+      object-fit: cover;
+    }
+    .desktop-icon .label {
+      font-size: 11px; color: #fff; font-weight: 500;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      text-align: center; line-height: 1.2; max-width: 80px;
+    }
+
+    /* DOCK */
+    .dock {
+      position: fixed; bottom: 6px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: flex-end; gap: 4px;
+      padding: 4px 12px;
+      background: rgba(255,255,255,0.2); backdrop-filter: var(--blur);
+      border-radius: 18px; border: 0.5px solid var(--glass-border);
+      z-index: 9998;
+    }
+    .dock-item {
+      width: 48px; height: 48px; border-radius: 0;
+      overflow: visible; cursor: pointer;
+      transition: width 0.2s cubic-bezier(0.34,1.56,0.64,1), height 0.2s cubic-bezier(0.34,1.56,0.64,1), margin 0.2s;
+      position: relative;
+    }
+    .dock-item img { width: 100%; height: 100%; object-fit: cover; }
+    .dock-item:hover { width: 64px; height: 64px; margin: 0 4px; margin-bottom: 0; }
+    .dock-item .tip {
+      position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.8); color: white; font-size: 11px;
+      padding: 3px 10px; border-radius: 5px; white-space: nowrap;
+      opacity: 0; transition: opacity 0.15s; pointer-events: none;
+    }
+    .dock-item:hover .tip { opacity: 1; }
+    .dock-sep { width: 1px; height: 40px; background: rgba(255,255,255,0.3); margin: 0 4px; align-self: center; }
+
+    /* WINDOWS */
+    .window {
+      position: fixed; display: none;
+      min-width: 320px; min-height: 200px;
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(24px) saturate(180%);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 0 0 0.5px rgba(0,0,0,0.08);
+      overflow: hidden; z-index: 5000;
+      animation: winOpen 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      resize: both;
+    }
+    .window.active { display: block; }
+    @keyframes winOpen { from { transform: scale(0.92); opacity: 0; } }
+
+    .win-bar {
+      height: 40px; background: rgba(246,246,246,0.92);
+      border-bottom: 0.5px solid rgba(0,0,0,0.06);
+      display: flex; align-items: center; padding: 0 14px;
+      cursor: grab; position: relative;
+    }
+    .win-bar:active { cursor: grabbing; }
+    .win-dots { display: flex; gap: 7px; }
+    .win-dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28c840; }
+    .win-bar .title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 13px; font-weight: 500; color: #333; }
+
+    .win-body {
+      padding: 24px 28px; overflow-y: auto; max-height: calc(100% - 40px);
+      font-size: 14px; line-height: 1.7; color: #333;
+    }
+    .win-body h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 10px; }
+    .win-body p { margin-bottom: 10px; color: #555; }
+    .win-body ul { padding-left: 18px; color: #555; }
+    .win-body li { margin-bottom: 5px; }
+    .win-body a { color: var(--accent); text-decoration: none; }
+    .win-body a:hover { text-decoration: underline; }
+    .win-body .hero-img { width: 100%; border-radius: 8px; margin: 12px 0; }
+    .win-body .brief-entry { border-bottom: 1px solid #eee; padding: 12px 0; }
+    .win-body .brief-entry:last-child { border-bottom: none; }
+    .win-body .brief-date { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .win-body .brief-title { font-weight: 600; margin-top: 2px; }
+
+    .link-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--accent); color: #ffffff !important;
+      padding: 8px 16px; border-radius: 8px;
+      font-size: 13px; font-weight: 500; text-decoration: none; margin-top: 8px;
+    }
+    .link-btn:hover { background: #005bb5; text-decoration: none; color: #ffffff !important; }
+
+    .play-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #1d1d1f; color: white;
+      padding: 10px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 12px;
+      border: none;
+    }
+    .play-btn:hover { background: #333; }
+    .play-btn::before { content: '▶'; font-size: 12px; }
+
+    /* CONTEXT MENU */
+    .ctx-menu {
+      display: none; position: fixed;
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(20px);
+      border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 0 0 0.5px rgba(0,0,0,0.08);
+      padding: 4px; z-index: 99999; min-width: 180px;
+    }
+    .ctx-menu.active { display: block; }
+    .ctx-item { padding: 6px 12px; font-size: 13px; border-radius: 5px; cursor: pointer; }
+    .ctx-item:hover { background: var(--accent); color: white; }
+    .ctx-sep { height: 1px; background: rgba(0,0,0,0.08); margin: 4px 8px; }
+
+    /* WALLPAPER PICKER */
+    .wp-overlay { display: none; position: fixed; inset: 0; z-index: 90000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+    .wp-overlay.active { display: flex; }
+    .wp-box { background: white; border-radius: 16px; padding: 24px; max-width: 520px; width: 90%; }
+    .wp-box h2 { font-size: 18px; margin-bottom: 16px; }
+    .wp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .wp-opt { aspect-ratio: 16/10; border-radius: 8px; background-size: cover; background-position: center; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+    .wp-opt:hover { border-color: var(--accent); transform: scale(1.03); }
+  </style>
 </head>
 <body>
-  <p>Redirecting to <a href="/pixel-room/">the room</a>...</p>
+  <div id="wallpaper"></div>
+
+  <!-- MENUBAR -->
+  <div class="menubar">
+    <span class="logo">🔧</span>
+    <span class="app-name">YH-BOB Garage</span>
+    <div class="menu-items">
+      <span onclick="openWP()">Wallpaper</span>
+      <span onclick="openWin('about')">About</span>
+    </div>
+    <span class="right" id="clock"></span>
+  </div>
+
+  <!-- STOCKS WIDGET -->
+  <div class="widget-stocks">
+    <h3>📈 AI Stocks</h3>
+    <div id="stocks-list"></div>
+  </div>
+
+  <!-- DESKTOP ICONS -->
+  <div class="desktop">
+    <div class="desktop-icon" ondblclick="openWin('photos')">
+      <img src="pixel-room/icons/photos.png" alt="Photos">
+      <span class="label">Our Photos</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('bob')">
+      <img src="pixel-room/icons/bob.png" alt="Bob">
+      <span class="label">Bob</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('brief')">
+      <img src="pixel-room/icons/ai-brief.png" alt="AI Brief">
+      <span class="label">AI Brief</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('my-lobster')">
+      <img src="pixel-room/icons/my-lobster.png" alt="My Lobster">
+      <span class="label">My Lobster</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('hn-redesign')">
+      <img src="pixel-room/icons/hn-redesign.png" alt="HN Redesign">
+      <span class="label">HN Redesign</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('video')">
+      <img src="pixel-room/icons/video.png" alt="Videos">
+      <span class="label">Videos</span>
+    </div>
+    <div class="desktop-icon" ondblclick="window.open('https://f3484134.github.io/brain-gym/','_blank')">
+      <img src="pixel-room/icons/brain-gym.png" alt="Brain Gym">
+      <span class="label">Brain Gym</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('research')">
+      <img src="pixel-room/icons/research.png" alt="Research">
+      <span class="label">Research</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('agents')">
+      <img src="pixel-room/icons/agents.png" alt="Agents">
+      <span class="label">Agent Team</span>
+    </div>
+    <div class="desktop-icon" ondblclick="openWin('about')">
+      <img src="pixel-room/icons/about.png" alt="About">
+      <span class="label">About Me</span>
+    </div>
+  </div>
+
+  <!-- DOCK -->
+  <div class="dock">
+    <div class="dock-item" onclick="openWin('brief')"><img src="pixel-room/icons/ai-brief.png" alt=""><span class="tip">AI Brief</span></div>
+    <div class="dock-item" onclick="openWin('stocks-detail')"><img src="pixel-room/icons/stocks.png" alt=""><span class="tip">AI Stocks</span></div>
+    <div class="dock-item" onclick="window.open('https://f3484134.github.io/brain-gym/','_blank')"><img src="pixel-room/icons/brain-gym.png" alt=""><span class="tip">Brain Gym</span></div>
+    <div class="dock-sep"></div>
+    <div class="dock-item" onclick="openWin('photos')"><img src="pixel-room/icons/photos.png" alt=""><span class="tip">Photos</span></div>
+    <div class="dock-item" onclick="openWin('bob')"><img src="pixel-room/icons/bob.png" alt=""><span class="tip">Bob</span></div>
+    <div class="dock-item" onclick="openWin('my-lobster')"><img src="pixel-room/icons/my-lobster.png" alt=""><span class="tip">My Lobster</span></div>
+  </div>
+
+  <!-- CONTEXT MENU -->
+  <div class="ctx-menu" id="ctx-menu">
+    <div class="ctx-item" onclick="openWP()">Change Wallpaper</div>
+    <div class="ctx-item" onclick="openWin('about')">About This Garage</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item" onclick="location.reload()">Refresh</div>
+  </div>
+
+  <!-- WALLPAPER PICKER -->
+  <div class="wp-overlay" id="wp-picker" onclick="if(event.target===this)this.classList.remove('active')">
+    <div class="wp-box">
+      <h2>Choose Wallpaper</h2>
+      <div class="wp-grid">
+        <div class="wp-opt" style="background-image:url('pixel-room/icons/garage-wallpaper.png')" onclick="setWP('pixel-room/icons/garage-wallpaper.png')"></div>
+        <div class="wp-opt" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400')" onclick="setWP('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=80')"></div>
+        <div class="wp-opt" style="background-image:url('https://images.unsplash.com/photo-1504093376-50ec5789f794?w=400')" onclick="setWP('https://images.unsplash.com/photo-1504093376-50ec5789f794?w=1920&q=80')"></div>
+        <div class="wp-opt" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400')" onclick="setWP('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1920&q=80')"></div>
+        <div class="wp-opt" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400')" onclick="setWP('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1920&q=80')"></div>
+        <div class="wp-opt" style="background-image:url('https://images.unsplash.com/photo-1621947081720-86970823b77a?w=400')" onclick="setWP('https://images.unsplash.com/photo-1621947081720-86970823b77a?w=1920&q=80')"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ WINDOWS ═══════ -->
+  <div class="window" id="win-photos" style="width:540px;height:420px;top:80px;left:260px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-photos')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-photos')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">Our Photos</span>
+    </div>
+    <div class="win-body">
+      <img class="hero-img" src="/decks/my-lobster/assets/group-photo.png" alt="YH & Bob" onerror="this.src='https://placehold.co/480x270/f5f5f5/333?text=YH+%26+Bob'">
+      <p style="text-align:center;color:#999;font-size:13px;">YH & Bob — one human, one lobster, infinite possibilities.</p>
+    </div>
+  </div>
+
+  <div class="window" id="win-bob" style="width:480px;height:380px;top:100px;left:300px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-bob')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-bob')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">Bob</span>
+    </div>
+    <div class="win-body">
+      <h2>🦞 Meet Bob</h2>
+      <p><strong>Think Jarvis, but named Bob.</strong> An AI agent running 24/7 on a cloud server. Handles research, automation, content creation, and multi-agent orchestration.</p>
+      <p>Has his own personality, memory, and opinions. Everything in this garage was built collaboratively — from the icons to the code to the weekly briefings.</p>
+      <a class="link-btn" href="/decks/my-lobster/" target="_blank">Read our full story →</a>
+    </div>
+  </div>
+
+  <div class="window" id="win-brief" style="width:560px;height:480px;top:60px;left:280px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-brief')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-brief')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">AI Weekly Brief</span>
+    </div>
+    <div class="win-body">
+      <h2>📰 AI Weekly Brief</h2>
+      <p style="color:#999;font-size:12px;">Every Monday 8:30 AM · Compiled by Bob · 20+ editions since Feb 2026</p>
+
+      <div class="brief-entry">
+        <div class="brief-date">June 15, 2026</div>
+        <div class="brief-title">US Orders Anthropic to Shut Down Fable 5 & Mythos 5</div>
+        <p style="font-size:13px;">OpenAI files S-1 targeting $1T. Bezos reveals Prometheus ($12B raise). Apple WWDC disappoints, stock -5%.</p>
+      </div>
+      <div class="brief-entry">
+        <div class="brief-date">June 8, 2026</div>
+        <div class="brief-title">Anthropic IPO at ~$965B Valuation</div>
+        <p style="font-size:13px;">SoftBank commits €75B to EU AI data centers. Apple rebuilds Siri with Gemini. Nvidia deepens SK Hynix partnership.</p>
+      </div>
+      <div class="brief-entry">
+        <div class="brief-date">June 1, 2026</div>
+        <div class="brief-title">Anthropic Posts First Operating Profit ($559M)</div>
+        <p style="font-size:13px;">Anthropic overtakes OpenAI as world's most valuable AI startup ($900B). Google I/O unveils Gemini 3.5 Flash.</p>
+      </div>
+      <div class="brief-entry">
+        <div class="brief-date">May 25, 2026</div>
+        <div class="brief-title">Google I/O 2026: Gemini Spark Agent</div>
+        <p style="font-size:13px;">Karpathy joins Anthropic. Anthropic acquires Stainless ($300M). Nvidia posts $81.6B Q1 revenue (+85% YoY).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="window" id="win-my-lobster" style="width:440px;height:300px;top:120px;left:340px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-my-lobster')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-my-lobster')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">My Lobster — Deck</span>
+    </div>
+    <div class="win-body">
+      <h2>🦞 My Lobster</h2>
+      <p>How I work with my AI agent — the flagship presentation. 21 slides covering our story, workflow, and what we've built together.</p>
+      <a class="link-btn" href="/decks/my-lobster/" target="_blank">Open Presentation →</a>
+    </div>
+  </div>
+
+  <div class="window" id="win-hn-redesign" style="width:440px;height:280px;top:140px;left:360px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-hn-redesign')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-hn-redesign')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">HN Redesign — Deck</span>
+    </div>
+    <div class="win-body">
+      <h2>📰 HN Redesign</h2>
+      <p>A product design exercise — reimagining Hacker News from the ground up.</p>
+      <a class="link-btn" href="/decks/hn-redesign/" target="_blank">Open Presentation →</a>
+    </div>
+  </div>
+
+  <div class="window" id="win-video" style="width:500px;height:360px;top:100px;left:300px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-video')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-video')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">Videos</span>
+    </div>
+    <div class="win-body">
+      <h2>🎥 Videos</h2>
+      <p>AI-narrated videos produced with HyperFrames + Edge TTS — scripted, narrated, and assembled by Bob:</p>
+      <div style="background:#f5f5f5;border-radius:12px;padding:20px;margin:12px 0;text-align:center;">
+        <p style="font-size:16px;font-weight:600;margin-bottom:4px;">🎬 The Founder's Playbook</p>
+        <p style="font-size:12px;color:#999;margin-bottom:12px;">Podcast-style book summary · 4:32</p>
+        <button class="play-btn" onclick="alert('Video playback coming soon!')">Play Video</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="window" id="win-research" style="width:460px;height:340px;top:90px;left:280px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-research')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-research')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">Research</span>
+    </div>
+    <div class="win-body">
+      <h2>📚 Knowledge Graph</h2>
+      <p>1,500+ articles processed into an interconnected wiki:</p>
+      <ul>
+        <li>Context Engineering & Agent Memory</li>
+        <li>Human-AI Symbiosis & Intentional Friction</li>
+        <li>Cognitive Surrender (Tri-System Theory)</li>
+        <li>AI Product Strategy & Design Systems</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="window" id="win-agents" style="width:440px;height:350px;top:110px;left:310px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-agents')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-agents')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">Agent Team</span>
+    </div>
+    <div class="win-body">
+      <h2>🦸 Multi-Agent System</h2>
+      <p>Bob orchestrates specialized agents for end-to-end delivery:</p>
+      <ul>
+        <li><strong>Stephen</strong> — Researcher</li>
+        <li><strong>Steve</strong> — PM / Orchestrator</li>
+        <li><strong>Tony</strong> — Architect</li>
+        <li><strong>Natasha</strong> — Designer</li>
+        <li><strong>Vision</strong> — Developer</li>
+        <li><strong>Thor</strong> — QA</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="window" id="win-about" style="width:440px;height:320px;top:130px;left:330px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-about')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-about')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">About This Garage</span>
+    </div>
+    <div class="win-body">
+      <h2>🔧 YH-BOB Garage</h2>
+      <p>A workshop where a design leader and an AI agent build things together.</p>
+      <p><strong>YH</strong> — Design leader at Microsoft, exploring the frontier of human-AI collaboration.</p>
+      <p><strong>Bob</strong> 🦞 — AI agent on OpenClaw, handling research, automation, development, and creative projects 24/7.</p>
+      <p style="margin-top:16px;font-size:12px;color:#999;">Built with love & lobsters · vincentgpt.com</p>
+    </div>
+  </div>
+
+  <div class="window" id="win-stocks-detail" style="width:400px;height:360px;top:80px;left:260px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-stocks-detail')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-stocks-detail')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">AI Stocks</span>
+    </div>
+    <div class="win-body">
+      <h2>📈 AI Stock Tracker</h2>
+      <div id="stocks-detail" style="margin-top:12px;"></div>
+      <p style="color:#999;font-size:11px;margin-top:16px;">Demo data · Production uses live market API</p>
+    </div>
+  </div>
+
+  <script>
+    // CLOCK
+    function tick() {
+      document.getElementById('clock').textContent = new Date().toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+    }
+    tick(); setInterval(tick, 30000);
+
+    // STOCKS
+    const tickers = ['MSFT','NVDA','GOOGL','AAPL','META','TSM','TSLA'];
+    const basePrices = [450, 180, 360, 295, 680, 210, 340];
+    function renderStocks() {
+      const rows = tickers.map((t, i) => {
+        const p = (basePrices[i] + (Math.random()-0.5)*20).toFixed(2);
+        const c = ((Math.random()-0.4)*4).toFixed(2);
+        const cls = parseFloat(c) >= 0 ? 'up' : 'down';
+        return `<div class="stock-row"><span class="ticker">${t}</span><span class="price">$${p}</span><span class="chg ${cls}">${parseFloat(c)>=0?'+':''}${c}%</span></div>`;
+      });
+      document.getElementById('stocks-list').innerHTML = rows.slice(0,5).join('');
+      document.getElementById('stocks-detail').innerHTML = rows.join('');
+    }
+    renderStocks(); setInterval(renderStocks, 30000);
+
+    // WINDOWS
+    let topZ = 5000;
+    function openWin(name) {
+      const w = document.getElementById('win-' + name);
+      if (!w) return;
+      w.classList.add('active');
+      w.style.zIndex = ++topZ;
+    }
+    function closeWin(id) { document.getElementById(id).classList.remove('active'); }
+    document.querySelectorAll('.window').forEach(w => w.addEventListener('mousedown', () => w.style.zIndex = ++topZ));
+
+    // DRAG
+    let dEl=null, dOX=0, dOY=0;
+    function startDrag(e, id) {
+      if (e.target.classList.contains('win-dot')) return;
+      dEl = document.getElementById(id);
+      dEl.style.zIndex = ++topZ;
+      const r = dEl.getBoundingClientRect();
+      dOX = e.clientX - r.left; dOY = e.clientY - r.top;
+      e.preventDefault();
+    }
+    document.addEventListener('mousemove', e => { if(dEl){ dEl.style.left=(e.clientX-dOX)+'px'; dEl.style.top=(e.clientY-dOY)+'px'; }});
+    document.addEventListener('mouseup', () => dEl=null);
+
+    // CONTEXT MENU
+    const ctx = document.getElementById('ctx-menu');
+    document.addEventListener('contextmenu', e => {
+      if(e.target.closest('.window,.dock,.menubar,.widget-stocks')) return;
+      e.preventDefault();
+      ctx.style.left=e.clientX+'px'; ctx.style.top=e.clientY+'px';
+      ctx.classList.add('active');
+    });
+    document.addEventListener('click', () => ctx.classList.remove('active'));
+
+    // WALLPAPER
+    function openWP() { document.getElementById('wp-picker').classList.add('active'); }
+    function setWP(url) {
+      document.getElementById('wallpaper').style.backgroundImage = `url('${url}')`;
+      document.getElementById('wp-picker').classList.remove('active');
+    }
+  </script>
 </body>
 </html>
