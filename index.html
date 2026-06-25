@@ -74,9 +74,17 @@
       display: flex; flex-direction: column; align-items: center; gap: 4px;
       cursor: pointer; padding: 6px; border-radius: 8px;
       transition: background 0.15s;
+      position: relative;
     }
     .desktop-icon:hover { background: rgba(255,255,255,0.25); }
     .desktop-icon:active { background: rgba(255,255,255,0.4); }
+    .desktop-icon .icon-tip {
+      position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
+      background: rgba(50,50,50,0.9); color: white; font-size: 11px;
+      padding: 4px 10px; border-radius: 5px; white-space: nowrap;
+      opacity: 0; transition: opacity 0.15s; pointer-events: none;
+    }
+    .desktop-icon:hover .icon-tip { opacity: 1; }
     .desktop-icon img {
       width: 54px; height: 54px; border-radius: 12px;
       box-shadow: none;
@@ -221,43 +229,43 @@
   <!-- DESKTOP ICONS -->
   <div class="desktop">
     <div class="desktop-icon" ondblclick="openWin('photos')">
-      <img src="pixel-room/icons/photos.png" alt="Photos">
+      <img src="pixel-room/icons/photos.png" alt="Photos"><span class="icon-tip">Our Photos</span>
       <span class="label">Our Photos</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('bob')">
-      <img src="pixel-room/icons/bob.png" alt="Bob">
+      <img src="pixel-room/icons/bob.png" alt="Bob"><span class="icon-tip">Bob</span>
       <span class="label">Bob</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('brief')">
-      <img src="pixel-room/icons/ai-brief.png" alt="AI Brief">
+      <img src="pixel-room/icons/ai-brief.png" alt="AI Brief"><span class="icon-tip">AI Brief</span>
       <span class="label">AI Brief</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('my-lobster')">
-      <img src="pixel-room/icons/my-lobster.png" alt="My Lobster">
+      <img src="pixel-room/icons/my-lobster.png" alt="My Lobster"><span class="icon-tip">My Lobster</span>
       <span class="label">My Lobster</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('hn-redesign')">
-      <img src="pixel-room/icons/hn-redesign.png" alt="HN Redesign">
+      <img src="pixel-room/icons/hn-redesign.png" alt="HN Redesign"><span class="icon-tip">HN Redesign</span>
       <span class="label">HN Redesign</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('video')">
-      <img src="pixel-room/icons/video.png" alt="Videos">
+      <img src="pixel-room/icons/video.png" alt="Videos"><span class="icon-tip">Videos</span>
       <span class="label">Videos</span>
     </div>
     <div class="desktop-icon" ondblclick="window.open('https://f3484134.github.io/brain-gym/','_blank')">
-      <img src="pixel-room/icons/brain-gym.png" alt="Brain Gym">
+      <img src="pixel-room/icons/brain-gym.png" alt="Brain Gym"><span class="icon-tip">Brain Gym</span>
       <span class="label">Brain Gym</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('research')">
-      <img src="pixel-room/icons/research.png" alt="Research">
+      <img src="pixel-room/icons/research.png" alt="Research"><span class="icon-tip">Research</span>
       <span class="label">Research</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('agents')">
-      <img src="pixel-room/icons/agents.png" alt="Agents">
+      <img src="pixel-room/icons/agents.png" alt="Agents"><span class="icon-tip">Agent Team</span>
       <span class="label">Agent Team</span>
     </div>
     <div class="desktop-icon" ondblclick="openWin('about')">
-      <img src="pixel-room/icons/about.png" alt="About">
+      <img src="pixel-room/icons/about.png" alt="About"><span class="icon-tip">About Me</span>
       <span class="label">About Me</span>
     </div>
   </div>
@@ -388,7 +396,9 @@
       <div style="background:#f5f5f5;border-radius:12px;padding:20px;margin:12px 0;text-align:center;">
         <p style="font-size:16px;font-weight:600;margin-bottom:4px;">🎬 The Founder's Playbook</p>
         <p style="font-size:12px;color:#999;margin-bottom:12px;">Podcast-style book summary · 4:32</p>
-        <button class="play-btn" onclick="alert('Video playback coming soon!')">Play Video</button>
+        <video controls style="width:100%;border-radius:8px;margin-top:8px;" preload="metadata">
+          <source src="pixel-room/founders-playbook.mp4" type="video/mp4">
+        </video>
       </div>
     </div>
   </div>
