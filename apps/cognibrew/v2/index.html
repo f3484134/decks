@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogniBrew V2 Pro - 早晨開機儀式與全天能量預測系統</title>
+    <style>
+        :root {
+            --bg-color: #090d16;
+            --card-bg: #131b2e;
+            --accent: #f59e0b;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            background: linear-gradient(135deg, #f59e0b, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        .badge-v2 {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+        label {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 4px;
+        }
+        input, select {
+            width: 100%;
+            padding: 9px 12px;
+            background: #090e1a;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 13px;
+        }
+        button.btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        button.btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        .timeline {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        .time-node {
+            background: #0d1527;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 10px 12px;
+            min-width: 80px;
+            text-align: center;
+        }
+        .time-node.peak {
+            border-color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .time-node .time { font-size: 11px; color: var(--text-muted); }
+        .time-node .score { font-size: 16px; font-weight: bold; margin: 4px 0; }
+        .time-node .desc { font-size: 10px; color: var(--accent-green); }
+        .audio-player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0d1527;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>☕ CogniBrew V2 Pro <span class="badge-v2">GEN-2</span></h1>
+        <p>早晨開機儀式、神經協同配方與 24h 能量預測引擎</p>
+    </div>
+
+    <!-- V2 Smart Context Card -->
+    <div class="card">
+        <h3 style="margin-top:0; color:var(--accent-blue);">🧬 智能生理與日程上下文 (Gen-2 Context Sensing)</h3>
+        <div class="grid-3">
+            <div>
+                <label>昨晚睡眠 / 深睡 (h)</label>
+                <input type="text" id="sleepData" value="6.2h (深睡 1.1h)">
+            </div>
+            <div>
+                <label>CYP1A2 咖啡因代謝基因</label>
+                <select id="metabolism">
+                    <option value="slow">慢代謝型 (易心悸/失眠)</option>
+                    <option value="medium" selected>標準型 (半衰期 4.5h)</option>
+                    <option value="fast">快代謝型 (耐受高)</option>
+                </select>
+            </div>
+            <div>
+                <label>胃部敏感度 / 腸胃狀態</label>
+                <select id="stomach">
+                    <option value="yes" selected>敏感 (易反酸)</option>
+                    <option value="no">健康強健</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-top:14px;">
+            <label>📅 今日行事曆智能抓取 (Auto-Synced Calendar Events):</label>
+            <input type="text" id="calendarSync" value="10:30 [高負荷] 董事會 2027 戰略審議 | 15:00 [中負荷] 跨國客戶溝通">
+        </div>
+
+        <div style="margin-top:14px;">
+            <label>🎵 120秒 沉浸環境音選擇:</label>
+            <select id="ambience">
+                <option value="rain">🌧️ 432Hz 晨間松林雨聲 (深層 Alpha 腦波)</option>
+                <option value="jazz" selected>🎷 暖冬黑膠爵士 (平靜專注感)</option>
+                <option value="stream">🌊 北歐高山溪流 (微冷清醒感)</option>
+            </select>
+        </div>
+
+        <button class="btn-primary" onclick="generateV2Plan()">⚡ 啟動 V2 全維度開機與能量預測</button>
+    </div>
+
+    <!-- V2 Results Display -->
+    <div class="card" id="v2ResultCard" style="display:none;">
+        <h3 style="margin-top:0; color:var(--accent);">🎯 今日戰略鎖定 (Auto-Detected MIT)</h3>
+        <p style="font-size:16px; margin:4px 0;"><strong>『 董事會 2027 戰略審議 』</strong> (預計 10:30 開始)</p>
+        <p style="color:var(--text-muted); font-size:13px;">系統已針對 10:30 會議排程計算出 08:45 為最佳攝入時刻，確保關鍵時刻大腦血流與神經遞質處於峰值。</p>
+
+        <h3 style="margin-top:20px; color:var(--accent-green);">🧪 神經協同配方 (Synergy Stack)</h3>
+        <ul style="font-size:13.5px; line-height:1.8; color:#cbd5e1; padding-left:20px;">
+            <li><strong>咖啡因精準劑量：</strong> 84.0 mg (中度低溫長萃，避免胃酸激增)</li>
+            <li><strong>🌿 200mg L-茶氨酸：</strong> 撫平神經興奮，阻斷心悸，提升平靜專注度 (Calm Focus)</li>
+            <li><strong>🥛 燕麥植物脂緩釋介質：</strong> 平緩咖啡因吸收曲線，消除下午崩潰</li>
+            <li><strong>💧 晨間 300ml 電解質先導：</strong> 5分鐘內恢復夜間細胞脫水</li>
+        </ul>
+
+        <h3 style="margin-top:20px; color:var(--accent-blue);">📈 24小時 認知效能與警覺度預測曲線</h3>
+        <div class="timeline">
+            <div class="time-node"><div class="time">08:00</div><div class="score">65</div><div class="desc">剛起床</div></div>
+            <div class="time-node"><div class="time">08:45</div><div class="score">78</div><div class="desc">開機飲用</div></div>
+            <div class="time-node peak"><div class="time">10:30</div><div class="score" style="color:var(--accent);">92</div><div class="desc">🔥 戰略峰值</div></div>
+            <div class="time-node"><div class="time">12:00</div><div class="score">82</div><div class="desc">平穩產出</div></div>
+            <div class="time-node"><div class="time">14:00</div><div class="score" style="color:#fb7185;">62</div><div class="desc">自然低谷</div></div>
+            <div class="time-node"><div class="time">15:00</div><div class="score">74</div><div class="desc">協同茶飲</div></div>
+            <div class="time-node"><div class="time">18:00</div><div class="score">68</div><div class="desc">工作收尾</div></div>
+            <div class="time-node"><div class="time">22:00</div><div class="score">35</div><div class="desc">準備安睡</div></div>
+        </div>
+
+        <div class="audio-player">
+            <div>
+                <strong>🎵 正在準備：暖冬黑膠爵士 432Hz</strong>
+                <div style="font-size:11px; color:var(--text-muted);">滴濾 120 秒計時開始 · 配合呼吸引導</div>
+            </div>
+            <button style="background:var(--accent-blue); border:none; padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">播放引導</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function generateV2Plan() {
+    document.getElementById('v2ResultCard').style.display = 'block';
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

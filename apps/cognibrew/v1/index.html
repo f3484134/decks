@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CogniBrew V1 - 早晨開機儀式與認知效能服務</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #d97706;
+            --accent-glow: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 680px;
+            width: 100%;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            color: var(--accent-glow);
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        label {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 4px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px 12px;
+            background: #0b1120;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: #fff;
+            box-sizing: border-box;
+            font-size: 13px;
+        }
+        button.btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+            color: #000;
+            font-weight: 700;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 14px;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+        button.btn-primary:hover {
+            opacity: 0.9;
+        }
+        .output-box {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 13.5px;
+            color: #e2e8f0;
+            background: #0a0f1d;
+            border-left: 3px solid var(--accent);
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 12px;
+        }
+        .phase-badge {
+            background: #334155;
+            color: #fbbf24;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>☕ CogniBrew V1</h1>
+        <p>早晨開機儀式與認知效能服務 (HKU 6-Step Innovation Prototype)</p>
+    </div>
+
+    <!-- Context Ingestion Card -->
+    <div class="card">
+        <div class="card-title"><span>📊</span> 步驟 1: 晨間生理與日程感知輸入 (Context Ingestion)</div>
+        <div class="grid-2">
+            <div>
+                <label>昨晚總睡眠時長 (小時)</label>
+                <input type="number" id="sleepHours" value="5.8" step="0.1">
+            </div>
+            <div>
+                <label>深睡眠時長 (小時)</label>
+                <input type="number" id="deepSleepHours" value="0.9" step="0.1">
+            </div>
+            <div>
+                <label>咖啡因敏感度</label>
+                <select id="sensitivity">
+                    <option value="low">低敏感 (代謝快)</option>
+                    <option value="medium" selected>標準敏感</option>
+                    <option value="high">高敏感 (易心悸)</option>
+                </select>
+            </div>
+            <div>
+                <label>今日戰略日程負荷</label>
+                <select id="scheduleLoad">
+                    <option value="light">輕鬆 (輕量溝通)</option>
+                    <option value="moderate">中等 (常規產出)</option>
+                    <option value="heavy" selected>高壓 (重大決策/會議)</option>
+                </select>
+            </div>
+            <div>
+                <label>首場高負荷會議時間</label>
+                <input type="text" id="firstMeeting" value="09:30">
+            </div>
+            <div>
+                <label>起床主觀自評 (1-10分)</label>
+                <input type="number" id="readiness" value="5" min="1" max="10">
+            </div>
+        </div>
+        <button class="btn-primary" onclick="generatePrescription()">⚡ 生成今日專屬開機配方與 Briefing</button>
+    </div>
+
+    <!-- Output Flow -->
+    <div class="card" id="flowCard" style="display:none;">
+        <div class="card-title"><span class="phase-badge">PHASE 1</span> 喚醒診斷與專屬配方</div>
+        <div class="output-box" id="phase1Output"></div>
+
+        <button class="btn-primary" style="background:#0284c7; color:#fff;" id="startBrewBtn" onclick="startBrewingPhase()">🫖 按下開始 120 秒沖煮與心智調頻</button>
+
+        <div id="phase2Area" style="display:none; margin-top:20px;">
+            <div class="card-title"><span class="phase-badge">PHASE 2</span> 120秒 沖煮沉浸與呼吸調頻</div>
+            <div class="output-box" id="phase2Output"></div>
+            
+            <div style="margin-top:14px;">
+                <label>🎯 今日唯一核心戰略任務 (Most Important Task, MIT):</label>
+                <input type="text" id="mitInput" placeholder="例如：完成架構設計重構 / 準備董事會演講..." value="完成支付模組架構重構">
+                <button class="btn-primary" onclick="lockMitAndFinish()">☕ 品嚐第一口咖啡並完成開機鎖定</button>
+            </div>
+        </div>
+
+        <div id="phase3Area" style="display:none; margin-top:20px;">
+            <div class="card-title"><span class="phase-badge">PHASE 3</span> 第一口咖啡與認知錨定</div>
+            <div class="output-box" id="phase3Output"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+function generatePrescription() {
+    const sleep = parseFloat(document.getElementById('sleepHours').value);
+    const deep = parseFloat(document.getElementById('deepSleepHours').value);
+    const sens = document.getElementById('sensitivity').value;
+    const load = document.getElementById('scheduleLoad').value;
+    const meeting = document.getElementById('firstMeeting').value;
+    const ready = document.getElementById('readiness').value;
+
+    let base = 100;
+    let sensF = sens === 'low' ? 1.3 : (sens === 'high' ? 0.65 : 1.0);
+    let sleepF = (sleep < 6.0 || deep < 1.0) ? 1.15 : 1.0;
+    let loadF = load === 'heavy' ? 1.25 : (load === 'light' ? 0.85 : 1.0);
+    let targetMg = (base * sensF * sleepF * loadF).toFixed(1);
+
+    let strategy = (sleep < 6.0) ? "緩釋穩態萃取 (Sustained Release) - 防皮質醇疊加" : "清晰敏銳萃取 (Clarity Formula)";
+
+    const text = `早上好。我是您的早晨認知開機顧問 CogniBrew。\n\n` +
+        `【生理與日程診斷】\n` +
+        `• 睡眠評估：${sleep}h (深睡 ${deep}h) | 晨間自評：${ready}/10\n` +
+        `• 今日日程：${load.toUpperCase()} 負荷 | 首場關鍵會議：${meeting}\n\n` +
+        `【今日專屬特調配方】\n` +
+        `• 目標咖啡因：${targetMg} mg (${strategy})\n` +
+        `• 沖煮建議：水溫 92°C | 萃取水體 200ml | 建議中深焙堅果香型咖啡豆\n\n` +
+        `生物依據：由於您昨晚深睡眠不足，系統降低了單次瞬時峰值，改以穩態萃取參數，預計在 ${meeting} 前 45 分鐘達到最佳認知清醒度。`;
+
+    document.getElementById('phase1Output').innerText = text;
+    document.getElementById('flowCard').style.display = 'block';
+}
+
+function startBrewingPhase() {
+    document.getElementById('phase2Area').style.display = 'block';
+    document.getElementById('startBrewBtn').style.display = 'none';
+
+    const text = `【120秒 晨間心智調頻】(咖啡正在滴濾，香氣正在瀰漫...)\n\n` +
+        `請將手機扣在桌面，微閉雙眼，跟隨指引進行 3 次箱式呼吸：\n` +
+        `1. 深吸氣 (4秒) —— 感知熱水穿透咖啡粉時散發的焦糖與堅果香氣...\n` +
+        `2. 屏息 (4秒) —— 讓大腦在純淨真空中停留...\n` +
+        `3. 緩慢吐氣 (4秒) —— 釋放昨日所有的焦慮與混亂...\n` +
+        `4. 屏息 (4秒) —— 感受身體各神經元正在被喚醒。\n\n` +
+        `滴濾完成。現在，請端起這杯專屬於你的認知燃料。`;
+
+    document.getElementById('phase2Output').innerText = text;
+}
+
+function lockMitAndFinish() {
+    const mit = document.getElementById('mitInput').value;
+    document.getElementById('phase3Area').style.display = 'block';
+
+    const text = `【第一口咖啡與戰略錨定】\n\n` +
+        `請輕啜第一口溫熱的咖啡，感受天然多酚喚醒大腦皮層。\n\n` +
+        `您今日鎖定的唯一戰略核心 (MIT) 是：\n` +
+        `🎯 『${mit}』\n\n` +
+        `系統已為您設置晨間專注免打擾。咖啡因將在 45 分鐘後達到最佳血中濃度。\n` +
+        `祝您今天進入極致的心流狀態。早晨開機程序完成！`;
+
+    document.getElementById('phase3Output').innerText = text;
+}
+</script>
+
+</body>
+</html>
