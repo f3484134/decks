@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project CogniBrew — 六步創新法 × MatrAIx AI 模擬用戶實驗報告</title>
+
+  <!-- Reveal.js 5 via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css" />
+
+  <style>
+    :root {
+      --accent:  #38bdf8;   /* cyan accent */
+      --accent2: #fbbf24;   /* warm amber */
+      --accent3: #34d399;   /* emerald green */
+      --bad:     #f87171;   /* rose red */
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border:  rgba(255, 255, 255, 0.12);
+    }
+
+    .reveal { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #f1f5f9; }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 { text-transform: none; font-weight: 700; }
+    .reveal h1 { font-size: 2.0em; color: #ffffff; }
+    .reveal h2 { font-size: 1.4em; color: var(--accent); margin-bottom: 0.5em; }
+    .reveal h3 { font-size: 1.1em; color: var(--accent2); }
+
+    .accent  { color: var(--accent);  }
+    .accent2 { color: var(--accent2); }
+    .accent3 { color: var(--accent3); }
+    .bad     { color: var(--bad);     }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; text-align: left; }
+    
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 0.6em;
+      line-height: 1.5;
+    }
+
+    .card h4 { font-size: 1.2em; margin-top: 0; margin-bottom: 8px; }
+    .card-bad { border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.06); }
+    .card-good { border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.06); }
+
+    .mockup-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.52em;
+      text-align: left;
+      line-height: 1.4;
+      color: #cbd5e1;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75em;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .pill-blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+    .pill-green { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+    .pill-red { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+    .pill-amber { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+
+    .stat-num { font-size: 1.8em; font-weight: 800; color: var(--accent3); }
+    .stat-sub { font-size: 0.55em; color: #94a3b8; }
+
+    ul.clean-list { list-style: none; padding-left: 0; margin: 0; }
+    ul.clean-list li { margin-bottom: 8px; position: relative; padding-left: 18px; }
+    ul.clean-list li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Slide 1: Title -->
+      <section>
+        <span class="pill pill-blue">HKU AIBT 實戰案例庫</span>
+        <h1 style="margin-top: 15px;">Project CogniBrew</h1>
+        <p style="font-size: 0.8em; color: #94a3b8;">產品創新六步驟 × MatrAIx 虛擬用戶模擬實驗與迭代報告</p>
+        <div style="font-size: 0.55em; margin-top: 40px; color: #64748b;">
+          執行團隊：Agent Product Team (Steve, Stephen, Natasha, Vision, Thor, Bob)<br>
+          方法論核心：六步創新流程 / Lean Learning Canvas / AI Persona Evals
+        </div>
+      </section>
+
+      <!-- Slide 2: The Challenge & Six-Step Frame -->
+      <section>
+        <h2>為什麼做這個實驗？</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>🎯 驗證教學與工具鏈</h4>
+            <ul class="clean-list">
+              <li><b>突破課堂瓶頸：</b> 學生做完原型後往往缺乏即時反饋，陷入自嗨。</li>
+              <li><b>實證方法論：</b> 將「六步創新法 + LLC」與「AI Persona 模擬」接軌。</li>
+              <li><b>探究真假洞察：</b> 驗證 MatrAIx 等 8.3B 虛擬用戶工具在商業定位中的真實價值。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>🧭 六步創新法推進軸線</h4>
+            <ul class="clean-list">
+              <li><b>Step 0:</b> 命題校準（從賣咖啡到認知開機服務）</li>
+              <li><b>Step 1:</b> 七維洞察（速度 vs 儀式、提神 vs 焦慮）</li>
+              <li><b>Step 2:</b> 機會定義（HMW 聚焦 120 秒低負擔方案）</li>
+              <li><b>Step 3:</b> 方案設計（Context Engineering + V1 原型）</li>
+              <li><b>Step 4:</b> 實驗驗證（LLC 假說 + 50 位 Persona 實測）</li>
+              <li><b>Step 5:</b> 學習決策（V2 Pro 迭代 + 二次 A/B 評測）</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Target Personas Matrix -->
+      <section>
+        <h2>MatrAIx 測試用戶矩陣 (4 類典型 Persona)</h2>
+        <div class="grid-2">
+          <div class="card">
+            <span class="pill pill-red">Persona 1: 高壓資深工程師</span>
+            <p><b>Alex (32歲，架構師)</b><br>
+            • <b>痛點：</b> 每天早會連發，靠 3 杯黑咖啡硬撐，胃酸逆流、心悸手抖。<br>
+            • <b>核心訴求：</b> 快速提神但絕不能讓身體崩潰，厭惡繁瑣打卡操作。</p>
+          </div>
+          <div class="card">
+            <span class="pill pill-blue">Persona 2: 跨時區產品總監</span>
+            <p><b>Sarah (38歲，PM Director)</b><br>
+            • <b>痛點：</b> 早上處於多方救火狀態，大腦過載，下午常發生斷崖式疲勞。<br>
+            • <b>核心訴求：</b> 需要儀式感釐清今日 MIT (Most Important Task)，平穩釋放能量。</p>
+          </div>
+          <div class="card">
+            <span class="pill pill-amber">Persona 3: 自由創作者 / 設計師</span>
+            <p><b>Leo (26歲，UI/UX 自由接案)</b><br>
+            • <b>痛點：</b> 晨間進入心流緩慢，容易分心刷手機，常焦慮拖延。<br>
+            • <b>核心訴求：</b> 需要環境音與輕度心理導引，輔助進入深度創作心流。</p>
+          </div>
+          <div class="card">
+            <span class="pill pill-green">Persona 4: 考試升學研究生</span>
+            <p><b>Emma (23歲，商學院碩士)</b><br>
+            • <b>痛點：</b> 預算有限，對過度科技包裝敏感，重視性價比與胃部舒適。<br>
+            • <b>核心訴求：</b> 乾淨專注、價格合理、配方透明無負擔。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Before vs After Interface Design -->
+      <section>
+        <h2>介面與體驗設計對比 (Before vs After)</h2>
+        <div class="grid-2">
+          <div>
+            <span class="pill pill-red">V1 原型 (Before): 功能堆砌與問卷感</span>
+            <div class="mockup-box card-bad" style="margin-top: 10px;">
+              [ CogniBrew V1 - 晨間對話 ]<br>
+              🤖: 早上好！請先填寫您的狀態：<br>
+              [睡眠時長: 5h] [心率: 82] [焦慮程度: 4/5]<br>
+              🤖: 正在分析您的咖啡因容忍度...<br>
+              ☕ 建議配方：重度烘焙耶加雪菲 + 濃縮雙份<br>
+              ⚠️ <b>用戶反饋：</b>「早上腦子一片混亂還要我填問卷？看到雙份濃縮我都開始胃痛了！」
+            </div>
+          </div>
+          <div>
+            <span class="pill pill-green">V2 Pro 原型 (After): 情境無感注入 + 能量曲線</span>
+            <div class="mockup-box card-good" style="margin-top: 10px;">
+              [ CogniBrew V2 Pro - 一鍵開機 ]<br>
+              ⚡ <b>自動識別行事曆與健康數據 (10:00 重要匯報)</b><br>
+              ☕ <b>神經協同配方：</b> 冷萃低酸 (120mg) + L-茶氨酸 (200mg)<br>
+              📈 <b>24h 能量預測：</b> 消除午後斷崖，專注平穩維持 4.5h<br>
+              🎧 <b>432Hz 雙耳調頻音：</b> 點擊播放 120 秒晨間降噪導引<br>
+              ✨ <b>一鍵確認送出</b> (無任何手動表單)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: MatrAIx Evaluation Results (Quantitative) -->
+      <section>
+        <h2>MatrAIx 50+ 虛擬用戶評測數據 (A/B 驗證)</h2>
+        <div class="grid-3" style="margin-top: 25px;">
+          <div class="card" style="text-align: center;">
+            <h4>價值感知度 (Perceived Value)</h4>
+            <div class="stat-num">4.55 <span style="font-size:0.5em; color:#94a3b8;">/ 5.0</span></div>
+            <div class="stat-sub">V1: 4.04 (🔺 <b>+12.5%</b>)</div>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h4>焦慮緩解度 (Anxiety Relief)</h4>
+            <div class="stat-num">4.10 <span style="font-size:0.5em; color:#94a3b8;">/ 5.0</span></div>
+            <div class="stat-sub">V1: 3.01 (🚀 <b>+36.3% 突破</b>)</div>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h4>淨推薦值 (NPS Score)</h4>
+            <div class="stat-num">+78.8</div>
+            <div class="stat-sub">V1: +17.3 (🌟 <b>+61.5 點大躍進</b>)</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 20px; font-size: 0.55em;">
+          📌 <b>關鍵轉折：</b> V1 的致命傷是「把焦慮的人推向更高焦慮的問卷與高咖啡因」；V2 Pro 解決了「心悸生理張力」並實現「零摩擦啟動」，直接引爆 NPS。
+        </div>
+      </section>
+
+      <!-- Slide 6: MatrAIx Qualitative Feedback -->
+      <section>
+        <h2>用戶真實聲音截錄 (Qualitative Feedback)</h2>
+        <div class="grid-2">
+          <div class="card card-bad">
+            <h4>❌ V1 核心質疑 (The "Brutal" Feedback)</h4>
+            <p style="font-style: italic;">
+              「早晨最寶貴的是前 15 分鐘，你還要我回答 4 個問題，這不是開機，這是添堵。」<br>
+              <span style="color:#f87171;">— Alex (架構師 Persona)</span>
+            </p>
+            <p style="font-style: italic;">
+              「提神是提了，但下午心跳加快、手抖沒辦法開會，本質上還是傳統黑咖啡換皮。」<br>
+              <span style="color:#f87171;">— Sarah (PM Director Persona)</span>
+            </p>
+          </div>
+          <div class="card card-good">
+            <h4>✅ V2 Pro 用戶證言 (The "Aha" Moments)</h4>
+            <p style="font-style: italic;">
+              「L-茶氨酸 + 低酸冷萃的搭配擊中了我！終於有人不是只塞咖啡因，而是幫我穩住神經。」<br>
+              <span style="color:#34d399;">— Alex (架構師 Persona)</span>
+            </p>
+            <p style="font-style: italic;">
+              「自動讀取行事曆直接配好專注曲線，加上 2 分鐘調頻音，讓我開晨會不再恐慌。」<br>
+              <span style="color:#34d399;">— Leo (設計師 Persona)</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: MatrAIx Evaluation & Reliability -->
+      <section>
+        <h2>MatrAIx 工具實測評估：到底靠不靠譜？</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>🟢 極高價值（非常靠譜的部分）</h4>
+            <ul class="clean-list">
+              <li><b>盲點與摩擦力偵測：</b> 能極速揪出「流程繁瑣」、「認知過載」、「前後邏輯矛盾」。</li>
+              <li><b>極端 Persona 壓力測試：</b> 能精準扮演挑剔工程師、胃敏感用戶，提供具體質疑。</li>
+              <li><b>迭代收斂速度：</b> 數分鐘內完成 50+ Persona 測試，將迭代週期從數週壓縮到小時級。</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>⚠️ 必須警惕（不可盲信的部分）</h4>
+            <ul class="clean-list">
+              <li><b>AI 禮貌偏差 (Politeness Bias)：</b> 對新奇概念普遍偏寬容，整體評分往往偏高。</li>
+              <li><b>無法驗證真實支付行為：</b> 虛擬用戶說「願意付費」不等於真實刷卡。</li>
+              <li><b>解法：</b> 必須導入嚴格的 <b>Evals 指標</b>（如任務中斷率、強迫選擇題、負面摩擦力評分）。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Learnings & Takeaways for HKU -->
+      <section>
+        <h2>給學生的核心啟示 (Methodology Learnings)</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h4>1. Context Is King</h4>
+            <p>好產品不再靠複雜代碼，而在於如何把「用戶真實情境（生理、日程、情緒）」作為 Context 動態注入系統。</p>
+          </div>
+          <div class="card">
+            <h4>2. 解決張力而非堆功能</h4>
+            <p>V1 輸在堆砌問卷，V2 贏在精準解決「要提神又怕心悸崩潰」的生理張力。創新始於張力。</p>
+          </div>
+          <div class="card">
+            <h4>3. 模擬是為了訓練決斷</h4>
+            <p>工具不會幫你做決定。看到 50 條反饋時，如何辨別什麼該改、什麼該堅持，才是產品經理的真正護城河。</p>
+          </div>
+        </div>
+        <div style="margin-top: 35px;">
+          <span class="pill pill-blue">GitHub 倉庫已開源</span>
+          <span class="pill pill-green">包含完整工作坊 30 分鐘教學套件</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js 5 Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      controls: true,
+      progress: true,
+      center: true,
+      transition: 'slide',
+      plugins: [ RevealHighlight ]
+    });
+  </script>
+</body>
+</html>
