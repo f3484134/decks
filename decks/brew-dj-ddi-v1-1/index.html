@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>調調咖啡 (Brew DJ) v1.1 — DDI 意義創新與詮釋躍遷 Pitch Deck</title>
+
+  <!-- Reveal.js 5 via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+
+  <style>
+    :root {
+      --accent:  #38bdf8;   /* cyan accent */
+      --accent2: #fbbf24;   /* warm amber */
+      --accent3: #34d399;   /* emerald green */
+      --bad:     #f87171;   /* rose red */
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border:  rgba(255, 255, 255, 0.12);
+    }
+
+    .reveal { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #f1f5f9; }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 { text-transform: none; font-weight: 700; }
+    .reveal h1 { font-size: 2.0em; color: #ffffff; }
+    .reveal h2 { font-size: 1.35em; color: var(--accent); margin-bottom: 0.5em; }
+    .reveal h3 { font-size: 1.05em; color: var(--accent2); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; text-align: left; }
+    
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 0.6em;
+      line-height: 1.55;
+    }
+
+    .card-bad { border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.06); }
+    .card-good { border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.06); }
+    .card-highlight { border-color: rgba(56, 189, 248, 0.5); background: rgba(56, 189, 248, 0.08); }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75em;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .pill-blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+    .pill-green { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+    .pill-red { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+    .pill-amber { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+
+    ul.clean-list { list-style: none; padding-left: 0; margin: 0; }
+    ul.clean-list li { margin-bottom: 8px; position: relative; padding-left: 18px; }
+    ul.clean-list li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
+
+    .quote-box {
+      border-left: 4px solid var(--accent2);
+      padding-left: 14px;
+      margin: 12px 0;
+      font-style: italic;
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Slide 1: Title -->
+      <section>
+        <span class="pill pill-blue">HKU AIBT 創新案例演進 · Deck 1.1</span>
+        <h1 style="margin-top: 15px;">調調咖啡 (Brew DJ)</h1>
+        <p style="font-size: 0.85em; color: var(--accent2);">「別人給你推薦咖啡，我們讀懂你為什麼喜歡。」</p>
+        <div style="font-size: 0.55em; margin-top: 40px; color: #94a3b8;">
+          從「社群病徵」到「DDI 意義創新」的產品論述重構<br>
+          出品：Agent Product Team (Steve PM, Natasha Design, Bob Coach)
+        </div>
+      </section>
+
+      <!-- Slide 2: Social Symptoms (Not Just Complaints) -->
+      <section>
+        <h2>起點：社群病徵，而非表面功能抱怨</h2>
+        <div class="grid-2">
+          <div class="card card-bad">
+            <span class="pill pill-red">社群微弱信號 (Social Signal)</span>
+            <div class="quote-box">
+              「所有品牌都說手沖、日曬、水洗……選擇太多＝選擇困難。我只想每天喝到合我胃口的咖啡，但不想被迫變成咖啡大師。」<br>
+              <span style="font-size: 0.85em; color: #94a3b8;">— 小紅書用戶留言 (@咖啡少女小林)</span>
+            </div>
+            <p><b>❌ 傳統 Market Pull 誤讀：</b>「用戶嫌選豆麻煩，那我們做個篩選器或盲盒隨機發貨。」</p>
+          </div>
+          <div class="card card-good">
+            <span class="pill pill-green">詮釋性解讀 (Hermeneutic Reading)</span>
+            <p><b>🔍 深層文化症候 (Cultural Tension)：</b></p>
+            <ul class="clean-list">
+              <li><b>微型自主權焦慮：</b> 白領生活被 KPI 與會議塞滿，咖啡是少數可控的「品味自留地」。</li>
+              <li><b>專業術語排拒感：</b> 想要好品味，但抗拒高門檻的「知識考核」。</li>
+              <li><b>被認真對待的渴望：</b> 拒絕流水線盲盒，渴望專屬的理解與陪伴。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: The Meaning Leap (DDI) -->
+      <section>
+        <h2>DDI 意義躍遷：重新定義咖啡</h2>
+        <div class="grid-2">
+          <div class="card card-bad">
+            <h4>🔴 舊意義 (Old Meaning)</h4>
+            <ul class="clean-list">
+              <li><b>9.9 元續命水：</b> 無靈魂的提神化學劑，淪為價格戰紅海。</li>
+              <li><b>菁英手沖：</b> 繁複產地風味考核，把普通人擋在門外。</li>
+              <li><b>被動消費：</b> 每月收到千篇一律的固定豆包。</li>
+            </ul>
+          </div>
+          <div class="card card-good">
+            <h4>🟢 調調咖啡新意義 (New Meaning)</h4>
+            <ul class="clean-list">
+              <li><b>咖啡 = 被認真對待的個人品味探索 (Brew DJ)。</b></li>
+              <li><b>微型掌控儀式：</b> 晨間進入專注心流的輕量錨點。</li>
+              <li><b>可見的味覺人格進化：</b> 越喝越懂你，像懂你的咖啡師朋友。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card card-highlight" style="margin-top: 15px; text-align: center; font-size: 0.6em;">
+          💡 <b>DDI 核心主張：</b> 我們賣的不是咖啡豆公克數，而是「免於選擇負擔的品味自我成長」。
+        </div>
+      </section>
+
+      <!-- Slide 4: Metaphor & Offering -->
+      <section>
+        <h2>跨界隱喻與產品落地：咖啡界的 Spotify</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h4>1. 咖啡人格測驗</h4>
+            <p>30 秒感知測試（探索者 / 儀式感玩家 / 感官主義者），建立情感認同與初始 Taste Profile。</p>
+          </div>
+          <div class="card">
+            <h4>2. 80/20 演算法策展</h4>
+            <p>80% 穩固安全舒適區 + 20% 驚喜探索區，兼顧「熟悉安心」與「味覺冒險」。</p>
+          </div>
+          <div class="card">
+            <h4>3. 動態味覺雷達閉環</h4>
+            <p>每次隨盒反饋直接雕刻專屬雷達圖，形成高情感黏著與極高遷移成本 (Switching Cost)。</p>
+          </div>
+        </div>
+        <div style="margin-top: 20px; font-size: 0.55em; color: #94a3b8;">
+          核心定價：¥199/月 訂閱制（相比自己買豆 ¥120，用戶為「懂我與探索」支付 65% 溢價）。
+        </div>
+      </section>
+
+      <!-- Slide 5: Learning Canvas (Hypothesis Engine) -->
+      <section>
+        <h2>Lean Learning Canvas 假說演化</h2>
+        <div class="card" style="font-size: 0.55em;">
+          <table style="width: 100%; text-align: left; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid var(--border); color: var(--accent);">
+              <th style="padding: 6px;">學習循環 (Loop)</th>
+              <th style="padding: 6px;">核心待驗證假說 (Risk Hypothesis)</th>
+              <th style="padding: 6px;">驗證實驗與指標 (Experiment)</th>
+              <th style="padding: 6px;">決策方向 (Decision)</th>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 6px;"><b>Loop 1: 意義認同</b></td>
+              <td style="padding: 6px;">用戶買單「咖啡人格與品味探索」而非單純提神</td>
+              <td style="padding: 6px;">咖啡人格互動測試頁 (Landing Page v2)</td>
+              <td style="padding: 6px; color: var(--accent3);">分享率 > 25%，轉化率 18% (Continue)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <td style="padding: 6px;"><b>Loop 2: 學習閉環</b></td>
+              <td style="padding: 6px;">用戶願意在開箱後給予回饋以進化雷達圖</td>
+              <td style="padding: 6px;">隨盒 AI 風味卡 + QR Code 輕回饋</td>
+              <td style="padding: 6px; color: var(--accent3);">70% 用戶在第 2 週主動回饋 (Continue)</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px;"><b>Loop 3: 商業溢價</b></td>
+              <td style="padding: 6px;">用戶願意長期支付 ¥199/月 (65% 溢價)</td>
+              <td style="padding: 6px;">次月續訂率與 MatrAIx 壓力測試</td>
+              <td style="padding: 6px; color: var(--accent2);">需進入 2.0 階段進行極端用戶實測</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- Slide 6: Next Step to 2.0 -->
+      <section>
+        <h2>從 1.1 邁向 2.0：進入 MatrAIx 壓力測試</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h4>📌 Deck 1.1 的定位完成</h4>
+            <p>已完成從「微弱信號」到「DDI 意義躍遷」的完整商業與體驗論述，確立了「Brew DJ」的核心心智。</p>
+          </div>
+          <div class="card card-highlight">
+            <h4>🚀 Deck 2.0 的核心任務 (Coming Up)</h4>
+            <ul class="clean-list">
+              <li><b>拒絕虛假自嗨：</b> 不拿 MatrAIx 做隨機訪談，而是做「假說壓力測試」。</li>
+              <li><b>目標群體 + 邊緣用戶對照盲測：</b> 測試白領 vs 極端價格敏感客 vs 硬核手沖客。</li>
+              <li><b>基於實驗結果修正產品：</b> 呈現數據衝突與最終設計迭代。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js 5 Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      controls: true,
+      progress: true,
+      center: true,
+      transition: 'slide'
+    });
+  </script>
+</body>
+</html>

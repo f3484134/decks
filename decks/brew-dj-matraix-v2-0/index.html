@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>調調咖啡 (Brew DJ) v2.0 — MatrAIx 假設壓力測試與產品迭代實證 Deck</title>
+
+  <!-- Reveal.js 5 via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" id="theme" />
+
+  <style>
+    :root {
+      --accent:  #38bdf8;   /* cyan accent */
+      --accent2: #fbbf24;   /* warm amber */
+      --accent3: #34d399;   /* emerald green */
+      --bad:     #f87171;   /* rose red */
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --border:  rgba(255, 255, 255, 0.12);
+    }
+
+    .reveal { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #f1f5f9; }
+    .reveal h1, .reveal h2, .reveal h3, .reveal h4 { text-transform: none; font-weight: 700; }
+    .reveal h1 { font-size: 2.0em; color: #ffffff; }
+    .reveal h2 { font-size: 1.35em; color: var(--accent); margin-bottom: 0.5em; }
+    .reveal h3 { font-size: 1.05em; color: var(--accent2); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; text-align: left; }
+    
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 0.58em;
+      line-height: 1.55;
+    }
+
+    .card-bad { border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.06); }
+    .card-good { border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.06); }
+    .card-highlight { border-color: rgba(56, 189, 248, 0.5); background: rgba(56, 189, 248, 0.08); }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75em;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .pill-blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+    .pill-green { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+    .pill-red { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+    .pill-amber { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+
+    .stat-num { font-size: 1.8em; font-weight: 800; color: var(--accent3); }
+    .stat-sub { font-size: 0.6em; color: #94a3b8; }
+
+    ul.clean-list { list-style: none; padding-left: 0; margin: 0; }
+    ul.clean-list li { margin-bottom: 8px; position: relative; padding-left: 18px; }
+    ul.clean-list li::before { content: "▹"; position: absolute; left: 0; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Slide 1: Title -->
+      <section>
+        <span class="pill pill-green">HKU AIBT 創新案例演進 · Deck 2.0</span>
+        <h1 style="margin-top: 15px;">調調咖啡 × MatrAIx 驗證</h1>
+        <p style="font-size: 0.85em; color: var(--accent);">「意義不是自嗨，用合成用戶進行假說壓力測試」</p>
+        <div style="font-size: 0.55em; margin-top: 40px; color: #94a3b8;">
+          從 DDI 意義假說 → MatrAIx 邊緣用戶盲測 → 產品設計調整實錄<br>
+          出品：Agent Product Team (Steve PM, Thor QA, Bob Coach)
+        </div>
+      </section>
+
+      <!-- Slide 2: Methodology Shift -->
+      <section>
+        <h2>方法論校準：MatrAIx 在這裡的正確角色</h2>
+        <div class="grid-2">
+          <div class="card card-bad">
+            <h4>❌ 常見誤區：拿 AI 做隨機用戶研究</h4>
+            <p>• 拿著空白畫布問 AI「你想要什麼樣的咖啡？」<br>
+            • 得到平庸、客套、無效的「偽需求反饋」。<br>
+            • 誤把 AI 當成真人做探索性訪談。</p>
+          </div>
+          <div class="card card-good">
+            <h4>✅ 正確定位：拿 AI 做「假說壓力測試」</h4>
+            <p>• <b>輸入已成型的新意義：</b>「Brew DJ 80/20 演算法與品味人格」。<br>
+            • <b>注入精確用戶樣本：</b> 目標白領 + 邊緣極端用戶。<br>
+            • <b>高壓盲測：</b> 揪出體驗摩擦力、心理抗拒與支付卡點。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Synthetic User Matrix -->
+      <section>
+        <h2>測試矩陣設計：目標群體 vs 邊緣用戶 (Edge Cases)</h2>
+        <div class="grid-2">
+          <div class="card">
+            <span class="pill pill-blue">🎯 目標群體：都市白領 / 知識工作者 (N=25)</span>
+            <ul class="clean-list">
+              <li><b>高壓管理層 & 產品經理：</b> 時間極度緊缺，渴望儀式感但討厭繁瑣。</li>
+              <li><b>自由創作者 & 設計師：</b> 追求自我表達與味覺冒險，對生活美感敏感。</li>
+            </ul>
+          </div>
+          <div class="card card-bad">
+            <span class="pill pill-red">⚡ 邊緣極端用戶 (Edge Cases) (N=25)</span>
+            <ul class="clean-list">
+              <li><b>極端價格敏感客 (N=15)：</b> 習慣 9.9 元外送，只看性價比，無感儀式。</li>
+              <li><b>硬核手沖極客 (N=10)：</b> 堅持自己稱重測溫調研磨，抗拒「被 AI 決定口味」。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Experiment Findings (Brutal Truth) -->
+      <section>
+        <h2>MatrAIx 測試殘酷真相 (Key Conflicts)</h2>
+        <div class="grid-2">
+          <div class="card card-bad">
+            <h4>💥 發現 1：硬核極客的「控制權反彈」</h4>
+            <p style="font-style: italic;">「我玩手沖就是為了自己探索產區，你一個 AI DJ 幫我選，剝奪了我最大的樂趣。」</p>
+            <p><b>洞察：</b> 不能做成完全封閉黑箱，必須給予「覆寫與手動微調權」。</p>
+          </div>
+          <div class="card card-bad">
+            <h4>💥 發現 2：開箱當下的「回饋認知摩擦」</h4>
+            <p style="font-style: italic;">「早上趕著上班撕開包裝，誰有空拿手機掃碼打 5 個維度的星星？」</p>
+            <p><b>洞察：</b> 回饋機制必須「非即時、單一維度（如👍/👎）、可延後輕量完成」。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Product Iterations Based on Evals -->
+      <section>
+        <h2>基於實驗結果：產品設計的 3 大實質調整</h2>
+        <div class="grid-3">
+          <div class="card card-good">
+            <h4>調整 1: 輕量「微醺開關」</h4>
+            <p>將 20% 探索區改為「可調節滑桿 (0%~40%)」，讓硬核用戶與保守用戶都能自由設定掌控度。</p>
+          </div>
+          <div class="card card-good">
+            <h4>調整 2: 極簡回饋卡</h4>
+            <p>揚棄複雜多維問卷，改為包裝袋撕角二選一標籤，或在微信服務號上一鍵點選「驚喜 / 偏酸 / 剛剛好」。</p>
+          </div>
+          <div class="card card-good">
+            <h4>調整 3: 雙層定價體系</h4>
+            <p>針對價格敏感客推出「純探索掛耳體驗包 ¥79/月」，降低初次試用門檻，再轉化至 ¥199 旗艦訂閱。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Summary for HKU -->
+      <section>
+        <h2>給產品創新的方法論總結</h2>
+        <div class="card card-highlight" style="font-size: 0.65em; line-height: 1.6;">
+          <p><b>1. DDI 定義方向：</b> 意義創新決定了產品的高度與靈魂（做什麼、代表什麼）。</p>
+          <p><b>2. MatrAIx 充當磨刀石：</b> 虛擬用戶不是為了證明自己多聰明，而是以極低成本在第一時間打碎盲目樂觀，逼出邊界條件。</p>
+          <p><b>3. 迭代才是真功夫：</b> 沒有完美的 1.0，唯有經過邊緣壓力測試並完成調整的 2.0，才能真正走向市場。</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Reveal.js 5 Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      controls: true,
+      progress: true,
+      center: true,
+      transition: 'slide'
+    });
+  </script>
+</body>
+</html>
