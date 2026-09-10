@@ -36,7 +36,7 @@
             background: linear-gradient(135deg, #f59e0b, #38bdf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 26px;
+            font-size: 28px;
             margin-bottom: 6px;
         }
         .badge-v2 {
@@ -115,15 +115,93 @@
         .time-node .time { font-size: 11px; color: var(--text-muted); }
         .time-node .score { font-size: 16px; font-weight: bold; margin: 4px 0; }
         .time-node .desc { font-size: 10px; color: var(--accent-green); }
-        .audio-player {
+        
+        /* Audio Player Styling */
+        .audio-player-box {
+            background: #0a1120;
+            border: 1px solid #223254;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .audio-controls {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #0d1527;
-            padding: 12px 16px;
+        }
+        .play-btn {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
             border-radius: 8px;
-            border-left: 4px solid var(--accent-blue);
-            margin-top: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .play-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+        }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #e11d48, #f43f5e);
+        }
+        .visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 24px;
+        }
+        .visualizer-bar {
+            width: 4px;
+            height: 4px;
+            background: #38bdf8;
+            border-radius: 2px;
+            transition: height 0.1s;
+        }
+        .playing .visualizer-bar {
+            animation: pulse 0.8s infinite alternate ease-in-out;
+        }
+        @keyframes pulse {
+            0% { height: 4px; }
+            100% { height: 22px; }
+        }
+        .visualizer-bar:nth-child(2) { animation-delay: 0.15s; }
+        .visualizer-bar:nth-child(3) { animation-delay: 0.3s; }
+        .visualizer-bar:nth-child(4) { animation-delay: 0.45s; }
+        .visualizer-bar:nth-child(5) { animation-delay: 0.2s; }
+        .visualizer-bar:nth-child(6) { animation-delay: 0.35s; }
+        
+        .breath-guide {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(56, 189, 248, 0.06);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+        .breath-circle {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #38bdf8;
+            box-shadow: 0 0 8px #38bdf8;
+        }
+        .breath-circle.animate {
+            animation: breathe 8s infinite ease-in-out;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.8); opacity: 1; }
         }
     </style>
 </head>
@@ -167,10 +245,10 @@
 
         <div style="margin-top:14px;">
             <label>🎵 120秒 沉浸環境音選擇:</label>
-            <select id="ambience">
-                <option value="rain">🌧️ 432Hz 晨間松林雨聲 (深層 Alpha 腦波)</option>
-                <option value="jazz" selected>🎷 暖冬黑膠爵士 (平靜專注感)</option>
-                <option value="stream">🌊 北歐高山溪流 (微冷清醒感)</option>
+            <select id="ambienceSelect" onchange="updateTrackName()">
+                <option value="rain" selected>🌧️ 432Hz 晨間松林雨聲 (深層 Alpha 腦波)</option>
+                <option value="jazz">🎷 暖冬黑膠爵士 (平靜專注感)</option>
+                <option value="binaural">⚡ 40Hz Gamma 雙耳節拍 (高效編程/深度心流)</option>
             </select>
         </div>
 
@@ -203,20 +281,189 @@
             <div class="time-node"><div class="time">22:00</div><div class="score">35</div><div class="desc">準備安睡</div></div>
         </div>
 
-        <div class="audio-player">
-            <div>
-                <strong>🎵 正在準備：暖冬黑膠爵士 432Hz</strong>
-                <div style="font-size:11px; color:var(--text-muted);">滴濾 120 秒計時開始 · 配合呼吸引導</div>
+        <div class="audio-player-box">
+            <div class="audio-controls">
+                <div>
+                    <strong id="trackTitle" style="color:var(--accent-blue);">🎵 432Hz 晨間松林雨聲 (Alpha 腦波)</strong>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+                        滴濾 120 秒計時開始 · Web Audio 聲學沉浸合成
+                    </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="visualizer" id="visualizer">
+                        <div class="visualizer-bar"></div>
+                        <div class="visualizer-bar"></div>
+                        <div class="visualizer-bar"></div>
+                        <div class="visualizer-bar"></div>
+                        <div class="visualizer-bar"></div>
+                        <div class="visualizer-bar"></div>
+                    </div>
+                    <button class="play-btn" id="playBtn" onclick="toggleAudio()">
+                        <span id="playIcon">▶</span> <span id="playText">播放調頻聲音</span>
+                    </button>
+                </div>
             </div>
-            <button style="background:var(--accent-blue); border:none; padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">播放引導</button>
+
+            <div class="breath-guide">
+                <div class="breath-circle" id="breathCircle"></div>
+                <span id="breathText">點擊播放，跟隨光圈韻律深呼吸：吸氣 4 秒 — 屏息 2 秒 — 呼氣 4 秒</span>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+let audioCtx = null;
+let isPlaying = false;
+let oscillators = [];
+let gainNode = null;
+let noiseNode = null;
+
+function updateTrackName() {
+    const sel = document.getElementById('ambienceSelect');
+    const text = sel.options[sel.selectedIndex].text;
+    document.getElementById('trackTitle').innerText = '🎵 ' + text;
+    if (isPlaying) {
+        stopAudio();
+        playAudio();
+    }
+}
+
 function generateV2Plan() {
     document.getElementById('v2ResultCard').style.display = 'block';
+    updateTrackName();
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+function toggleAudio() {
+    if (isPlaying) {
+        stopAudio();
+    } else {
+        playAudio();
+    }
+}
+
+function playAudio() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    const type = document.getElementById('ambienceSelect').value;
+    gainNode = audioCtx.createGain();
+    gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gainNode.connect(audioCtx.destination);
+
+    if (type === 'rain') {
+        // Generate Pink/Brown Noise filtered like rain + 432Hz calming tone
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+        for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99886 * b0 + white * 0.0555179;
+            b1 = 0.99332 * b1 + white * 0.0750759;
+            b2 = 0.96900 * b2 + white * 0.1538520;
+            b3 = 0.86650 * b3 + white * 0.3104856;
+            b4 = 0.55000 * b4 + white * 0.5329522;
+            b5 = -0.7616 * b5 - white * 0.0168980;
+            output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+            b6 = white * 0.115926;
+        }
+        noiseNode = audioCtx.createBufferSource();
+        noiseNode.buffer = noiseBuffer;
+        noiseNode.loop = true;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(900, audioCtx.currentTime);
+
+        noiseNode.connect(filter);
+        filter.connect(gainNode);
+        noiseNode.start();
+
+        // Add soft 432Hz sine tone
+        const osc = audioCtx.createOscillator();
+        const oscGain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(432, audioCtx.currentTime);
+        oscGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        osc.connect(oscGain);
+        oscGain.connect(gainNode);
+        osc.start();
+        oscillators.push(osc);
+
+    } else if (type === 'jazz') {
+        // Warm jazz chord pad (E Maj9)
+        const freqs = [164.81, 207.65, 246.94, 293.66, 370.00]; // E3, G#3, B3, D#4, F#4
+        freqs.forEach(f => {
+            const osc = audioCtx.createOscillator();
+            const oscGain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+            oscGain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+            osc.connect(oscGain);
+            oscGain.connect(gainNode);
+            osc.start();
+            oscillators.push(osc);
+        });
+    } else if (type === 'binaural') {
+        // 40Hz Gamma Binaural Beats (200Hz Left, 240Hz Right)
+        const merger = audioCtx.createChannelMerger(2);
+        
+        const oscL = audioCtx.createOscillator();
+        oscL.type = 'sine';
+        oscL.frequency.setValueAtTime(200, audioCtx.currentTime);
+        
+        const oscR = audioCtx.createOscillator();
+        oscR.type = 'sine';
+        oscR.frequency.setValueAtTime(240, audioCtx.currentTime);
+
+        const gainL = audioCtx.createGain();
+        gainL.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        const gainR = audioCtx.createGain();
+        gainR.gain.setValueAtTime(0.08, audioCtx.currentTime);
+
+        oscL.connect(gainL);
+        gainL.connect(merger, 0, 0); // Left channel
+
+        oscR.connect(gainR);
+        gainR.connect(merger, 0, 1); // Right channel
+
+        merger.connect(gainNode);
+        oscL.start();
+        oscR.start();
+        oscillators.push(oscL, oscR);
+    }
+
+    isPlaying = true;
+    document.getElementById('playBtn').classList.add('playing');
+    document.getElementById('playIcon').innerText = '⏸';
+    document.getElementById('playText').innerText = '暫停聲音引導';
+    document.getElementById('visualizer').classList.add('playing');
+    document.getElementById('breathCircle').classList.add('animate');
+}
+
+function stopAudio() {
+    if (oscillators.length > 0) {
+        oscillators.forEach(o => {
+            try { o.stop(); o.disconnect(); } catch(e){}
+        });
+        oscillators = [];
+    }
+    if (noiseNode) {
+        try { noiseNode.stop(); noiseNode.disconnect(); } catch(e){}
+        noiseNode = null;
+    }
+    isPlaying = false;
+    document.getElementById('playBtn').classList.remove('playing');
+    document.getElementById('playIcon').innerText = '▶';
+    document.getElementById('playText').innerText = '播放調頻聲音';
+    document.getElementById('visualizer').classList.remove('playing');
+    document.getElementById('breathCircle').classList.remove('animate');
 }
 </script>
 
