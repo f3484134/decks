@@ -60,7 +60,7 @@
     }
 
     .slide-title {
-      font-size: 34px !important;
+      font-size: 38px !important;
       font-weight: 800 !important;
       color: var(--primary) !important;
       line-height: 1.2 !important;
@@ -69,7 +69,7 @@
     }
 
     .slide-subtitle {
-      font-size: 16px;
+      font-size: 19px; font-weight: 500;
       color: var(--text-muted);
       margin-bottom: 20px;
       font-weight: 400;
@@ -124,7 +124,7 @@
     }
 
     .card-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--primary);
       margin-bottom: 8px;
@@ -134,8 +134,8 @@
     }
 
     .card-body {
-      font-size: 13.5px;
-      color: #334155;
+      font-size: 15.5px;
+      color: #1e293b;
       line-height: 1.55;
     }
 
@@ -172,14 +172,14 @@
 
     /* METRIC STATS */
     .stat-num {
-      font-size: 32px;
+      font-size: 40px;
       font-weight: 900;
       color: var(--primary);
       line-height: 1;
       font-feature-settings: "tnum";
     }
     .stat-label {
-      font-size: 12px;
+      font-size: 14px; font-weight: 600;
       color: var(--text-muted);
       margin-top: 4px;
       font-weight: 500;
@@ -193,7 +193,7 @@
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid var(--border-card);
-      font-size: 12px;
+      font-size: 14px;
       background: white;
     }
     .blueprint-table th {
@@ -1014,72 +1014,82 @@
       <!-- ==========================================
            SLIDE 13: 团队介绍 (Team Introduction)
            ========================================== -->
+      <!-- ==========================================
+           SLIDE 13: 团队介绍 (Team Introduction)
+           ========================================== -->
       <section>
         <div class="deck-tag">Phase 12 · 研发团队</div>
-        <h2 class="slide-title">Agent Product Team 研发与设计团队</h2>
-        <div class="slide-subtitle">由 7 位专精 AI Agent 与人类设计导师协同共创的敏捷创新团队。</div>
+        <h2 class="slide-title">Agent Product Team 团队合影与分工</h2>
+        <div class="slide-subtitle">由 7 位专精 AI Agent 与导师 Bob 协同共创的 AI-Native 敏捷创新团队。</div>
 
-        <div class="bento-grid grid-4col">
-          <div class="bento-card">
-            <div class="card-title" style="font-size: 14.5px;">
-              <span>Steve</span>
-              <span class="badge badge-teal">PM / Orchestrator</span>
-            </div>
-            <div class="card-body" style="font-size: 12px;">
-              负责创新命题校准、DDI 意义统筹、精益学习画布架构与全流程敏捷推进。
+        <div class="bento-grid grid-1-2" style="align-items: stretch; gap: 16px;">
+          <div class="bento-card card-slate" style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 12px; background: #ffffff; border: 2px solid #e2e8f0; border-radius: 14px;">
+            <img src="./team-photo.png" alt="Agent Product Team 合影" style="width: 100%; height: auto; max-height: 380px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);" />
+            <div style="font-size: 13.5px; font-weight: 700; color: #1e3a5f; margin-top: 10px; text-align: center;">
+              📸 Agent Product Team 团队全家福 (Avengers Edition)
             </div>
           </div>
 
-          <div class="bento-card">
-            <div class="card-title" style="font-size: 14.5px;">
-              <span>Stephen</span>
-              <span class="badge badge-amber">Researcher</span>
+          <div class="bento-grid grid-2col" style="gap: 10px;">
+            <div class="bento-card card-highlight" style="padding: 12px 14px;">
+              <div class="card-title" style="font-size: 16px; margin-bottom: 4px;">
+                <span>🎯 Steve</span>
+                <span class="badge badge-teal">PM / 编排</span>
+              </div>
+              <div class="card-body" style="font-size: 13.5px; line-height: 1.45;">
+                产品策略、命题校准、精益学习画布与全流程推进。
+              </div>
             </div>
-            <div class="card-body" style="font-size: 12px;">
-              负责七维文化与生理张力洞察、药代动力学模型研究与 MatrAIx 模拟分析。
-            </div>
-          </div>
 
-          <div class="bento-card">
-            <div class="card-title" style="font-size: 14.5px;">
-              <span>Natasha</span>
-              <span class="badge badge-rose">Designer</span>
+            <div class="bento-card card-warn" style="padding: 12px 14px;">
+              <div class="card-title" style="font-size: 16px; margin-bottom: 4px;">
+                <span>🔬 Stephen</span>
+                <span class="badge badge-amber">Researcher / 研究</span>
+              </div>
+              <div class="card-body" style="font-size: 13.5px; line-height: 1.45;">
+                文化张力洞察、药代动力学及 MatrAIx 模拟分析。
+              </div>
             </div>
-            <div class="card-body" style="font-size: 12px;">
-              负责多感官体验架构、服务蓝图绘制、UI/UX 交互设计与声音仪式打磨。
-            </div>
-          </div>
 
-          <div class="bento-card">
-            <div class="card-title" style="font-size: 14.5px;">
-              <span>Tony & Vision</span>
-              <span class="badge">Tech & Code</span>
+            <div class="bento-card" style="padding: 12px 14px;">
+              <div class="card-title" style="font-size: 16px; margin-bottom: 4px;">
+                <span>🎨 Natasha</span>
+                <span class="badge badge-rose">Designer / 设计</span>
+              </div>
+              <div class="card-body" style="font-size: 13.5px; line-height: 1.45;">
+                多感官体验架构、服务蓝图与 40Hz 声音仪式设计。
+              </div>
             </div>
-            <div class="card-body" style="font-size: 12px;">
-              <strong>Tony (Architect)</strong>：系统与 Context 架构。<br>
-              <strong>Vision (Developer)</strong>：Prototype 2 前端与 Web Audio 引擎。
-            </div>
-          </div>
-        </div>
 
-        <div class="bento-grid grid-2col" style="margin-top: 14px;">
-          <div class="bento-card card-slate">
-            <div class="card-title" style="font-size: 14px;">
-              <span>Thor</span>
-              <span class="badge">QA & Benchmark</span>
+            <div class="bento-card" style="padding: 12px 14px;">
+              <div class="card-title" style="font-size: 16px; margin-bottom: 4px;">
+                <span>🏗️ Tony & 💻 Vision</span>
+                <span class="badge">Tech / 架构与工程</span>
+              </div>
+              <div class="card-body" style="font-size: 13.5px; line-height: 1.45;">
+                <strong>Tony</strong>：系统架构与 Context。<br>
+                <strong>Vision</strong>：Web Audio 引擎与前端原型。
+              </div>
             </div>
-            <div class="card-body" style="font-size: 12.5px;">
-              负责淘汰准则（Kill Criteria）量化测试、MatrAIx 数字人压测与数据合规。
-            </div>
-          </div>
 
-          <div class="bento-card card-highlight">
-            <div class="card-title" style="font-size: 14px; color: #0f766e;">
-              <span>Bob</span>
-              <span class="badge badge-teal">Product Coach</span>
+            <div class="bento-card card-slate" style="padding: 12px 14px;">
+              <div class="card-title" style="font-size: 16px; margin-bottom: 4px;">
+                <span>⚡ Thor</span>
+                <span class="badge">QA / 评测</span>
+              </div>
+              <div class="card-body" style="font-size: 13.5px; line-height: 1.45;">
+                淘汰准则量化压测与 MatrAIx 数字人实验合规。
+              </div>
             </div>
-            <div class="card-body" style="font-size: 12.5px;">
-              负责 HKU 创新方法论把关、5-Whys 根因分析、团队覆盘与 Slide 呈现指导。
+
+            <div class="bento-card card-highlight" style="padding: 12px 14px; background: #fefce8; border-color: #fef08a;">
+              <div class="card-title" style="font-size: 16px; margin-bottom: 4px; color: #854d0e;">
+                <span>🫠 Bob</span>
+                <span class="badge badge-amber">Coach / 导师</span>
+              </div>
+              <div class="card-body" style="font-size: 13.5px; line-height: 1.45; color: #713f12;">
+                HKU 创新方法论把关、5-Whys 根因分析与复盘指导。
+              </div>
             </div>
           </div>
         </div>
