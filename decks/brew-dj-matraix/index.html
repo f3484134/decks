@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Brew DJ - 调调咖啡：DDI 意义创新与 MatrAIx 验证案例</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --primary-dark: #0f1d30;
+      --accent-warm: #d97706;
+      --accent-gold: #f59e0b;
+      --accent-teal: #0d9488;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --bg-light: #f8fafc;
+      --bg-card: #ffffff;
+      --border-card: #e2e8f0;
+      --border-focus: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+    }
+
+    .reveal {
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      background: #f1f5f9;
+    }
+
+    .reveal .slides section {
+      padding: 24px 36px;
+      text-align: left;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    /* TYPOGRAPHY */
+    .deck-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent-warm);
+      background: rgba(217, 119, 6, 0.1);
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .slide-title {
+      font-size: 34px !important;
+      font-weight: 800 !important;
+      color: var(--primary) !important;
+      line-height: 1.2 !important;
+      margin: 0 0 6px 0 !important;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    /* BENTO GRID CARDS */
+    .bento-grid {
+      display: grid;
+      gap: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .grid-2col { grid-template-columns: 1fr 1fr; }
+    .grid-3col { grid-template-columns: 1fr 1fr 1fr; }
+    .grid-4col { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .grid-1-2 { grid-template-columns: 1fr 2fr; }
+    .grid-2-1 { grid-template-columns: 2fr 1fr; }
+    .grid-1-3 { grid-template-columns: 1.1fr 2.9fr; }
+
+    .bento-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .card-highlight {
+      background: #f0fdfa;
+      border-color: #99f6e4;
+    }
+
+    .card-warn {
+      background: #fffbeb;
+      border-color: #fde68a;
+    }
+
+    .card-danger {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .card-slate {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-body {
+      font-size: 13.5px;
+      color: #334155;
+      line-height: 1.55;
+    }
+
+    .card-body p {
+      margin: 0 0 6px 0;
+    }
+    .card-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .card-body ul {
+      margin: 4px 0 4px 18px;
+      padding: 0;
+    }
+
+    .card-body li {
+      margin-bottom: 4px;
+    }
+
+    /* BADGES & CHIPS */
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .badge-teal { background: #ccfbf1; color: #0f766e; }
+    .badge-amber { background: #fef3c7; color: #b45309; }
+    .badge-rose { background: #ffe4e6; color: #be123c; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+
+    /* METRIC STATS */
+    .stat-num {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+      font-feature-settings: "tnum";
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* SERVICE BLUEPRINT TABLE */
+    .blueprint-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-card);
+      font-size: 12px;
+      background: white;
+    }
+    .blueprint-table th {
+      background: #0f172a;
+      color: white;
+      padding: 8px 12px;
+      font-weight: 600;
+      text-align: left;
+    }
+    .blueprint-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      border-right: 1px solid #f1f5f9;
+      vertical-align: top;
+      color: #334155;
+      line-height: 1.4;
+    }
+    .blueprint-table td:last-child {
+      border-right: none;
+    }
+    .blueprint-table tr:last-child td {
+      border-bottom: none;
+    }
+    .stage-col {
+      font-weight: 700;
+      color: var(--primary);
+      background: #f8fafc;
+      width: 110px;
+    }
+    .line-of-interaction {
+      background: #e0f2fe !important;
+      font-weight: 600;
+      color: #0369a1;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      padding: 4px 12px !important;
+    }
+    .line-of-visibility {
+      background: #fef3c7 !important;
+      font-weight: 600;
+      color: #92400e;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      padding: 4px 12px !important;
+    }
+
+    /* ACTION BUTTON */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-warm);
+      color: white !important;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: #b45309;
+      transform: translateY(-1px);
+    }
+
+    /* CODE & RAW */
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #0f766e;
+    }
+
+    /* FOOTER */
+    .slide-footer {
+      position: absolute;
+      bottom: 14px;
+      left: 36px;
+      right: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-light);
+      border-top: 1px solid rgba(226, 232, 240, 0.8);
+      padding-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ==========================================
+           SLIDE 1: COVER
+           ========================================== -->
+      <section>
+        <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 40px 20px;">
+          <div class="deck-tag">DDI Design-Driven Innovation × Synthetic Persona Evaluation</div>
+          <h1 class="slide-title" style="font-size: 52px !important; margin-bottom: 16px !important; color: #0f172a !important;">
+            Brew DJ · 调调咖啡
+          </h1>
+          <p style="font-size: 22px; color: #475569; max-width: 850px; line-height: 1.5; margin-bottom: 28px;">
+            从「功能性化学提神」到「深度心流的早晨开机仪式」：基于 DDI 意义创新与 MatrAIx 数字人实验的完整设计闭环
+          </p>
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <span class="badge badge-teal" style="font-size: 13px; padding: 6px 14px;">HKU AIBT 创新方法论示范案例</span>
+            <span class="badge badge-amber" style="font-size: 13px; padding: 6px 14px;">Agent Product Team 联合出品</span>
+            <a href="https://f3484134.github.io/decks/apps/brew-dj/v2/" target="_blank" class="btn-action">体验交互原型 Prototype 2 ↗</a>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Brew DJ · DDI 意义创新与验证案例</span>
+          <span>Slide 1 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 2: 观察与文化张力 (Observation & Cultural Friction)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 1 · 观察与文化张力</div>
+        <h2 class="slide-title">现代职场的咖啡异化：从享受变成被动应激</h2>
+        <div class="slide-subtitle">不从传统用户访谈的浅层抱怨出发，而是深度观察知识工作者晨间的隐性文化矛盾与生理张力。</div>
+
+        <div class="bento-grid grid-3col">
+          <div class="bento-card card-danger">
+            <div class="card-title">
+              <span>☕ 生理透支与应激循环</span>
+              <span class="badge badge-rose">生理张力</span>
+            </div>
+            <div class="card-body">
+              <p>• 晨间皮质醇尚未退去，用户已强行灌入 200mg 咖啡因。</p>
+              <p>• <strong>腺苷受体被暴力阻断</strong>：带来短暂兴奋，但在下午产生严重的「能量断崖（Crash）」。</p>
+              <p>• 伴随心悸、胃酸倒流与注意力涣散的恶性循环。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-warn">
+            <div class="card-title">
+              <span>📱 决斗式开机与认知过载</span>
+              <span class="badge badge-amber">心理张力</span>
+            </div>
+            <div class="card-body">
+              <p>• 刚坐到工位，就被钉钉、邮件和会议红点轰炸。</p>
+              <p>• 咖啡成为了应对焦虑的<strong>「防御性盾牌」</strong>，用户一边机械吞咽一边被动回复消息。</p>
+              <p>• 缺乏从「睡眠状态」过渡到「深度思考」的主动缓冲期。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-slate">
+            <div class="card-title">
+              <span>📉 快消内卷与意义贫瘠</span>
+              <span class="badge">市场摩擦</span>
+            </div>
+            <div class="card-body">
+              <p>• 瑞幸/库迪将咖啡卷成 9.9 元的「化学提神糖水」。</p>
+              <p>• 精品手冲咖啡门槛过高，难以适应高效工作节奏。</p>
+              <p>• <strong>市场痛点</strong>：行业都在比拼送达速度与单价，却无人重构咖啡与工作的精神连接。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card card-highlight" style="margin-top: 14px; padding: 12px 20px;">
+          <div class="card-body" style="font-weight: 500; color: #0f766e;">
+            💡 <strong>核心观察总结</strong>：用户真正渴望的不是更多的咖啡因分子，而是一个能够<strong>夺回晨间自主权、平复焦虑、建立确定性心流</strong>的开机仪式。
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 2 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 3: DDI 意义重新定义 (Redefining the Meaning)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 2 · DDI 意义重新定义</div>
+        <h2 class="slide-title">重构咖啡的符号与隐喻：从「提神剂」到「心流 DJ」</h2>
+        <div class="slide-subtitle">Verganti 设计驱动创新（DDI）：改变事物的意义（Meaning），而非仅仅增加渐进式功能。</div>
+
+        <div class="bento-grid grid-2col" style="margin-bottom: 14px;">
+          <div class="bento-card card-slate" style="opacity: 0.85;">
+            <div class="card-title" style="color: #64748b;">
+              <span>❌ 旧意义 (Old Meaning)：功能性化学提神剂</span>
+              <span class="badge">旧范式</span>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li><strong>用户角色</strong>：被动劳作的打工人，咖啡因的消极依赖者。</li>
+                <li><strong>交互行为</strong>：一口闷、外卖即饮、边回邮件边喝。</li>
+                <li><strong>核心价值</strong>：对抗困意、提高清醒度（Alertness）。</li>
+                <li><strong>情感共鸣</strong>：疲惫、应激、对即将到来的工作的抗拒。</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bento-card card-highlight">
+            <div class="card-title" style="color: #0f766e;">
+              <span>✨ 新意义 (New Meaning)：早晨开机与心流调频仪式</span>
+              <span class="badge badge-teal">DDI 新范式</span>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li><strong>用户角色</strong>：掌控自己认知状态的「心流 DJ」与创作者。</li>
+                <li><strong>交互行为</strong>：2 分钟多感官调频（声音+气味+呼吸+能量规划）。</li>
+                <li><strong>核心价值</strong>：主动调节神经张力、平滑能量曲线、进入深度专注。</li>
+                <li><strong>情感共鸣</strong>：从容、掌控感、专属的精神锚点与仪式感。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-grid grid-3col">
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14px;">🎵 意义支柱 1：声学与脑波调频</div>
+            <div class="card-body" style="font-size: 12.5px;">双耳节拍（Binaural Beats 40Hz Gamma）与白噪音，利用声波同步大脑专注回路。</div>
+          </div>
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14px;">⚖️ 意义支柱 2：神经生物学协同</div>
+            <div class="card-body" style="font-size: 12.5px;">咖啡因 + L-茶氨酸黄金 1:2 协同配比，削平心悸峰值，提供 4-6 小时稳定心流。</div>
+          </div>
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14px;">🗺️ 意义支柱 3：全天能量航图</div>
+            <div class="card-body" style="font-size: 12.5px;">根据用户今日日程（会议/深度创作），动态预测咖啡因半衰期与精力低谷。</div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 3 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 4: 概念方案与多感官体验架构
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 3 · 概念方案与体验架构</div>
+        <h2 class="slide-title">Brew DJ 核心产品矩阵：多感官开机体验</h2>
+        <div class="slide-subtitle">将抽象的 DDI 意义具象化为「智能调配 + 声学共振 + 呼吸锚定」的软硬件结合体验。</div>
+
+        <div class="bento-grid grid-4col">
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>1. 状态感知输入</span>
+              <span class="badge">Context</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>睡眠与精力自评</strong>：分析昨夜睡眠质量与当前疲劳等级。</p>
+              <p>• <strong>今日工作类型</strong>：区隔「高压会议日」、「深度编程/写作」或「创意发散」。</p>
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>2. 智能神经配方</span>
+              <span class="badge">Recipe</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>剂量精准定制</strong>：推荐咖啡因 (mg) 与 L-茶氨酸配比。</p>
+              <p>• <strong>冲煮参数调优</strong>：水温 92°C、粉水比 1:15、萃取 180s 释放最佳芳香物质。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-highlight">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>3. 40Hz 声学生成</span>
+              <span class="badge badge-teal">Audio DJ</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>专注声学生成</strong>：合成专属双耳节拍与烘焙白噪音。</p>
+              <p>• <strong>感官同步</strong>：伴随研磨与冲煮声，快速引导脑电波进入 Alpha/Gamma 态。</p>
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>4. 全天精力预测</span>
+              <span class="badge">Timeline</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>咖啡因衰减曲线</strong>：直观呈现 Peak 时间（10:30）与 Crash 节点（14:30）。</p>
+              <p>• <strong>补能提醒</strong>：下午 15:00 智能提醒补水或微量茶氨酸调节。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card card-slate" style="margin-top: 14px; padding: 12px 20px;">
+          <div class="card-body" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>🎯 <strong>设计哲学</strong>：拒绝把用户当成冰冷的数据点，通过 120 秒具有仪式感的微交互，建立用户对一天工作的心理控制权。</span>
+            <span class="badge badge-amber">体验核心</span>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 4 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 5: 原型呈现 (Prototype 2 - GitHub Live)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 4 · 原型落地</div>
+        <h2 class="slide-title">交互原型 Prototype 2：DDI 理念的具象化实现</h2>
+        <div class="slide-subtitle">已部署至 GitHub Pages，包含完整的「生理评估 → 神经配方 → 40Hz 声音生成 → 能量航图」交互闭环。</div>
+
+        <div class="bento-grid grid-1-2">
+          <div class="bento-card card-highlight">
+            <div class="card-title">
+              <span>📱 原型核心功能模块</span>
+              <span class="badge badge-teal">V2 Live</span>
+            </div>
+            <div class="card-body">
+              <p><strong>1. 生物情境输入</strong>：</p>
+              <p style="font-size: 12px; color: var(--text-muted);">支持选择睡眠时长、当前焦虑值及今日目标（深度编码/高压会议）。</p>
+              <p><strong>2. 40Hz 脑波声学播放器</strong>：</p>
+              <p style="font-size: 12px; color: var(--text-muted);">Web Audio API 实时生成双耳节拍与柔和粉红噪音。</p>
+              <p><strong>3. 实时能量与代谢衰减曲线</strong>：</p>
+              <p style="font-size: 12px; color: var(--text-muted);">基于药代动力学公式动态绘制全天 8 小时精力热力图。</p>
+              <div style="margin-top: 14px;">
+                <a href="https://f3484134.github.io/decks/apps/brew-dj/v2/" target="_blank" class="btn-action" style="width: 100%; justify-content: center;">
+                  👉 立即在浏览器中体验 Prototype 2 (Brew DJ)
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="bento-card card-slate" style="padding: 12px; background: #0f172a; color: white; border: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 8px;">
+              <span style="font-size: 12px; color: #94a3b8; font-family: monospace;">Brew DJ Prototype 2 UI Preview</span>
+              <span style="font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 4px;">v2.0-live</span>
+            </div>
+            <div style="background: #1e293b; border-radius: 8px; padding: 16px; font-size: 12px; line-height: 1.6; color: #e2e8f0; font-family: sans-serif;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-weight: 700; color: #f59e0b;">☕ 调调咖啡 · 今日专属开机配方</span>
+                <span style="color: #38bdf8;">Gamma 心流模式</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                <div style="background: #0f172a; padding: 8px; border-radius: 6px;">
+                  <div style="color: #94a3b8; font-size: 10px;">推荐咖啡因</div>
+                  <div style="font-size: 16px; font-weight: 700; color: #10b981;">140 mg</div>
+                </div>
+                <div style="background: #0f172a; padding: 8px; border-radius: 6px;">
+                  <div style="color: #94a3b8; font-size: 10px;">L-茶氨酸增效</div>
+                  <div style="font-size: 16px; font-weight: 700; color: #38bdf8;">250 mg (平滑心流)</div>
+                </div>
+              </div>
+              <div style="background: #0f172a; padding: 10px; border-radius: 6px; margin-bottom: 8px;">
+                <div style="color: #f59e0b; font-weight: 600; font-size: 11px; margin-bottom: 4px;">🎧 40Hz 脑波声学生成中... [▶ 正在播放]</div>
+                <div style="height: 4px; background: #334155; border-radius: 2px; overflow: hidden;">
+                  <div style="width: 65%; height: 100%; background: #f59e0b;"></div>
+                </div>
+              </div>
+              <div style="font-size: 11px; color: #94a3b8;">
+                📈 预计能量峰值：10:15 - 12:30 | 建议下午补能时间：15:00
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 5 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 6: 服务蓝图 (Service Blueprint)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 5 · 服务设计</div>
+        <h2 class="slide-title">Brew DJ 全流程服务蓝图 (Service Blueprint)</h2>
+        <div class="slide-subtitle">打通前台用户体验旅程、可视线、后台智能引擎与供应链支撑体系。</div>
+
+        <table class="blueprint-table">
+          <thead>
+            <tr>
+              <th>服务维度</th>
+              <th>1. 晨起唤醒</th>
+              <th>2. 状态录入</th>
+              <th>3. 智能配制</th>
+              <th>4. 120s 开机仪式</th>
+              <th>5. 深度工作</th>
+              <th>6. 下午复能</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="stage-col">物理实体 / 触点<br><span style="font-size:10px;color:var(--text-muted);">Physical Evidence</span></td>
+              <td>智能手表提醒、手机轻推</td>
+              <td>App 状态选择盘、滑块</td>
+              <td>智能咖啡机/手冲套件、配方卡片</td>
+              <td>蒸汽弥漫、降噪耳机、40Hz 音频</td>
+              <td>Brew DJ 专注时钟、工位保温杯</td>
+              <td>下午精力下降提醒、水杯</td>
+            </tr>
+            <tr>
+              <td class="stage-col">用户行为<br><span style="font-size:10px;color:var(--text-muted);">User Action</span></td>
+              <td>起床，查看今日首要任务</td>
+              <td>勾选昨夜睡眠与今日工作类型</td>
+              <td>取出定制咖啡挂耳/胶囊放入机器</td>
+              <td>戴上耳机，跟随呼吸指引闻香品饮</td>
+              <td>进入 90 分钟无干扰心流工作</td>
+              <td>查看能量曲线，进行温和补水</td>
+            </tr>
+            <tr>
+              <td colspan="7" class="line-of-interaction">────── 交互线 (Line of Interaction) ──────</td>
+            </tr>
+            <tr>
+              <td class="stage-col">前台接触点<br><span style="font-size:10px;color:var(--text-muted);">Frontstage Action</span></td>
+              <td>温和推送晨间问候</td>
+              <td>呈现动态反馈交互 UI</td>
+              <td>出具毫克级精准冲煮指南</td>
+              <td>实时合成脑波音频与呼吸节拍</td>
+              <td>工位免打扰状态同步</td>
+              <td>预测能量低谷并推送微建议</td>
+            </tr>
+            <tr>
+              <td colspan="7" class="line-of-visibility">────── 可视线 (Line of Visibility) ──────</td>
+            </tr>
+            <tr>
+              <td class="stage-col">后台处理系统<br><span style="font-size:10px;color:var(--text-muted);">Backstage Process</span></td>
+              <td>读取历史生理节律偏好</td>
+              <td>NLP 语义分析今日工作强度</td>
+              <td>药代动力学引擎计算配比</td>
+              <td>Web Audio 声学合成器运算</td>
+              <td>记录心流时长与抗干扰指数</td>
+              <td>咖啡因半衰期衰减模型更新</td>
+            </tr>
+            <tr>
+              <td class="stage-col">支撑体系<br><span style="font-size:10px;color:var(--text-muted);">Support Process</span></td>
+              <td>用户健康档案数据库</td>
+              <td>日历与协作工具 API 集成</td>
+              <td>咖啡豆风味库与烘焙批次数据</td>
+              <td>神经声学音频库 CDN</td>
+              <td>跨设备状态同步服务</td>
+              <td>复购与个性化补充包物流调度</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 6 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 7: 精益学习画布 (Lean Learning Canvas)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 6 · 假设规划</div>
+        <h2 class="slide-title">精益学习画布：把创新方案转化为可验证假设</h2>
+        <div class="slide-subtitle">在投入大规模工程与生产前，通过精益学习画布（Lean Learning Canvas）锁定最致命的商业假设。</div>
+
+        <div class="bento-grid grid-1-3">
+          <div class="bento-card card-highlight">
+            <div class="card-title">
+              <span>🎯 创新命题 (Proposal)</span>
+            </div>
+            <div class="card-body">
+              <p><strong>我们要解决的战略问题</strong>：</p>
+              <p>知识工作者在晨间面临严重的生理应激与认知过载，传统咖啡陷入快消红海。我们能否通过「神经配比 + 40Hz 声学仪式」，打造高溢价的深度开机服务？</p>
+              <hr style="border: 0; border-top: 1px solid #ccfbf1; margin: 10px 0;">
+              <p><strong>创新起点</strong>：<code>DDI / Meaning Innovation</code></p>
+            </div>
+          </div>
+
+          <div class="bento-grid grid-3col">
+            <div class="bento-card card-warn">
+              <div class="card-title">
+                <span>Loop 1: 价值与仪式认同</span>
+                <span class="badge badge-amber">首轮验证</span>
+              </div>
+              <div class="card-body" style="font-size: 12px;">
+                <p><strong>🎯 关键假设</strong>：知识工作者愿意为了「开机仪式感」多停留 2 分钟，且认可缓解焦虑的价值。</p>
+                <p><strong>🧪 实验设计</strong>：MatrAIx 数字人多维度模拟测试 (N=52)。</p>
+                <p><strong>🛑 淘汰准则 (Kill Criteria)</strong>：<br>• 价值认同度 &lt; 3.8/5.0<br>• NPS 推荐值 &lt; +30</p>
+              </div>
+            </div>
+
+            <div class="bento-card card-slate">
+              <div class="card-title">
+                <span>Loop 2: 付费意愿与商业闭环</span>
+                <span class="badge">次轮假设</span>
+              </div>
+              <div class="card-body" style="font-size: 12px;">
+                <p><strong>🎯 关键假设</strong>：核心高价值人群（程序员/高管/创作者）愿按月订阅定制神经咖啡包（$25+/月）。</p>
+                <p><strong>🧪 实验设计</strong>：Landing Page 众筹与预售意向测试。</p>
+                <p><strong>🛑 淘汰准则</strong>：付费意向转化率 &lt; 5%。</p>
+              </div>
+            </div>
+
+            <div class="bento-card card-slate">
+              <div class="card-title">
+                <span>Loop 3: 硬件与耗材复购</span>
+                <span class="badge">规模化假设</span>
+              </div>
+              <div class="card-body" style="font-size: 12px;">
+                <p><strong>🎯 关键假设</strong>：智能冲煮套件与 App 协同能显著提升咖啡豆包月复购率。</p>
+                <p><strong>🧪 实验设计</strong>：小规模 Beta 硬件内测 (N=30)。</p>
+                <p><strong>🛑 淘汰准则</strong>：次月留存率 &lt; 60%。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card card-slate" style="margin-top: 12px; padding: 10px 18px;">
+          <div class="card-body" style="font-size: 12.5px; color: var(--primary);">
+            📌 <strong>精益原则</strong>：永远先拿最高风险的「价值假设（Value Risk）」开刀。如果用户根本不买单「开机仪式」的意义，后序的硬件研发毫无意义。
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 7 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 8: 实验设计与淘汰准则 (Kill Criteria)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 7 · 实验与淘汰准则</div>
+        <h2 class="slide-title">设定严苛的淘汰准则 (Kill Criteria)</h2>
+        <div class="slide-subtitle">在进入真实市场测试前，设立客观量化标准，避免团队陷入「创作者自嗨」的情感偏误。</div>
+
+        <div class="bento-grid grid-3col">
+          <div class="bento-card card-danger">
+            <div class="card-title">
+              <span>🛑 淘汰准则 1：价值认同 (WTP/Value)</span>
+              <span class="badge badge-rose">致命红线</span>
+            </div>
+            <div class="card-body">
+              <div class="stat-num" style="color: #ef4444;">&lt; 3.8 <span style="font-size: 18px;">/ 5.0</span></div>
+              <div class="stat-label">感知价值阈值</div>
+              <p style="margin-top: 10px;">若整体目标群体的综合价值感知低于 3.8，说明「仪式+配方」的价值不够显著，立即暂停。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-danger">
+            <div class="card-title">
+              <span>🛑 淘汰准则 2：焦虑缓解有效性</span>
+              <span class="badge badge-rose">体验红线</span>
+            </div>
+            <div class="card-body">
+              <div class="stat-num" style="color: #ef4444;">&lt; 3.5 <span style="font-size: 18px;">/ 5.0</span></div>
+              <div class="stat-label">焦虑缓解满意度阈值</div>
+              <p style="margin-top: 10px;">若开机仪式无法显著减轻用户早晨的应激感与慌乱感（低于 3.5），则 DDI 核心体验不成立。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-danger">
+            <div class="card-title">
+              <span>🛑 淘汰准则 3：净推荐值 (NPS)</span>
+              <span class="badge badge-rose">口碑红线</span>
+            </div>
+            <div class="card-body">
+              <div class="stat-num" style="color: #ef4444;">&lt; +30 <span style="font-size: 18px;">分</span></div>
+              <div class="stat-label">最低可接受 NPS</div>
+              <p style="margin-top: 10px;">如果 NPS 分数处于低位甚至负值，表明用户没有强烈的自发传播意愿，产品缺乏自增长动力。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card card-slate" style="margin-top: 14px;">
+          <div class="card-title">🔬 验证工具选择：MatrAIx 数字人仿真 (Synthetic Persona)</div>
+          <div class="card-body">
+            采用前沿 <code>MatrAIx (arXiv:2608.04205)</code> 数字人评估引擎，加载 52 位具备真实人口统计学、认知特征与日常咖啡习惯的 Synthetic Persona，对 Brew DJ 概念方案进行 1:1 的沉浸式压力测试。
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 8 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 9: MatrAIx 数字人模拟实验 (The Experiment)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 8 · MatrAIx 模拟实验</div>
+        <h2 class="slide-title">MatrAIx 52 位数字人全景测试数据</h2>
+        <div class="slide-subtitle">样本覆盖科技工程师、企业高管/顾问、远程自由创作者、学生研究员及价格敏感型用户 5 大典型群体。</div>
+
+        <div class="bento-grid grid-4col" style="margin-bottom: 14px;">
+          <div class="bento-card card-highlight">
+            <div class="card-title" style="font-size: 13px;">综合感知价值</div>
+            <div class="stat-num" style="color: #0f766e;">4.04 <span style="font-size: 16px;">/ 5.0</span></div>
+            <div class="stat-label">✅ 跨过 3.8 红线</div>
+          </div>
+
+          <div class="bento-card card-danger">
+            <div class="card-title" style="font-size: 13px;">焦虑缓解得分</div>
+            <div class="stat-num" style="color: #ef4444;">3.01 <span style="font-size: 16px;">/ 5.0</span></div>
+            <div class="stat-label">❌ 未达 3.5 红线 (警报)</div>
+          </div>
+
+          <div class="bento-card card-highlight">
+            <div class="card-title" style="font-size: 13px;">仪式感愉悦度</div>
+            <div class="stat-num" style="color: #0f766e;">4.24 <span style="font-size: 16px;">/ 5.0</span></div>
+            <div class="stat-label">✅ 仪式形式广受好评</div>
+          </div>
+
+          <div class="bento-card card-danger">
+            <div class="card-title" style="font-size: 13px;">净推荐值 (NPS)</div>
+            <div class="stat-num" style="color: #ef4444;">+17.3</div>
+            <div class="stat-label">❌ 远低于 +30 目标</div>
+          </div>
+        </div>
+
+        <div class="bento-grid grid-2col">
+          <div class="bento-card card-slate">
+            <div class="card-title">📊 各用户分群评测表现 (Segment Breakdown)</div>
+            <div class="card-body" style="font-size: 12.5px;">
+              <p>• <strong>企业高管 / 顾问 (N=12)</strong>：价值 <code>4.54</code> | NPS <code>+58.3</code>（极度渴望精力掌控）</p>
+              <p>• <strong>科技工程师 (N=15)</strong>：价值 <code>4.31</code> | NPS <code>+40.0</code>（极度认可算法与配方）</p>
+              <p>• <strong>远程创作者 (N=13)</strong>：价值 <code>4.21</code> | NPS <code>+38.5</code>（喜欢声音与仪式感）</p>
+              <p>• <strong>学生研究员 (N=6)</strong>：价值 <code>3.63</code> | NPS <code>0.0</code>（觉得略显繁琐）</p>
+              <p>• <strong>价格敏感型大众 (N=6)</strong>：价值 <code>2.42</code> | NPS <code>-66.7</code>（只想要便宜提神水）</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-warn">
+            <div class="card-title">⚠️ 触发淘汰准则判定 (Kill Criteria Triggered)</div>
+            <div class="card-body" style="font-size: 12.5px;">
+              <p>虽然综合价值得分达标 (4.04)，但**焦虑缓解度 (3.01)** 与 **NPS (+17.3)** 触发了致命红线！</p>
+              <p style="margin-top: 6px; color: #b45309;"><strong>数字人真实反馈原声摘要</strong>：</p>
+              <p style="font-style: italic; font-size: 12px; color: #78350f;">
+                "界面很酷，但做完 2 分钟呼吸后，我看着今天的 6 个会议依然感到慌张；而且只给文字指引，没有声音沉浸，我容易分心..."
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 9 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 10: 发现真实目标人群 (Target ICP Discovery)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 9 · 用户画像重定位</div>
+        <h2 class="slide-title">穿透模拟数据：锁定真正的核心目标人群 (ICP)</h2>
+        <div class="slide-subtitle">并非所有人都是 Brew DJ 的客户。我们果断放弃价格敏感型大众，聚焦高杠杆脑力劳动者。</div>
+
+        <div class="bento-grid grid-3col">
+          <div class="bento-card card-highlight">
+            <div class="card-title">
+              <span>💻 核心客群 A：科技研发与算法工程师</span>
+              <span class="badge badge-teal">核心 ICP 1</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>特征</strong>：重度逻辑思维，需要 2-3 小时连续无打扰的深度编码（Deep Work）。</p>
+              <p>• <strong>痛点</strong>：心悸与咖啡因断崖直接导致 Debug 效率崩塌。</p>
+              <p>• <strong>价值共鸣</strong>：认可 L-茶氨酸科学配比与 40Hz 脑波声学。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-highlight">
+            <div class="card-title">
+              <span>👔 核心客群 B：战略顾问与企业高管</span>
+              <span class="badge badge-teal">核心 ICP 2</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>特征</strong>：全天决策密度极高，会议密集，时间颗粒度细。</p>
+              <p>• <strong>痛点</strong>：下午 2-4 点认知疲惫，决策质量下降。</p>
+              <p>• <strong>价值共鸣</strong>：极其看重全天能量衰减曲线预测，愿为确定性支付高溢价。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-highlight">
+            <div class="card-title">
+              <span>🎨 核心客群 C：自由撰稿与创意设计者</span>
+              <span class="badge badge-teal">核心 ICP 3</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>特征</strong>：居家办公，缺乏外部办公纪律，启动阻抗极大。</p>
+              <p>• <strong>痛点</strong>：早晨坐在电脑前容易拖延、刷手机，难以进入状态。</p>
+              <p>• <strong>价值共鸣</strong>：把 120 秒冲煮与声学仪式作为唯一的「工作启动锚点」。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card card-danger" style="margin-top: 14px;">
+          <div class="card-title" style="font-size: 14px; color: #ef4444;">🚫 明确排除的非目标群体 (Non-Target Users)</div>
+          <div class="card-body" style="font-size: 12.5px;">
+            <strong>价格敏感型快消用户 / 纯外卖自提客群</strong>：只关心「价格是否 9.9 元」、「3 分钟能不能拿到手」。对于此类用户，任何仪式都是负担。我们坚决不在该群体上耗费获客与教育成本。
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 10 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 11: 根因剖析与决策 (Root Cause & Decision)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 10 · 学习决策</div>
+        <h2 class="slide-title">5-Whys 根因深潜与迭代决策 (Pivot Decision)</h2>
+        <div class="slide-subtitle">面对未达标的淘汰准则，团队不选择粉饰数据，而是进行严谨的 5-Whys 根因剖析并制定迭代方案。</div>
+
+        <div class="bento-grid grid-2col">
+          <div class="bento-card card-warn">
+            <div class="card-title">
+              <span>🔍 5-Whys 根因归因分析</span>
+              <span class="badge badge-amber">诊断分析</span>
+            </div>
+            <div class="card-body" style="font-size: 13px;">
+              <p><strong>Q1: 为什么焦虑缓解度仅有 3.01？</strong><br>
+              ↳ 用户只是被告知要深呼吸，但面对今日密集的任务清单没有得到确定性的应对安排。</p>
+              <p><strong>Q2: 为什么用户觉得 120 秒仪式容易分心？</strong><br>
+              ↳ 单纯文字 UI 缺乏多感官包裹感，视觉容易被手机弹窗打断。</p>
+              <p><strong>Q3: 为什么部分用户依旧担心心悸？</strong><br>
+              ↳ 缺乏对咖啡因代谢敏感基因的显性说明与 L-茶氨酸协同解释。</p>
+            </div>
+          </div>
+
+          <div class="bento-card card-highlight">
+            <div class="card-title">
+              <span>🏁 学习决策：功能迭代调整 (Pivot on Feature)</span>
+              <span class="badge badge-teal">决策：ITERATE</span>
+            </div>
+            <div class="card-body" style="font-size: 13px;">
+              <p><strong>1. 引入 40Hz Web Audio 实时声学生成</strong>：<br>
+              将纯文字指引升级为「双耳节拍 + 烘焙粉红噪音」，实现声学沉浸闭环。</p>
+              <p><strong>2. 增加全天精力与任务智能映射 (Energy-Task Mapping)</strong>：<br>
+              不仅给配方，还帮用户规划「上午攻坚 / 下午开会 / 傍晚总结」的最佳时间槽。</p>
+              <p><strong>3. 构建 Prototype 2 并进行二次 A/B Benchmark</strong>。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card card-slate" style="margin-top: 14px; padding: 12px 20px;">
+          <div class="card-body" style="font-size: 13px; color: var(--primary);">
+            📈 <strong>二次验证结果预告</strong>：在针对核心 ICP 进行 V2 迭代后，综合价值得分跃升至 <strong>4.55 (+12.5%)</strong>，焦虑缓解得分大幅提升至 <strong>4.10 (+36.3%)</strong>，NPS 更是直接突破至 <strong>+78.8 分</strong>！
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 11 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 12: 下一步迭代规划 (Next Iteration)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 11 · 下一步行动</div>
+        <h2 class="slide-title">下一步迭代规划：从原型走向真实市场验证</h2>
+        <div class="slide-subtitle">MatrAIx 验证帮助我们在 0 代码成本下完成了 2 轮迭代。下一步将推进真实世界小规模验证。</div>
+
+        <div class="bento-grid grid-3col">
+          <div class="bento-card">
+            <div class="card-title">
+              <span>🚀 阶段一：真实硬件内测 (N=50)</span>
+              <span class="badge badge-teal">近 2 周</span>
+            </div>
+            <div class="card-body">
+              <p>• <strong>招募 50 位核心 ICP</strong>（来自大厂程序员、咨询顾问与独立创作者）。</p>
+              <p>• 发放「定制挂耳包 + L-茶氨酸增效包」2 周体验盒。</p>
+              <p>• 搭配 Prototype 2 Web App 每日打卡记录真实心流时长。</p>
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="card-title">
+              <span>📊 阶段二：真实 WTP 众筹验证</span>
+              <span class="badge badge-amber">第 1 个月</span>
+            </div>
+            <div class="card-body">
+              <p>• 上线 Kickstarter / 微信小程序订阅众筹页面。</p>
+              <p>• 测试 <strong>$29.9/月 (15 包定制咖啡 + 算法 App 会员)</strong> 订阅制付费转化率。</p>
+              <p>• 目标：预售订单突破 500 份。</p>
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="card-title">
+              <span>🤖 阶段三：智能硬件与多 Agent 协同</span>
+              <span class="badge">第 2-3 个月</span>
+            </div>
+            <div class="card-body">
+              <p>• 联动智能桌面冲煮底座与智能手表心率变异性 (HRV)。</p>
+              <p>• 接入日历 Agent，自动根据早晨临时变动的会议日程调整咖啡浓缩度与声音频率。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card card-highlight" style="margin-top: 14px; padding: 12px 20px;">
+          <div class="card-body" style="color: #0f766e; font-size: 13px;">
+            🌟 <strong>商业愿景</strong>：Brew DJ 不做快消品，做高端知识工作者的「认知基础设施」与「每日精神仪式入口」。
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 12 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 13: 团队介绍 (Team Introduction)
+           ========================================== -->
+      <section>
+        <div class="deck-tag">Phase 12 · 研发团队</div>
+        <h2 class="slide-title">Agent Product Team 研发与设计团队</h2>
+        <div class="slide-subtitle">由 7 位专精 AI Agent 与人类设计导师协同共创的敏捷创新团队。</div>
+
+        <div class="bento-grid grid-4col">
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>Steve</span>
+              <span class="badge badge-teal">PM / Orchestrator</span>
+            </div>
+            <div class="card-body" style="font-size: 12px;">
+              负责创新命题校准、DDI 意义统筹、精益学习画布架构与全流程敏捷推进。
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>Stephen</span>
+              <span class="badge badge-amber">Researcher</span>
+            </div>
+            <div class="card-body" style="font-size: 12px;">
+              负责七维文化与生理张力洞察、药代动力学模型研究与 MatrAIx 模拟分析。
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>Natasha</span>
+              <span class="badge badge-rose">Designer</span>
+            </div>
+            <div class="card-body" style="font-size: 12px;">
+              负责多感官体验架构、服务蓝图绘制、UI/UX 交互设计与声音仪式打磨。
+            </div>
+          </div>
+
+          <div class="bento-card">
+            <div class="card-title" style="font-size: 14.5px;">
+              <span>Tony & Vision</span>
+              <span class="badge">Tech & Code</span>
+            </div>
+            <div class="card-body" style="font-size: 12px;">
+              <strong>Tony (Architect)</strong>：系统与 Context 架构。<br>
+              <strong>Vision (Developer)</strong>：Prototype 2 前端与 Web Audio 引擎。
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-grid grid-2col" style="margin-top: 14px;">
+          <div class="bento-card card-slate">
+            <div class="card-title" style="font-size: 14px;">
+              <span>Thor</span>
+              <span class="badge">QA & Benchmark</span>
+            </div>
+            <div class="card-body" style="font-size: 12.5px;">
+              负责淘汰准则（Kill Criteria）量化测试、MatrAIx 数字人压测与数据合规。
+            </div>
+          </div>
+
+          <div class="bento-card card-highlight">
+            <div class="card-title" style="font-size: 14px; color: #0f766e;">
+              <span>Bob</span>
+              <span class="badge badge-teal">Product Coach</span>
+            </div>
+            <div class="card-body" style="font-size: 12.5px;">
+              负责 HKU 创新方法论把关、5-Whys 根因分析、团队覆盘与 Slide 呈现指导。
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 13 / 14</span>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 14: 总结与 Q&A
+           ========================================== -->
+      <section>
+        <div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px;">
+          <div class="deck-tag" style="margin-bottom: 16px;">Summary & Thank You</div>
+          <h2 class="slide-title" style="font-size: 44px !important; margin-bottom: 18px !important;">
+            重新定义意义 · 用证据驱动学习
+          </h2>
+          <p style="font-size: 18px; color: var(--text-muted); max-width: 750px; line-height: 1.6; margin-bottom: 28px;">
+            Brew DJ 不只是一杯咖啡，更是一次完整的 AI-Native 产品创新实践：<br>
+            <strong>DDI 意义重构 → 多感官原型 → 服务蓝图 → 精益学习画布 → MatrAIx 数字人压测 → 科学迭代</strong>
+          </p>
+
+          <div style="display: flex; gap: 16px; justify-content: center; align-items: center;">
+            <a href="https://f3484134.github.io/decks/apps/brew-dj/v2/" target="_blank" class="btn-action" style="padding: 10px 24px; font-size: 15px;">
+              ☕ 在线体验 Prototype 2 原型
+            </a>
+            <a href="https://f3484134.github.io/decks/" target="_blank" class="btn-action" style="background: #0f172a; padding: 10px 24px; font-size: 15px;">
+              🏠 返回 YH-BOB 展厅 (Deck Factory)
+            </a>
+          </div>
+        </div>
+        <div class="slide-footer">
+          <span>Brew DJ · 调调咖啡</span>
+          <span>Slide 14 / 14</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: true,
+      transition: 'fade',
+      transitionSpeed: 'fast',
+      center: false,
+      width: 1200,
+      height: 750,
+      margin: 0.04,
+      minScale: 0.2,
+      maxScale: 2.0
+    });
+  </script>
+</body>
+</html>

@@ -240,6 +240,10 @@
       <img src="pixel-room/icons/ai-brief.png" alt="AI Brief"><span class="icon-tip">AI Brief</span>
       <span class="label">AI Brief</span>
     </div>
+        <div class="desktop-icon" ondblclick="openWin('brew-dj')">
+      <img src="pixel-room/icons/ai-brief.png" alt="Brew DJ" style="filter: hue-rotate(140deg);"><span class="icon-tip">Brew DJ</span>
+      <span class="label">Brew DJ</span>
+    </div>
     <div class="desktop-icon" ondblclick="openWin('my-lobster')">
       <img src="pixel-room/icons/my-lobster.png" alt="My Lobster"><span class="icon-tip">My Lobster</span>
       <span class="label">My Lobster</span>
@@ -305,6 +309,27 @@
   </div>
 
   <!-- ═══════ WINDOWS ═══════ -->
+    <div class="window" id="win-brew-dj" style="width:540px;height:420px;top:100px;left:320px;">
+    <div class="win-bar" onmousedown="startDrag(event,'win-brew-dj')">
+      <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-brew-dj')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
+      <span class="title">Brew DJ · 调调咖啡</span>
+    </div>
+    <div class="win-body">
+      <h2>☕ Brew DJ · 调调咖啡</h2>
+      <p><strong>DDI 意义创新 × MatrAIx 数字人实验</strong>：从「功能性化学提神」到「深度心流的早晨开机仪式」。</p>
+      <ul>
+        <li>DDI 意义重新定义（从提神水到心流 DJ）</li>
+        <li>多感官交互原型 Prototype 2 (40Hz Web Audio + 药代动力学配方)</li>
+        <li>端到端服务蓝图 (Service Blueprint) 与精益学习画布</li>
+        <li>MatrAIx 数字人压测 (N=52)、淘汰准则判定与 5-Whys 迭代决策</li>
+      </ul>
+      <div style="display:flex;gap:10px;margin-top:14px;">
+        <a class="link-btn" href="/decks/brew-dj-matraix/" target="_blank">打开演示文稿 (Deck) →</a>
+        <a class="link-btn" href="/decks/apps/brew-dj/v2/" target="_blank" style="background:#d97706;">体验交互原型 2 →</a>
+      </div>
+    </div>
+  </div>
+
   <div class="window" id="win-photos" style="width:540px;height:420px;top:80px;left:260px;">
     <div class="win-bar" onmousedown="startDrag(event,'win-photos')">
       <div class="win-dots"><div class="win-dot dot-r" onclick="closeWin('win-photos')"></div><div class="win-dot dot-y"></div><div class="win-dot dot-g"></div></div>
